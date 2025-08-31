@@ -130,6 +130,35 @@ namespace zdsimScanner
         public static int[] ED9M_flag_key_buffer = new int[30];
         public static int[] tem18_flag_key_buffer = new int[32];
         //------------------------------------------------------------------------------------
+
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
+        private static string[] m_convert_signature(string sig)
+        {
+            for (int i = 0; i < sig.Length; i++)
+            {
+                if (sig[i] == 0x2c)
+                {
+                    sig = sig.Remove(i, 1);
+                }
+            }
+
+            string[] retn = new string[sig.Length / 2];
+            int a = 0;
+
+            for (int i = 0; i < sig.Length / 2; i++)
+            {
+                retn[i] = sig.Substring(a, 2);
+                a += 2;
+            }
+
+            return retn;
+        }
+
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         public static bool open_process(string p_name)
         {
             Process[] p = Process.GetProcessesByName(p_name);
@@ -149,6 +178,21 @@ namespace zdsimScanner
         }
 
         //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
+        private static ProcessModule get_module_by_name(string name)
+        {
+            for (int i = 0; i < Loco.current_process.Modules.Count; i++)
+            {
+                if (current_process.Modules[i].ModuleName == name)
+                    return current_process.Modules[i];
+            }
+            return current_process.Modules[0];
+        }
+
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         public static byte[] read_bytes(Int32 addr, int size)
         {
             int bytesRead = 0;  // количество байтов, считанных с помощью ReadProcessMemory
@@ -158,12 +202,16 @@ namespace zdsimScanner
         }
 
         //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         public static void write_bytes(Int32 addr, byte[] buffer)
         {
             int bytesRead = 0;
             WriteProcessMemory((int)P_HANDLE, addr, buffer, buffer.Length, ref bytesRead);
         }
 
+        //------------------------------------------------------------------------------------
+        //
         //------------------------------------------------------------------------------------
         //Читаем указатель
         public static int read_pointer(Int32 baze_address, int[] offsets)
@@ -194,6 +242,8 @@ namespace zdsimScanner
             return baze_address;
         }
 
+        //------------------------------------------------------------------------------------
+        //
         //------------------------------------------------------------------------------------
         public static void InitBuffers()
         {
@@ -226,6 +276,8 @@ namespace zdsimScanner
         public static List<byte[]> list_collect_sounds_zdsim_ed9m = new List<byte[]>();
         public static List<byte[]> list_collect_sounds_zdsim_tem18 = new List<byte[]>();
         
+      
+       
         public static byte[] out_buffer = new byte[64];
         public static byte[] out_buffer1 = new byte[128];
         public static byte[] in_buffer = new byte[64];
@@ -292,52 +344,76 @@ namespace zdsimScanner
 
         private static byte[] b_write_4byte_0 = new byte[4] { 0, 0, 0, 0 };
         private static byte[] b_write_8byte_0 = new byte[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
+
         //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
+        //zdsim поиск локомотива
+        public static string sig_2es5k =   "3233313532000000";
+        public static string sig_ep1m =    "3331373134000000";
+        public static string sig_chs2k =   "3334330000000000";
+        public static string sig_chs4 =    "3532330000000000";
+        public static string sig_chs4kvr = "3532340000000000";
+        public static string sig_chs4t =   "3632310000000000";
+        public static string sig_chs7 =    "3832320000000000";
+        public static string sig_chs8 =    "3831320000000000";
+        public static string sig_vl11m =   "3831310000000000";
+        public static string sig_vl82m =   "3838320000000000";
+        public static string sig_vl80t =   "3838300000000000";
+        public static string sig_vl85 =    "3838350000000000";
+        public static string sig_tep70 =   "3230373000000000";
+        public static string sig_2te10u =  "3231303134000000";
+        public static string sig_m62 =     "3134363200000000";
+        public static string sig_ed4m =    "3331353400000000";
+        public static string sig_ed9m =    "3331353900000000";
+        public static string sig_tem18 =   "3230313331380000";
+
         // словарь сигнатур локомотивов
         private static readonly Dictionary<int, int> locoSignatures = new Dictionary<int, int>
-        {
-             { 23152,  1 },  // 2ES5K
-             { 31714,  2 },  // EP1m
-             { 343,    3 },  // CHS2K
-             { 523,    4 },  // CHS4
-             { 524,    5 },  // CHS4 KVR
-             { 621,    6 },  // CHS4t
-             { 822,    7 },  // CHS7
-             { 812,    8 },  // CHS8
-             { 811,    9 },  // VL11m
-             { 882,   10 },  // VL82m
-             { 880,   11 },  // VL80t
-             { 885,   12 },  // VL85
-             { 2070,  13 },  // TEP70
-             { 21014, 14 },  // 2TE10U
-             { 1462,  15 },  // M62
-             { 3154,  16 },  // ED4M
-             { 3159,  17 }, // ED9M
-             { 201318,18 }  // TEM18dm
-        };
+{
+    { 23152,  1 },  // 2ES5K
+    { 31714,  2 },  // EP1m
+    { 343,    3 },  // CHS2K
+    { 523,    4 },  // CHS4
+    { 524,    5 },  // CHS4 KVR
+    { 621,    6 },  // CHS4t
+    { 822,    7 },  // CHS7
+    { 812,    8 },  // CHS8
+    { 811,    9 },  // VL11m
+    { 882,   10 },  // VL82m
+    { 880,   11 },  // VL80t
+    { 885,   12 },  // VL85
+    { 2070,  13 },  // TEP70
+    { 21014, 14 },  // 2TE10U
+    { 1462,  15 },  // M62
+    { 3154,  16 },  // ED4M
+    { 3159,  17 },  // ED9M
+    { 201318,18 }   // TEM18dm
+};
 
         // словарь для отображения названий по sig_loco
         private static readonly Dictionary<int, string> locoNames = new Dictionary<int, string>
-        {
-             { 1, "2ES5K" },
-             { 2, "EP1m" },
-             { 3, "CHS2K" },
-             { 4, "CHS4" },
-             { 5, "CHS4 KVR" },
-             { 6, "CHS4t" },
-             { 7, "CHS7" },
-             { 8, "CHS8" },
-             { 9, "VL11m" },
-             { 10, "VL82m" },
-             { 11, "VL80t" },
-             { 12, "VL85" },
-             { 13, "TEP70" },
-             { 14, "2TE10U" },
-             { 15, "M62" },
-             { 16, "ED4M" },
-             { 17, "ED9M" },
-             { 18, "TEM18dm" }
-        };
+{
+    { 1, "2ES5K" },
+    { 2, "EP1m" },
+    { 3, "CHS2K" },
+    { 4, "CHS4" },
+    { 5, "CHS4 KVR" },
+    { 6, "CHS4t" },
+    { 7, "CHS7" },
+    { 8, "CHS8" },
+    { 9, "VL11m" },
+    { 10, "VL82m" },
+    { 11, "VL80t" },
+    { 12, "VL85" },
+    { 13, "TEP70" },
+    { 14, "2TE10U" },
+    { 15, "M62" },
+    { 16, "ED4M" },
+    { 17, "ED9M" },
+    { 18, "TEM18dm" }
+};
+
 
         //-----------------------------------------------------------------------------------
         //ищем локомотив в процессе zlauncher.exe
@@ -575,10 +651,9 @@ namespace zdsimScanner
         }
 
         //===================================================================================
+        //===================================================================================
         // Читаем из памти игры параметры локомотивов
         //===================================================================================
-       /*
-        
         //-----------------------------------------------------------------------------------
         // Функция читает из памяти игры параметры локомотива "Электровоз 2ЭС5К"
         //-----------------------------------------------------------------------------------
@@ -704,6 +779,9 @@ namespace zdsimScanner
                 i_temp = Convert.ToUInt16(d_temp * i_pnevmo_convert);
                 temp_buffer = BitConverter.GetBytes(i_temp);
                 Array.Copy(temp_buffer, 0, out_buffer, 35, 2);
+
+
+
 
                 //-------------------------------------------------------------------------
                 //                               Лампы
@@ -24125,6 +24203,5 @@ namespace zdsimScanner
             }
         }
         //-----------------------------------------------------------------------------------
-       */
     }
 }

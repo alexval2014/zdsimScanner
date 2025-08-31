@@ -99,7 +99,7 @@ namespace zdsimScanner
             this.textBox4.Text = (Properties.Settings.Default.napr_td);
             this.textBox5.Text = (Properties.Settings.Default.tok);
             this.textBox6.Text = (Properties.Settings.Default.pnevmatika);
-            this.numericUpDown7.Value = Properties.Settings.Default.delay_motor;
+            this.numericUpDown7.Value = Properties.Settings.Default.step_steper_motor;
             this.numericUpDown8.Value = Properties.Settings.Default.bdit;
             this.numericUpDown_shum.Value = Properties.Settings.Default.joystick_shum;
             if (Form1.i_priem_peredacha == 1)
@@ -2549,17 +2549,18 @@ namespace zdsimScanner
             }
         }
 
+        //Настройка приборов по умолчанию
         private void button2_Click(object sender, EventArgs e)
         {
             Form1.Init_pribor();
-            textBox1.Text = Convert.ToString(1.475);
-            textBox2.Text = Convert.ToString(26.2);
-            textBox3.Text = Convert.ToString(11.5);
-            textBox4.Text = Convert.ToString(2.6);
-            textBox5.Text = Convert.ToString(6.5);
-            textBox6.Text = Convert.ToString(38.8);
-            numericUpDown7.Value = 3300;
-            numericUpDown8.Value = 500;
+            textBox1.Text = Convert.ToString(100);   //Множетель Скорости
+            textBox2.Text = Convert.ToString(100);   //Множетель Тока ЭПТ
+            textBox3.Text = Convert.ToString(100);   //Множетель Напряжения КС
+            textBox4.Text = Convert.ToString(200);   //Множетель Напряжения ТД
+            textBox5.Text = Convert.ToString(100);   //Множетель Токов ТД
+            textBox6.Text = Convert.ToString(100);   //Множетель Пневматики
+            numericUpDown7.Value = 3200;             //Количество шагов ШД
+            numericUpDown8.Value = 500;              //Время мигания лампы бдительности и ограничения скорости
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -2570,7 +2571,7 @@ namespace zdsimScanner
             Loco.i_napruga_td_convert = Convert.ToSingle(textBox4.Text);
             Loco.i_tok_convert = Convert.ToSingle(textBox5.Text);
             Loco.i_pnevmo_convert = Convert.ToSingle(textBox6.Text);
-            Form1.i_delay_motor = Convert.ToUInt16(numericUpDown7.Value);
+            Form1.i_step_steper_motor = Convert.ToUInt16(numericUpDown7.Value);
             Form1.i_bdit = Convert.ToUInt16(numericUpDown8.Value);
             Form1.i_shum_joystick = Convert.ToUInt16(numericUpDown_shum.Value);
 
@@ -5160,18 +5161,14 @@ namespace zdsimScanner
             else Form1.i_dvery_control_off_settings = 1;
         }
 
+        private void numericUpDown7_ValueChanged(object sender, EventArgs e)
+        {
 
+        }
 
+        private void label9_Click(object sender, EventArgs e)
+        {
 
-
-        
-        
-
-        
-
-        
-
-        
-
+        }
     }
 }

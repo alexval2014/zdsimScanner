@@ -12,7 +12,7 @@ namespace zdsimScanner.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.12.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -208,356 +208,6 @@ namespace zdsimScanner.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
             "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection controls_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["controls_buffer_key_settings"]));
-            }
-            set {
-                this["controls_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection es5k_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["es5k_buffer_key_settings"]));
-            }
-            set {
-                this["es5k_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ep1m_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ep1m_buffer_key_settings"]));
-            }
-            set {
-                this["ep1m_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs2k_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs2k_buffer_key_settings"]));
-            }
-            set {
-                this["chs2k_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs4_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs4_buffer_key_settings"]));
-            }
-            set {
-                this["chs4_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs4kvr_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs4kvr_buffer_key_settings"]));
-            }
-            set {
-                this["chs4kvr_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs4t_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs4t_buffer_key_settings"]));
-            }
-            set {
-                this["chs4t_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs7_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs7_buffer_key_settings"]));
-            }
-            set {
-                this["chs7_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs8_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs8_buffer_key_settings"]));
-            }
-            set {
-                this["chs8_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection vl11_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["vl11_buffer_key_settings"]));
-            }
-            set {
-                this["vl11_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection vl82_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["vl82_buffer_key_settings"]));
-            }
-            set {
-                this["vl82_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection vl80t_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["vl80t_buffer_key_settings"]));
-            }
-            set {
-                this["vl80t_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection vl85_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["vl85_buffer_key_settings"]));
-            }
-            set {
-                this["vl85_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection tep70_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["tep70_buffer_key_settings"]));
-            }
-            set {
-                this["tep70_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection te10u_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["te10u_buffer_key_settings"]));
-            }
-            set {
-                this["te10u_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection m62_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["m62_buffer_key_settings"]));
-            }
-            set {
-                this["m62_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ed4m_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ed4m_buffer_key_settings"]));
-            }
-            set {
-                this["ed4m_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ed9m_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ed9m_buffer_key_settings"]));
-            }
-            set {
-                this["ed9m_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection controls_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["controls_buffer_axis_settings"]));
-            }
-            set {
-                this["controls_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection es5k_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["es5k_buffer_axis_settings"]));
-            }
-            set {
-                this["es5k_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ep1m_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ep1m_buffer_axis_settings"]));
-            }
-            set {
-                this["ep1m_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs2k_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs2k_buffer_axis_settings"]));
-            }
-            set {
-                this["chs2k_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs4_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs4_buffer_axis_settings"]));
-            }
-            set {
-                this["chs4_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs4kvr_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs4kvr_buffer_axis_settings"]));
-            }
-            set {
-                this["chs4kvr_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs4t_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs4t_buffer_axis_settings"]));
-            }
-            set {
-                this["chs4t_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection chs7_buffer_axis_settings {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["chs7_buffer_axis_settings"]));
@@ -620,1014 +270,6 @@ namespace zdsimScanner.Properties {
             }
             set {
                 this["vl80t_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection vl85_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["vl85_buffer_axis_settings"]));
-            }
-            set {
-                this["vl85_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection tep70_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["tep70_buffer_axis_settings"]));
-            }
-            set {
-                this["tep70_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection te10u_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["te10u_buffer_axis_settings"]));
-            }
-            set {
-                this["te10u_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection m62_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["m62_buffer_axis_settings"]));
-            }
-            set {
-                this["m62_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ed4m_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ed4m_buffer_axis_settings"]));
-            }
-            set {
-                this["ed4m_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ed9m_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ed9m_buffer_axis_settings"]));
-            }
-            set {
-                this["ed9m_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ARx_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ARx_point_buffer_settings"]));
-            }
-            set {
-                this["ARx_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ARy_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ARy_point_buffer_settings"]));
-            }
-            set {
-                this["ARy_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ARz_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ARz_point_buffer_settings"]));
-            }
-            set {
-                this["ARz_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection AX_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["AX_point_buffer_settings"]));
-            }
-            set {
-                this["AX_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection AY_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["AY_point_buffer_settings"]));
-            }
-            set {
-                this["AY_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection AZ_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["AZ_point_buffer_settings"]));
-            }
-            set {
-                this["AZ_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection FRx_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["FRx_point_buffer_settings"]));
-            }
-            set {
-                this["FRx_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection FRy_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["FRy_point_buffer_settings"]));
-            }
-            set {
-                this["FRy_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection FRz_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["FRz_point_buffer_settings"]));
-            }
-            set {
-                this["FRz_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection FX_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["FX_point_buffer_settings"]));
-            }
-            set {
-                this["FX_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection FY_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["FY_point_buffer_settings"]));
-            }
-            set {
-                this["FY_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection FZ_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["FZ_point_buffer_settings"]));
-            }
-            set {
-                this["FZ_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection Rx_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["Rx_point_buffer_settings"]));
-            }
-            set {
-                this["Rx_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection Ry_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["Ry_point_buffer_settings"]));
-            }
-            set {
-                this["Ry_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection Rz_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["Rz_point_buffer_settings"]));
-            }
-            set {
-                this["Rz_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection VRx_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["VRx_point_buffer_settings"]));
-            }
-            set {
-                this["VRx_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection VRy_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["VRy_point_buffer_settings"]));
-            }
-            set {
-                this["VRy_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection VRz_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["VRz_point_buffer_settings"]));
-            }
-            set {
-                this["VRz_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection VX_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["VX_point_buffer_settings"]));
-            }
-            set {
-                this["VX_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection VY_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["VY_point_buffer_settings"]));
-            }
-            set {
-                this["VY_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection VZ_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["VZ_point_buffer_settings"]));
-            }
-            set {
-                this["VZ_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection X_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["X_point_buffer_settings"]));
-            }
-            set {
-                this["X_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection Y_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["Y_point_buffer_settings"]));
-            }
-            set {
-                this["Y_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection Z_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["Z_point_buffer_settings"]));
-            }
-            set {
-                this["Z_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection POV_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["POV_point_buffer_settings"]));
-            }
-            set {
-                this["POV_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection Slider_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["Slider_point_buffer_settings"]));
-            }
-            set {
-                this["Slider_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ASlider_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ASlider_point_buffer_settings"]));
-            }
-            set {
-                this["ASlider_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection FSlider_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["FSlider_point_buffer_settings"]));
-            }
-            set {
-                this["FSlider_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection VSlider_point_buffer_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["VSlider_point_buffer_settings"]));
-            }
-            set {
-                this["VSlider_point_buffer_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection controls_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["controls_buffer_axis_settings2"]));
-            }
-            set {
-                this["controls_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection es5k_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["es5k_buffer_axis_settings2"]));
-            }
-            set {
-                this["es5k_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ep1m_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ep1m_buffer_axis_settings2"]));
-            }
-            set {
-                this["ep1m_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs2k_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs2k_buffer_axis_settings2"]));
-            }
-            set {
-                this["chs2k_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs4_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs4_buffer_axis_settings2"]));
-            }
-            set {
-                this["chs4_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs4kvr_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs4kvr_buffer_axis_settings2"]));
-            }
-            set {
-                this["chs4kvr_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs4t_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs4t_buffer_axis_settings2"]));
-            }
-            set {
-                this["chs4t_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs7_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs7_buffer_axis_settings2"]));
-            }
-            set {
-                this["chs7_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection chs8_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["chs8_buffer_axis_settings2"]));
-            }
-            set {
-                this["chs8_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection vl11_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["vl11_buffer_axis_settings2"]));
-            }
-            set {
-                this["vl11_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection vl82_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["vl82_buffer_axis_settings2"]));
-            }
-            set {
-                this["vl82_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection vl80t_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["vl80t_buffer_axis_settings2"]));
-            }
-            set {
-                this["vl80t_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection vl85_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["vl85_buffer_axis_settings2"]));
-            }
-            set {
-                this["vl85_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection tep70_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["tep70_buffer_axis_settings2"]));
-            }
-            set {
-                this["tep70_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection te10u_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["te10u_buffer_axis_settings2"]));
-            }
-            set {
-                this["te10u_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection m62_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["m62_buffer_axis_settings2"]));
-            }
-            set {
-                this["m62_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ed4m_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ed4m_buffer_axis_settings2"]));
-            }
-            set {
-                this["ed4m_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ed9m_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ed9m_buffer_axis_settings2"]));
-            }
-            set {
-                this["ed9m_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_controls_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_controls_axis_data_settings"]));
-            }
-            set {
-                this["sb_controls_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_es5k_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_es5k_axis_data_settings"]));
-            }
-            set {
-                this["sb_es5k_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_ep1m_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_ep1m_axis_data_settings"]));
-            }
-            set {
-                this["sb_ep1m_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_chs2k_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_chs2k_axis_data_settings"]));
-            }
-            set {
-                this["sb_chs2k_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_chs4_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_chs4_axis_data_settings"]));
-            }
-            set {
-                this["sb_chs4_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_chs4kvr_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_chs4kvr_axis_data_settings"]));
-            }
-            set {
-                this["sb_chs4kvr_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_chs4t_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_chs4t_axis_data_settings"]));
-            }
-            set {
-                this["sb_chs4t_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_chs7_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_chs7_axis_data_settings"]));
-            }
-            set {
-                this["sb_chs7_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_chs8_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_chs8_axis_data_settings"]));
-            }
-            set {
-                this["sb_chs8_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_vl11_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_vl11_axis_data_settings"]));
-            }
-            set {
-                this["sb_vl11_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_vl82_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_vl82_axis_data_settings"]));
-            }
-            set {
-                this["sb_vl82_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_vl80t_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_vl80t_axis_data_settings"]));
-            }
-            set {
-                this["sb_vl80t_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_vl85_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_vl85_axis_data_settings"]));
-            }
-            set {
-                this["sb_vl85_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_tep70_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_tep70_axis_data_settings"]));
-            }
-            set {
-                this["sb_tep70_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_te10u_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_te10u_axis_data_settings"]));
-            }
-            set {
-                this["sb_te10u_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_m62_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_m62_axis_data_settings"]));
-            }
-            set {
-                this["sb_m62_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_ed4m_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_ed4m_axis_data_settings"]));
-            }
-            set {
-                this["sb_ed4m_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_ed9m_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_ed9m_axis_data_settings"]));
-            }
-            set {
-                this["sb_ed9m_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection temp_string_buffer_start {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["temp_string_buffer_start"]));
-            }
-            set {
-                this["temp_string_buffer_start"] = value;
             }
         }
         
@@ -1701,62 +343,6 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection neshtatki_buffer_key_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["neshtatki_buffer_key_settings"]));
-            }
-            set {
-                this["neshtatki_buffer_key_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection neshtatki_buffer_axis_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["neshtatki_buffer_axis_settings"]));
-            }
-            set {
-                this["neshtatki_buffer_axis_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection neshtatki_buffer_axis_settings2 {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["neshtatki_buffer_axis_settings2"]));
-            }
-            set {
-                this["neshtatki_buffer_axis_settings2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>start</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection sb_neshtatki_axis_data_settings {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["sb_neshtatki_axis_data_settings"]));
-            }
-            set {
-                this["sb_neshtatki_axis_data_settings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int i_sound_peredacha {
             get {
@@ -1769,8 +355,1433 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        public global::System.Collections.Specialized.StringCollection Setting {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Setting"]));
+            }
+            set {
+                this["Setting"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection controls_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["controls_buffer_key_settings"]));
+            }
+            set {
+                this["controls_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection es5k_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["es5k_buffer_key_settings"]));
+            }
+            set {
+                this["es5k_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ep1m_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ep1m_buffer_key_settings"]));
+            }
+            set {
+                this["ep1m_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs2k_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs2k_buffer_key_settings"]));
+            }
+            set {
+                this["chs2k_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs4_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs4_buffer_key_settings"]));
+            }
+            set {
+                this["chs4_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs4kvr_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs4kvr_buffer_key_settings"]));
+            }
+            set {
+                this["chs4kvr_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs4t_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs4t_buffer_key_settings"]));
+            }
+            set {
+                this["chs4t_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs7_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs7_buffer_key_settings"]));
+            }
+            set {
+                this["chs7_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs8_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs8_buffer_key_settings"]));
+            }
+            set {
+                this["chs8_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection vl11_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["vl11_buffer_key_settings"]));
+            }
+            set {
+                this["vl11_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection vl82_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["vl82_buffer_key_settings"]));
+            }
+            set {
+                this["vl82_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection vl80t_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["vl80t_buffer_key_settings"]));
+            }
+            set {
+                this["vl80t_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection vl85_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["vl85_buffer_key_settings"]));
+            }
+            set {
+                this["vl85_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection tep70_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["tep70_buffer_key_settings"]));
+            }
+            set {
+                this["tep70_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection te10u_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["te10u_buffer_key_settings"]));
+            }
+            set {
+                this["te10u_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection m62_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["m62_buffer_key_settings"]));
+            }
+            set {
+                this["m62_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ed4m_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ed4m_buffer_key_settings"]));
+            }
+            set {
+                this["ed4m_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ed9m_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ed9m_buffer_key_settings"]));
+            }
+            set {
+                this["ed9m_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection controls_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["controls_buffer_axis_settings"]));
+            }
+            set {
+                this["controls_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection es5k_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["es5k_buffer_axis_settings"]));
+            }
+            set {
+                this["es5k_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ep1m_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ep1m_buffer_axis_settings"]));
+            }
+            set {
+                this["ep1m_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs2k_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs2k_buffer_axis_settings"]));
+            }
+            set {
+                this["chs2k_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs4_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs4_buffer_axis_settings"]));
+            }
+            set {
+                this["chs4_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs4kvr_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs4kvr_buffer_axis_settings"]));
+            }
+            set {
+                this["chs4kvr_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs4t_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs4t_buffer_axis_settings"]));
+            }
+            set {
+                this["chs4t_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection vl85_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["vl85_buffer_axis_settings"]));
+            }
+            set {
+                this["vl85_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection tep70_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["tep70_buffer_axis_settings"]));
+            }
+            set {
+                this["tep70_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection te10u_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["te10u_buffer_axis_settings"]));
+            }
+            set {
+                this["te10u_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection m62_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["m62_buffer_axis_settings"]));
+            }
+            set {
+                this["m62_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ed4m_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ed4m_buffer_axis_settings"]));
+            }
+            set {
+                this["ed4m_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ed9m_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ed9m_buffer_axis_settings"]));
+            }
+            set {
+                this["ed9m_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ARx_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ARx_point_buffer_settings"]));
+            }
+            set {
+                this["ARx_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ARy_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ARy_point_buffer_settings"]));
+            }
+            set {
+                this["ARy_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ARz_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ARz_point_buffer_settings"]));
+            }
+            set {
+                this["ARz_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection AX_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["AX_point_buffer_settings"]));
+            }
+            set {
+                this["AX_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection AY_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["AY_point_buffer_settings"]));
+            }
+            set {
+                this["AY_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection AZ_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["AZ_point_buffer_settings"]));
+            }
+            set {
+                this["AZ_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection FRx_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["FRx_point_buffer_settings"]));
+            }
+            set {
+                this["FRx_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection FRy_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["FRy_point_buffer_settings"]));
+            }
+            set {
+                this["FRy_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection FRz_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["FRz_point_buffer_settings"]));
+            }
+            set {
+                this["FRz_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection FX_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["FX_point_buffer_settings"]));
+            }
+            set {
+                this["FX_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection FY_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["FY_point_buffer_settings"]));
+            }
+            set {
+                this["FY_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection FZ_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["FZ_point_buffer_settings"]));
+            }
+            set {
+                this["FZ_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection Rx_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Rx_point_buffer_settings"]));
+            }
+            set {
+                this["Rx_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection Ry_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Ry_point_buffer_settings"]));
+            }
+            set {
+                this["Ry_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection Rz_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Rz_point_buffer_settings"]));
+            }
+            set {
+                this["Rz_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection VRx_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["VRx_point_buffer_settings"]));
+            }
+            set {
+                this["VRx_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection VRy_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["VRy_point_buffer_settings"]));
+            }
+            set {
+                this["VRy_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection VRz_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["VRz_point_buffer_settings"]));
+            }
+            set {
+                this["VRz_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection VX_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["VX_point_buffer_settings"]));
+            }
+            set {
+                this["VX_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection VY_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["VY_point_buffer_settings"]));
+            }
+            set {
+                this["VY_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection VZ_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["VZ_point_buffer_settings"]));
+            }
+            set {
+                this["VZ_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection X_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["X_point_buffer_settings"]));
+            }
+            set {
+                this["X_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection Y_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Y_point_buffer_settings"]));
+            }
+            set {
+                this["Y_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection Z_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Z_point_buffer_settings"]));
+            }
+            set {
+                this["Z_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection POV_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["POV_point_buffer_settings"]));
+            }
+            set {
+                this["POV_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection Slider_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Slider_point_buffer_settings"]));
+            }
+            set {
+                this["Slider_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ASlider_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ASlider_point_buffer_settings"]));
+            }
+            set {
+                this["ASlider_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection FSlider_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["FSlider_point_buffer_settings"]));
+            }
+            set {
+                this["FSlider_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection VSlider_point_buffer_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["VSlider_point_buffer_settings"]));
+            }
+            set {
+                this["VSlider_point_buffer_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection controls_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["controls_buffer_axis_settings2"]));
+            }
+            set {
+                this["controls_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection es5k_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["es5k_buffer_axis_settings2"]));
+            }
+            set {
+                this["es5k_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ep1m_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ep1m_buffer_axis_settings2"]));
+            }
+            set {
+                this["ep1m_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs2k_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs2k_buffer_axis_settings2"]));
+            }
+            set {
+                this["chs2k_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs4_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs4_buffer_axis_settings2"]));
+            }
+            set {
+                this["chs4_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs4kvr_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs4kvr_buffer_axis_settings2"]));
+            }
+            set {
+                this["chs4kvr_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs4t_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs4t_buffer_axis_settings2"]));
+            }
+            set {
+                this["chs4t_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs7_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs7_buffer_axis_settings2"]));
+            }
+            set {
+                this["chs7_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection chs8_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["chs8_buffer_axis_settings2"]));
+            }
+            set {
+                this["chs8_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection vl11_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["vl11_buffer_axis_settings2"]));
+            }
+            set {
+                this["vl11_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection vl82_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["vl82_buffer_axis_settings2"]));
+            }
+            set {
+                this["vl82_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection vl80t_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["vl80t_buffer_axis_settings2"]));
+            }
+            set {
+                this["vl80t_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection vl85_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["vl85_buffer_axis_settings2"]));
+            }
+            set {
+                this["vl85_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection tep70_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["tep70_buffer_axis_settings2"]));
+            }
+            set {
+                this["tep70_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection te10u_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["te10u_buffer_axis_settings2"]));
+            }
+            set {
+                this["te10u_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection m62_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["m62_buffer_axis_settings2"]));
+            }
+            set {
+                this["m62_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ed4m_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ed4m_buffer_axis_settings2"]));
+            }
+            set {
+                this["ed4m_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ed9m_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ed9m_buffer_axis_settings2"]));
+            }
+            set {
+                this["ed9m_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_controls_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_controls_axis_data_settings"]));
+            }
+            set {
+                this["sb_controls_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_es5k_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_es5k_axis_data_settings"]));
+            }
+            set {
+                this["sb_es5k_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_ep1m_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_ep1m_axis_data_settings"]));
+            }
+            set {
+                this["sb_ep1m_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_chs2k_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_chs2k_axis_data_settings"]));
+            }
+            set {
+                this["sb_chs2k_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_chs4_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_chs4_axis_data_settings"]));
+            }
+            set {
+                this["sb_chs4_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_chs4kvr_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_chs4kvr_axis_data_settings"]));
+            }
+            set {
+                this["sb_chs4kvr_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_chs4t_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_chs4t_axis_data_settings"]));
+            }
+            set {
+                this["sb_chs4t_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_chs7_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_chs7_axis_data_settings"]));
+            }
+            set {
+                this["sb_chs7_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_chs8_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_chs8_axis_data_settings"]));
+            }
+            set {
+                this["sb_chs8_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_vl11_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_vl11_axis_data_settings"]));
+            }
+            set {
+                this["sb_vl11_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_vl82_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_vl82_axis_data_settings"]));
+            }
+            set {
+                this["sb_vl82_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_vl80t_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_vl80t_axis_data_settings"]));
+            }
+            set {
+                this["sb_vl80t_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_vl85_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_vl85_axis_data_settings"]));
+            }
+            set {
+                this["sb_vl85_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_tep70_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_tep70_axis_data_settings"]));
+            }
+            set {
+                this["sb_tep70_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_te10u_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_te10u_axis_data_settings"]));
+            }
+            set {
+                this["sb_te10u_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_m62_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_m62_axis_data_settings"]));
+            }
+            set {
+                this["sb_m62_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_ed4m_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_ed4m_axis_data_settings"]));
+            }
+            set {
+                this["sb_ed4m_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_ed9m_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_ed9m_axis_data_settings"]));
+            }
+            set {
+                this["sb_ed9m_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection temp_string_buffer_start {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["temp_string_buffer_start"]));
+            }
+            set {
+                this["temp_string_buffer_start"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection neshtatki_buffer_key_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["neshtatki_buffer_key_settings"]));
+            }
+            set {
+                this["neshtatki_buffer_key_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection neshtatki_buffer_axis_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["neshtatki_buffer_axis_settings"]));
+            }
+            set {
+                this["neshtatki_buffer_axis_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection neshtatki_buffer_axis_settings2 {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["neshtatki_buffer_axis_settings2"]));
+            }
+            set {
+                this["neshtatki_buffer_axis_settings2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>start</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection sb_neshtatki_axis_data_settings {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["sb_neshtatki_axis_data_settings"]));
+            }
+            set {
+                this["sb_neshtatki_axis_data_settings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_controls_wav_path_data_settings {
             get {
@@ -1783,8 +1794,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_neshtatki_wav_path_data_settings {
             get {
@@ -1797,8 +1808,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_es5k_wav_path_data_settings {
             get {
@@ -1811,8 +1822,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_ep1m_wav_path_data_settings {
             get {
@@ -1825,8 +1836,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_chs2k_wav_path_data_settings {
             get {
@@ -1839,8 +1850,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_chs4_wav_path_data_settings {
             get {
@@ -1853,8 +1864,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_chs4kvr_wav_path_data_settings {
             get {
@@ -1867,8 +1878,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_chs4t_wav_path_data_settings {
             get {
@@ -1881,8 +1892,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_chs7_wav_path_data_settings {
             get {
@@ -1895,8 +1906,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_chs8_wav_path_data_settings {
             get {
@@ -1909,8 +1920,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_vl11_wav_path_data_settings {
             get {
@@ -1923,8 +1934,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_vl82_wav_path_data_settings {
             get {
@@ -1937,8 +1948,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_vl80t_wav_path_data_settings {
             get {
@@ -1951,8 +1962,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_vl85_wav_path_data_settings {
             get {
@@ -1965,8 +1976,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_tep70_wav_path_data_settings {
             get {
@@ -1979,8 +1990,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_te10u_wav_path_data_settings {
             get {
@@ -1993,8 +2004,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_m62_wav_path_data_settings {
             get {
@@ -2007,8 +2018,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_ed4m_wav_path_data_settings {
             get {
@@ -2021,8 +2032,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_ed9m_wav_path_data_settings {
             get {
@@ -2035,8 +2046,8 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
             "tring>start</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection sb_tem18_wav_path_data_settings {
             get {
@@ -2049,12 +2060,13 @@ namespace zdsimScanner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection Setting {
+        [global::System.Configuration.DefaultSettingValueAttribute("3200")]
+        public decimal step_steper_motor {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["Setting"]));
+                return ((decimal)(this["step_steper_motor"]));
             }
             set {
-                this["Setting"] = value;
+                this["step_steper_motor"] = value;
             }
         }
     }

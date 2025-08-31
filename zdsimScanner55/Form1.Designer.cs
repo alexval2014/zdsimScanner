@@ -45,6 +45,7 @@
             this.combobox_Port = new System.Windows.Forms.ComboBox();
             this.button_about = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.button_demo = new System.Windows.Forms.Button();
             this.numericUpDown_delay_HID = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_skorCOM = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_delay = new System.Windows.Forms.NumericUpDown();
@@ -213,6 +214,20 @@
             // 
             this.toolTip1.AutomaticDelay = 1000;
             // 
+            // button_demo
+            // 
+            this.button_demo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_demo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button_demo.Location = new System.Drawing.Point(872, 585);
+            this.button_demo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_demo.Name = "button_demo";
+            this.button_demo.Size = new System.Drawing.Size(112, 35);
+            this.button_demo.TabIndex = 25;
+            this.button_demo.Text = "Демо";
+            this.toolTip1.SetToolTip(this.button_demo, "запуск демо режима без устройств и Arduino");
+            this.button_demo.UseVisualStyleBackColor = true;
+            this.button_demo.Click += new System.EventHandler(this.button_demo_Click);
+            // 
             // numericUpDown_delay_HID
             // 
             this.numericUpDown_delay_HID.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::zdsimScanner.Properties.Settings.Default, "delay_send_HID", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -346,6 +361,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button1;
             this.ClientSize = new System.Drawing.Size(1149, 639);
+            this.Controls.Add(this.button_demo);
             this.Controls.Add(this.numericUpDown_delay_HID);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button_about);
@@ -406,6 +422,7 @@
         private System.Windows.Forms.Button button_stop;
         private System.Windows.Forms.Timer timer_500ms;
         private System.Windows.Forms.Timer timer_oborot_disel;
+        private System.Windows.Forms.Button button_demo;
     }
 }
 
