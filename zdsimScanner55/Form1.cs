@@ -14882,8 +14882,8 @@ namespace zdsimScanner
 
             if (Loco.sig_loco != 0)
             {
-                //if (Loco.sig_pos_pnevm != 0) console1.AppendText("\r\nпневматика " + "0x" + Convert.ToString(Loco.sig_pos_pnevm, 16));
-                //if (Loco.sig_pos_pnevm != 0) console1.AppendText("\r\nэлектрика " + "0x" + Convert.ToString(Loco.sig_pos_elektro, 16));
+                if (Loco.sig_pos_pnevm != 0) console1.AppendText("\r\nпневматика " + "0x" + Convert.ToString(Loco.sig_pos_pnevm, 16));
+                if (Loco.sig_pos_pnevm != 0) console1.AppendText("\r\nэлектрика " + "0x" + Convert.ToString(Loco.sig_pos_elektro, 16));
                 console1.AppendText("\r\nЛоко код " + Loco.locoCode);
                 console1.AppendText("\r\nsig_loco " + Loco.sig_loco);
                 console1.AppendText("\r\nТип лока " + Loco.sig_loco);
@@ -15071,12 +15071,6 @@ namespace zdsimScanner
                 }
 
                 SendToComPort(); //Отправка данных в COM порт
-                //признак буфера
-                //Loco.out_buffer[60] = 0xa0;
-                //Loco.out_buffer[61] = 0xb0;
-                //Loco.out_buffer[62] = 0xc0;
-                //Loco.out_buffer[63] = 0xd0;
-                //port.Write(Loco.out_buffer, 0, Loco.out_buffer.Length);
             }
             else
             {
@@ -15129,28 +15123,28 @@ namespace zdsimScanner
             {
                 if (Loco.i_process_name == 6)
                 {
-                    /*
-                    Loco.write_controls();
-                    Loco.write_neshtatki();
-                    if (Loco.sig_loco == 1) Loco.write_2es5k();
-                    if (Loco.sig_loco == 2) Loco.write_ep1m();
-                    if (Loco.sig_loco == 3) Loco.write_chs2k();
-                    if (Loco.sig_loco == 4) Loco.write_chs4();
-                    if (Loco.sig_loco == 5) Loco.write_chs4kvr();
-                    if (Loco.sig_loco == 6) Loco.write_chs4t();
-                    if (Loco.sig_loco == 7) Loco.write_chs7();
-                    if (Loco.sig_loco == 8) Loco.write_chs8();
-                    if (Loco.sig_loco == 9) Loco.write_vl11();
-                    if (Loco.sig_loco == 10) Loco.write_vl82();
-                    if (Loco.sig_loco == 11) Loco.write_vl80t();
-                    if (Loco.sig_loco == 12) Loco.write_vl85();
-                    if (Loco.sig_loco == 13) Loco.write_tep70();
-                    if (Loco.sig_loco == 14) Loco.write_2te10u();
-                    if (Loco.sig_loco == 15) Loco.write_m62();
-                    if (Loco.sig_loco == 16) Loco.write_ed4m();
-                    if (Loco.sig_loco == 17) Loco.write_ed9m();
-                    if (Loco.sig_loco == 18) Loco.write_tem18();
-                    */
+
+                    LocoWrite.write_controls();
+                    LocoWrite.write_neshtatki();
+
+                    if (Loco.sig_loco == 1) LocoWrite.write_2es5k();
+                    if (Loco.sig_loco == 2) LocoWrite.write_ep1m();
+                    if (Loco.sig_loco == 3) LocoWrite.write_chs2k();
+                    if (Loco.sig_loco == 4) LocoWrite.write_chs4();
+                    if (Loco.sig_loco == 5) LocoWrite.write_chs4kvr();
+                    if (Loco.sig_loco == 6) LocoWrite.write_chs4t();
+                    if (Loco.sig_loco == 7) LocoWrite.write_chs7();
+                    if (Loco.sig_loco == 8) LocoWrite.write_chs8();
+                    if (Loco.sig_loco == 9) LocoWrite.write_vl11();
+                    if (Loco.sig_loco == 10) LocoWrite.write_vl82();
+                    if (Loco.sig_loco == 11) LocoWrite.write_vl80t();
+                    if (Loco.sig_loco == 12) LocoWrite.write_vl85();
+                    if (Loco.sig_loco == 13) LocoWrite.write_tep70();
+                    if (Loco.sig_loco == 14) LocoWrite.write_2te10u();
+                    if (Loco.sig_loco == 15) LocoWrite.write_m62();
+                    if (Loco.sig_loco == 16) LocoWrite.write_ed4m();
+                    if (Loco.sig_loco == 17) LocoWrite.write_ed9m();
+                    if (Loco.sig_loco == 18) LocoWrite.write_tem18();
                 }
             }
             else

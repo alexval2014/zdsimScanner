@@ -142,6 +142,7 @@
     <Compile Include="Loco.cs" />
     <Compile Include="LocoButtons.cs" />
     <Compile Include="LocoRead.cs" />
+    <Compile Include="LocoWrite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
