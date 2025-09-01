@@ -564,7 +564,6 @@ namespace zdsimScanner
         public void UpdateJoystickState()
         {
             int[] b_temp;
-
             JoystickState j = device.CurrentJoystickState;
 
             Form1.joystick_axis_buffer[0] = j.ARx;//обычные оси
@@ -756,9 +755,6 @@ namespace zdsimScanner
                 progressBar_osi.Value = Convert.ToUInt16(b_temp[0]);
                 label_progressbar_osi.Text = Convert.ToString(b_temp[0]);
             }
-
-
-
         }
 
         public string[] LocoKeyData = new string[]{

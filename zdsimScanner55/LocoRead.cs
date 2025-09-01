@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading;
 using zdsimScanner;
 
@@ -6,6 +7,31 @@ namespace zdsimScanner
 {
     class LocoRead
     {
+
+
+        private static byte ReadByteFromString(Int32 address, int maxLength = 4)
+        {
+            // читаем несколько байт (с запасом, т.к. строка "12" = 2 символа + '\0')
+            byte[] buffer = Loco.read_bytes((Int32)Loco.BA + address, maxLength);
+
+            // преобразуем в строку
+            string str = Encoding.ASCII.GetString(buffer);
+
+            // убираем мусор
+            str = str.Replace("\0", "").Trim();
+
+            // пробуем распарсить
+            if (byte.TryParse(str, out byte value))
+            {
+                return value;
+            }
+            else
+            {
+                return 0; // если строка не число — вернём 0     
+            }
+        }
+
+
         //===================================================================================
         // Читаем из памти игры параметры локомотивов
         //===================================================================================
@@ -10869,10 +10895,9 @@ namespace zdsimScanner
            //РК поз1
            Loco.temp_buffer = new byte[] { 255, 255 };
            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 27, 2);
-
+            
            //динамические
-
-           //НМ float
+            //НМ float
            Loco.temp_buffer = Loco.read_bytes(sig_pos_pnevm + 0x80, 8);
            double d_temp = BitConverter.ToDouble(Loco.temp_buffer, 0);
            i_temp = Convert.ToUInt16(d_temp * Loco.i_pnevmo_convert);
@@ -11030,46 +11055,78 @@ namespace zdsimScanner
             Int32 i32;
 
             //статические
-            //скорость доп.
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x0032CA78, 2);
-            Form1.i_skor_dop = BitConverter.ToInt16(Loco.temp_buffer, 0);
 
-            //скорость тек.
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x04F6FCE0, 4);
-            float f_temp = BitConverter.ToSingle(Loco.temp_buffer, 0);
-            f_temp = Math.Abs(f_temp);
-            UInt16 i_temp = Convert.ToUInt16(f_temp * Loco.i_skor_tek_convert);
-            Loco.temp_buffer = BitConverter.GetBytes(i_temp);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 2, 2);
+            //Ограничение скорости (допустимая скорость)
+            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x0034987C, 2);
+            Form1.i_skor_dop = BitConverter.ToInt16(Loco.temp_buffer, 0) & 0xFF;
+
+            // скорость тек. с множетелем для стрелочных приборов на ШД
+            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x04F8C28C, 4);  // читаем float по адресу в памяти симулятора
+            float f_temp = BitConverter.ToSingle(Loco.temp_buffer, 0);           // преобразуем 4 байта в float
+            f_temp = Math.Abs(f_temp);                                           // модуль (на случай отрицательных значений)
+            UInt16 i_temp = Convert.ToUInt16(f_temp * Loco.i_skor_tek_convert);  // масштабируем в целое значение
+            Loco.temp_buffer = BitConverter.GetBytes(i_temp);                    // упаковываем в 2 байта
+            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 2, 2);              // кладём в выходной буфер
 
             //АЛС
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB744, 1);
+            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08C07ECC, 1);
             Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 4, 1);
+            
+            //Расстояние до цели в метрах
+            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08C07EB8, 4);
+            Form1.i_rasstoyanie_do_tseli = BitConverter.ToInt16(Loco.temp_buffer, 0);
+            //Console.WriteLine($"[DEBUG] Расстояние до цели в метрах = {Form1.i_rasstoyanie_do_tseli}");
+
 
             //бдительность
             Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x0032CBC0, 1);
             Loco.i_bdit_current = Loco.temp_buffer[0];
 
-            //скор тек 2
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x04F6FCE0, 4);
-            f_temp = BitConverter.ToSingle(Loco.temp_buffer, 0);
-            f_temp = Math.Abs(f_temp);
-            i_temp = Convert.ToUInt16(f_temp);
-            Form1.i_skor_tek = i_temp;
-            Loco.temp_buffer = BitConverter.GetBytes(i_temp);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 6, 2);
+            //Скорость текущая без множетеля
+            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x04F8C28C, 4);  // читаем float по адресу в памяти симулятора
+            f_temp = BitConverter.ToSingle(Loco.temp_buffer, 0);                 // преобразуем 4 байта в float
+            f_temp = Math.Abs(f_temp);                                           // модуль (на случай отрицательных значений)
+            i_temp = Convert.ToUInt16(f_temp * Loco.i_skor_tek_convert);         // масштабируем в целое значение
+            Form1.i_skor_tek = i_temp;                                           // Запишим значение в переменную текущей скорости для дальнейших вычислений
+            Loco.temp_buffer = BitConverter.GetBytes(i_temp);                    // упаковываем в 2 байта
+            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 6, 2);              // кладём в выходной буфер
 
-            //час
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB8AC, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 10, 1);
+            // !!! Добавляем отладку здесь !!!
+            Console.WriteLine($"[DEBUG] Текущая скорость (float из памяти) = {f_temp}, после конвертации = {i_temp}");
 
-            //минута
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB8B0, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 11, 1);
+            // Часы
+            Loco.out_buffer[10] = ReadByteFromString(0x08C08041);
 
-            //секунда
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB8B4, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 12, 1);
+            // Минуты
+            Loco.out_buffer[11] = ReadByteFromString(0x08C08047);
+
+            // Секунды
+            Loco.out_buffer[12] = ReadByteFromString(0x08C0804D);
+
+
+            
+
+
+
+            /*
+            // Часы
+            byte[] buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB8B9, 4);   // читаем до 2 байт (например "12\0")
+            string hourStr = Encoding.ASCII.GetString(buffer).TrimEnd('\0');   // убираем \0
+            byte hour = byte.Parse(hourStr);    // преобразуем в byte
+            Loco.out_buffer[10] = hour;         // Записываем Часы в out_buffer
+
+            // Минуты
+            buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB8BF, 4);          // читаем до 2 байт (например "12\0")
+            string minuteStr = Encoding.ASCII.GetString(buffer).TrimEnd('\0'); // убираем \0
+            byte minute = byte.Parse(minuteStr); // преобразуем в byte
+            Loco.out_buffer[11] = minute;        // Записываем Минуты в out_buffer
+
+            // Секунды
+            buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB8C5, 4);           // читаем до 2 байт (например "12\0")
+            string secondStr = Encoding.ASCII.GetString(buffer).TrimEnd('\0');  // убираем \0
+            byte second = byte.Parse(secondStr); // преобразуем в byte
+            Loco.out_buffer[12] = second;        // Записываем Секунды в out_buffer
+            */
 
             //Напряжение контактной сети. float
             Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08DB92B4, 8);

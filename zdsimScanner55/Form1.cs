@@ -8,6 +8,7 @@ using System.Threading;
 using System.Diagnostics;
 using Microsoft.DirectX.DirectInput;
 using System.Configuration;
+using System.Text;
 
 namespace zdsimScanner
 {
@@ -2332,6 +2333,9 @@ namespace zdsimScanner
         public static int i_skor_tek2 = 0;               //СКОРОСТЬ ТЕКУЩАЯ
         public static int i_skor_dop = 0;
         public static UInt16 i_skor_tek = 0;
+        public static int i_rasstoyanie_do_tseli = 0;
+
+
         public static byte i_skor_dop_out = 1;
         public static string i_joy_name="";
         public static string i_zdsimloco_name = "";
@@ -2468,7 +2472,7 @@ namespace zdsimScanner
         public Form1()
         {  
             InitializeComponent();
-            this.Text = "zdsimScanner 54.006 v8.1.0";
+            this.Text = "zdsimScanner 55.008 v9.0.0";
         }
 
         //------------------------------------------------------------------------------------
@@ -14882,8 +14886,8 @@ namespace zdsimScanner
 
             if (Loco.sig_loco != 0)
             {
-                //if (Loco.sig_pos_pnevm != 0) console1.AppendText("\r\nпневматика " + "0x" + Convert.ToString(Loco.sig_pos_pnevm, 16));
-                //if (Loco.sig_pos_pnevm != 0) console1.AppendText("\r\nэлектрика " + "0x" + Convert.ToString(Loco.sig_pos_elektro, 16));
+                if (Loco.sig_pos_pnevm != 0) console1.AppendText("\r\nпневматика " + "0x" + Convert.ToString(Loco.sig_pos_pnevm, 16));
+                if (Loco.sig_pos_pnevm != 0) console1.AppendText("\r\nэлектрика " + "0x" + Convert.ToString(Loco.sig_pos_elektro, 16));
                 console1.AppendText("\r\nЛоко код " + Loco.locoCode);
                 console1.AppendText("\r\nsig_loco " + Loco.sig_loco);
                 console1.AppendText("\r\nТип лока " + Loco.sig_loco);
@@ -15009,28 +15013,36 @@ namespace zdsimScanner
                     Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 5, 1);
                 }
 
-                //превышение скорости
-                if (i_skor_dop <= (i_skor_tek + 3) && (Loco.sig_loco == 1 || Loco.sig_loco == 2 || Loco.sig_loco == 3 ||
-                    Loco.sig_loco == 6 || Loco.sig_loco == 7 || Loco.sig_loco == 12 || Loco.sig_loco == 14 || Loco.sig_loco == 16 ||
-                    Loco.sig_loco == 17 || Loco.sig_loco == 18))
+                // превышение скорости
+                if (i_skor_dop <= (i_skor_tek + 3) &&
+                    (Loco.sig_loco == 1 || Loco.sig_loco == 2 || Loco.sig_loco == 3 ||
+                     Loco.sig_loco == 6 || Loco.sig_loco == 7 || Loco.sig_loco == 12 ||
+                     Loco.sig_loco == 14 || Loco.sig_loco == 16 || Loco.sig_loco == 17 ||
+                     Loco.sig_loco == 18))
                 {
+                    Console.WriteLine($"[DEBUG] Превышение скорости! i_skor_tek={i_skor_tek}, i_skor_dop={i_skor_dop}, loco={Loco.sig_loco}");
+
                     if (i_skor_dop_out == 1)
                     {
                         Loco.temp_buffer = BitConverter.GetBytes(i_skor_dop);
                         Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                        Console.WriteLine($"[DEBUG] В out_buffer записано ограничение: {i_skor_dop}");
                     }
 
                     if (i_skor_dop_out == 0)
                     {
                         Loco.temp_buffer = new byte[] { 255, 255 };
                         Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                        Console.WriteLine("[DEBUG] В out_buffer записано FF FF (заглушка)");
                     }
                 }
                 else
                 {
                     Loco.temp_buffer = BitConverter.GetBytes(i_skor_dop);
                     Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                    Console.WriteLine($"[DEBUG] Превышения нет. В out_buffer записано ограничение: {i_skor_dop}");
                 }
+
 
                 //задержка контроля дверей
                 if (Loco.sig_loco == 16 || Loco.sig_loco == 17)
@@ -15071,12 +15083,6 @@ namespace zdsimScanner
                 }
 
                 SendToComPort(); //Отправка данных в COM порт
-                //признак буфера
-                //Loco.out_buffer[60] = 0xa0;
-                //Loco.out_buffer[61] = 0xb0;
-                //Loco.out_buffer[62] = 0xc0;
-                //Loco.out_buffer[63] = 0xd0;
-                //port.Write(Loco.out_buffer, 0, Loco.out_buffer.Length);
             }
             else
             {
@@ -15085,7 +15091,7 @@ namespace zdsimScanner
         }
 
         //------------------------------------------------------------------------------------
-        // timer2 Для вывода в Демо режиме
+        //timer2 Для вывода в Демо режиме
         //this.timer2.Interval = 3000;
         //this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
         //------------------------------------------------------------------------------------
@@ -15094,13 +15100,48 @@ namespace zdsimScanner
             // Сначала читаем данные по номеру локомотива
             ReadLoco();//Вызываем процедуру получения данных из локомотива 
 
+            // превышение скорости
+            if (i_skor_dop <= (i_skor_tek + 3) &&
+                (Loco.sig_loco == 1 || Loco.sig_loco == 2 || Loco.sig_loco == 3 ||
+                 Loco.sig_loco == 6 || Loco.sig_loco == 7 || Loco.sig_loco == 12 ||
+                 Loco.sig_loco == 14 || Loco.sig_loco == 16 || Loco.sig_loco == 17 ||
+                 Loco.sig_loco == 18))
+            {
+                Console.WriteLine($"[DEBUG] Превышение скорости! i_skor_tek={i_skor_tek}, i_skor_dop={i_skor_dop}, loco={Loco.sig_loco}");
+                
+                //Мигание значения индикатора при привышении скорости
+                if (i_skor_dop_out == 1)
+                {
+                    Loco.temp_buffer = BitConverter.GetBytes(i_skor_dop);
+                    Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                    Console.WriteLine($"[DEBUG] В out_buffer записано Текущая скорость: {i_skor_tek}");
+                    Console.WriteLine($"[DEBUG] В out_buffer записано Ограничение скорости: {i_skor_dop}");
+                }
+
+                if (i_skor_dop_out == 0)
+                {
+                    Loco.temp_buffer = new byte[] { 255, 255 };
+                    Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                    Console.WriteLine("[DEBUG] В out_buffer записано FF FF (заглушка)");
+                }
+            }
+            else
+            {
+                Loco.temp_buffer = BitConverter.GetBytes(i_skor_dop);
+                Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                Console.WriteLine($"[DEBUG] Превышения нет. В out_buffer записано: i_skor_tek ={ i_skor_tek}, i_skor_dop ={ i_skor_dop}");
+            }
+
+
+
             // Теперь разбираем буфер и показываем разные отчёты
             console1.Clear();
-
             switch (Loco.sig_loco)
             {
                 // Вывод отладки для локомотива ed4m
                 case 16:
+                   //console1.AppendText($"\r\nСкорость текущая: {Loco.out_buffer[2]}");
+                   //console1.AppendText($"\r\nОграничение скорости: {i_skor_dop}");
                     DisplayEd4mInfo(Loco.out_buffer);
                     break;
 
@@ -15129,28 +15170,28 @@ namespace zdsimScanner
             {
                 if (Loco.i_process_name == 6)
                 {
-                    /*
-                    Loco.write_controls();
-                    Loco.write_neshtatki();
-                    if (Loco.sig_loco == 1) Loco.write_2es5k();
-                    if (Loco.sig_loco == 2) Loco.write_ep1m();
-                    if (Loco.sig_loco == 3) Loco.write_chs2k();
-                    if (Loco.sig_loco == 4) Loco.write_chs4();
-                    if (Loco.sig_loco == 5) Loco.write_chs4kvr();
-                    if (Loco.sig_loco == 6) Loco.write_chs4t();
-                    if (Loco.sig_loco == 7) Loco.write_chs7();
-                    if (Loco.sig_loco == 8) Loco.write_chs8();
-                    if (Loco.sig_loco == 9) Loco.write_vl11();
-                    if (Loco.sig_loco == 10) Loco.write_vl82();
-                    if (Loco.sig_loco == 11) Loco.write_vl80t();
-                    if (Loco.sig_loco == 12) Loco.write_vl85();
-                    if (Loco.sig_loco == 13) Loco.write_tep70();
-                    if (Loco.sig_loco == 14) Loco.write_2te10u();
-                    if (Loco.sig_loco == 15) Loco.write_m62();
-                    if (Loco.sig_loco == 16) Loco.write_ed4m();
-                    if (Loco.sig_loco == 17) Loco.write_ed9m();
-                    if (Loco.sig_loco == 18) Loco.write_tem18();
-                    */
+
+                    LocoWrite.write_controls();
+                    LocoWrite.write_neshtatki();
+
+                    if (Loco.sig_loco == 1) LocoWrite.write_2es5k();
+                    if (Loco.sig_loco == 2) LocoWrite.write_ep1m();
+                    if (Loco.sig_loco == 3) LocoWrite.write_chs2k();
+                    if (Loco.sig_loco == 4) LocoWrite.write_chs4();
+                    if (Loco.sig_loco == 5) LocoWrite.write_chs4kvr();
+                    if (Loco.sig_loco == 6) LocoWrite.write_chs4t();
+                    if (Loco.sig_loco == 7) LocoWrite.write_chs7();
+                    if (Loco.sig_loco == 8) LocoWrite.write_chs8();
+                    if (Loco.sig_loco == 9) LocoWrite.write_vl11();
+                    if (Loco.sig_loco == 10) LocoWrite.write_vl82();
+                    if (Loco.sig_loco == 11) LocoWrite.write_vl80t();
+                    if (Loco.sig_loco == 12) LocoWrite.write_vl85();
+                    if (Loco.sig_loco == 13) LocoWrite.write_tep70();
+                    if (Loco.sig_loco == 14) LocoWrite.write_2te10u();
+                    if (Loco.sig_loco == 15) LocoWrite.write_m62();
+                    if (Loco.sig_loco == 16) LocoWrite.write_ed4m();
+                    if (Loco.sig_loco == 17) LocoWrite.write_ed9m();
+                    if (Loco.sig_loco == 18) LocoWrite.write_tem18();
                 }
             }
             else
@@ -15169,40 +15210,63 @@ namespace zdsimScanner
 
             // скорость дополнительная (int16) — байты 0–1
             Array.Copy(buffer, 0, tmp, 0, 2);
-            console1.AppendText($"\r\nскорость доп. = {BitConverter.ToInt16(tmp, 0)}");
+            console1.AppendText($"\r\nОграничение скорости = {BitConverter.ToInt16(tmp, 0)}");
 
             // скорость текущая (int16) — байты 2–3
             Array.Copy(buffer, 2, tmp, 0, 2);
-            console1.AppendText($"\r\nскорость тек. = {BitConverter.ToInt16(tmp, 0)}");
+            console1.AppendText($"\r\nСкорость текущая = {BitConverter.ToInt16(tmp, 0)}");
 
             // АЛС — байт 4
             console1.AppendText($"\r\nАЛС = {buffer[4]}");
+
+            // Расстояние до цели в метрах
+            console1.AppendText($"\r\nРасстояние до цели в метрах = {Form1.i_rasstoyanie_do_tseli}");
+
             // бдительность — байт 5
-            console1.AppendText($"\r\nбдительность = {buffer[5]}");
+            console1.AppendText($"\r\nБдительность = {buffer[5]}");
 
             // ток ЭПТ — байты 8–9
             Array.Copy(buffer, 8, tmp, 0, 2);
-            console1.AppendText($"\r\nток эпт = {BitConverter.ToInt16(tmp, 0)}");
+            console1.AppendText($"\r\nТок эпт = {BitConverter.ToInt16(tmp, 0)}");
 
             // часы/мин/сек — байты 10,11,12
-            console1.AppendText($"\r\nвремя: {buffer[10]}:{buffer[11]}:{buffer[12]}");
+            console1.AppendText($"\r\nВремя: {buffer[10]}:{buffer[11]}:{buffer[12]}");
 
             // напряжение КС — байты 13–14
             Array.Copy(buffer, 13, tmp, 0, 2);
-            console1.AppendText($"\r\nнапряжение КС = {BitConverter.ToInt16(tmp, 0)}");
+            console1.AppendText($"\r\nНапряжение КС = {BitConverter.ToInt16(tmp, 0)}");
 
             // контроллер — байт 15
-            console1.AppendText($"\r\nконтроллер = {buffer[15]}");
+            console1.AppendText($"\r\nКонтроллер = {buffer[15]}");
 
             // манометры НМ, ТМ, УР, ТЦ — байты 29–36
             int[] offsets = { 29, 31, 33, 35 };
             string[] names = { "НМ", "ТМ", "УР", "ТЦ" };
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Манометры: ");
+
             for (int i = 0; i < offsets.Length; i++)
             {
                 Array.Copy(buffer, offsets[i], tmp, 0, 2);
-                console1.AppendText($"\r\n{names[i]} = {BitConverter.ToInt16(tmp, 0)}");
+                int value = BitConverter.ToInt16(tmp, 0);
+
+                sb.Append($"{names[i]}={value}");
+                if (i < offsets.Length - 1)
+                {
+                    sb.Append(", ");
+                }
             }
 
+            // выводим в console1
+            console1.AppendText("\r\n" + sb.ToString());
+
+
+
+
+
+
+            /*
             // Лампы ZTE и прочие — просто выводим байты по индексам
             console1.AppendText("\r\n\r\nЛампы:");
             var lampInfo = new (int index, string label)[]
@@ -15212,6 +15276,17 @@ namespace zdsimScanner
                (44, "ЛК ZTE"), (47, "двери ZTE"), (48, "О ZTE"),
                (49, "РН ZTE"), (52, "БВ ZTE"), (53, "К ZTE"),
                (54, "РБ Бокс. SIM"), (55, "СОТ ZTE"), (56, "СОТx ZTE")
+            };
+            */
+
+
+            // Лампы прочие — просто выводим байты по индексам
+            console1.AppendText("\r\n\r\nЛампы:");
+            var lampInfo = new (int index, string label)[]
+            {
+               (37, "ТЦ"), (38, "ЭПТ-О"), (39, "ЭПТ-П"), (40, "ЭПТ-Т"),
+               (43, "EPK_State"), 
+               (54, "РБ Бокс"), (56, "СОТx ZTE")
             };
 
 
