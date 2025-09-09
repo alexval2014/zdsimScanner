@@ -45,6 +45,7 @@
             this.combobox_Port = new System.Windows.Forms.ComboBox();
             this.button_about = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.button_demo = new System.Windows.Forms.Button();
             this.numericUpDown_delay_HID = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_skorCOM = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_delay = new System.Windows.Forms.NumericUpDown();
@@ -65,10 +66,9 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 28);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(9, 18);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(182, 20);
+            this.label1.Size = new System.Drawing.Size(124, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Время до запуска - min";
             // 
@@ -77,10 +77,9 @@
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(19, 585);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button1.Location = new System.Drawing.Point(13, 380);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(112, 35);
+            this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 3;
             this.button1.Text = "Выход";
             this.button1.UseVisualStyleBackColor = true;
@@ -91,10 +90,9 @@
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button2.Location = new System.Drawing.Point(1017, 585);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button2.Location = new System.Drawing.Point(640, 381);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(112, 35);
+            this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 4;
             this.button2.Text = "Пуск";
             this.button2.UseVisualStyleBackColor = true;
@@ -103,20 +101,18 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(208, 28);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(139, 18);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(85, 20);
+            this.label2.Size = new System.Drawing.Size(57, 13);
             this.label2.TabIndex = 9;
             this.label2.Text = "COM порт";
             // 
             // but_settings
             // 
             this.but_settings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.but_settings.Location = new System.Drawing.Point(1008, 68);
-            this.but_settings.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.but_settings.Location = new System.Drawing.Point(672, 44);
             this.but_settings.Name = "but_settings";
-            this.but_settings.Size = new System.Drawing.Size(123, 35);
+            this.but_settings.Size = new System.Drawing.Size(82, 23);
             this.but_settings.TabIndex = 10;
             this.but_settings.Text = "Настройки";
             this.but_settings.UseVisualStyleBackColor = true;
@@ -125,20 +121,18 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(395, 28);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(263, 18);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(121, 20);
+            this.label3.Size = new System.Drawing.Size(82, 13);
             this.label3.TabIndex = 14;
             this.label3.Text = "Скорость COM";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(584, 28);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(389, 18);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(202, 20);
+            this.label4.Size = new System.Drawing.Size(133, 13);
             this.label4.TabIndex = 15;
             this.label4.Text = "Интервал передачи COM";
             // 
@@ -149,12 +143,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.console1.BackColor = System.Drawing.Color.Black;
             this.console1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.console1.Location = new System.Drawing.Point(18, 131);
-            this.console1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.console1.Location = new System.Drawing.Point(13, 82);
             this.console1.Multiline = true;
             this.console1.Name = "console1";
             this.console1.ReadOnly = true;
-            this.console1.Size = new System.Drawing.Size(1110, 423);
+            this.console1.Size = new System.Drawing.Size(741, 276);
             this.console1.TabIndex = 17;
             // 
             // timer1
@@ -171,10 +164,9 @@
             // 
             this.button_stop.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.button_stop.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button_stop.Location = new System.Drawing.Point(513, 586);
-            this.button_stop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_stop.Location = new System.Drawing.Point(383, 381);
             this.button_stop.Name = "button_stop";
-            this.button_stop.Size = new System.Drawing.Size(112, 35);
+            this.button_stop.Size = new System.Drawing.Size(75, 23);
             this.button_stop.TabIndex = 19;
             this.button_stop.Text = "Стоп";
             this.button_stop.UseVisualStyleBackColor = true;
@@ -189,10 +181,9 @@
             // 
             this.combobox_Port.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.combobox_Port.FormattingEnabled = true;
-            this.combobox_Port.Location = new System.Drawing.Point(208, 68);
-            this.combobox_Port.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.combobox_Port.Location = new System.Drawing.Point(139, 44);
             this.combobox_Port.Name = "combobox_Port";
-            this.combobox_Port.Size = new System.Drawing.Size(180, 28);
+            this.combobox_Port.Size = new System.Drawing.Size(121, 21);
             this.combobox_Port.TabIndex = 7;
             this.toolTip1.SetToolTip(this.combobox_Port, "COM порт вашего устройства вывода или Arduino");
             this.combobox_Port.SelectedIndexChanged += new System.EventHandler(this.combobox_Port_SelectedIndexChanged);
@@ -200,10 +191,9 @@
             // button_about
             // 
             this.button_about.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button_about.Location = new System.Drawing.Point(1072, 12);
-            this.button_about.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_about.Location = new System.Drawing.Point(715, 8);
             this.button_about.Name = "button_about";
-            this.button_about.Size = new System.Drawing.Size(58, 35);
+            this.button_about.Size = new System.Drawing.Size(39, 23);
             this.button_about.TabIndex = 20;
             this.button_about.Text = "?";
             this.button_about.UseVisualStyleBackColor = true;
@@ -213,11 +203,23 @@
             // 
             this.toolTip1.AutomaticDelay = 1000;
             // 
+            // button_demo
+            // 
+            this.button_demo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_demo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button_demo.Location = new System.Drawing.Point(525, 380);
+            this.button_demo.Name = "button_demo";
+            this.button_demo.Size = new System.Drawing.Size(75, 23);
+            this.button_demo.TabIndex = 25;
+            this.button_demo.Text = "Демо";
+            this.toolTip1.SetToolTip(this.button_demo, "запуск демо режима без устройств и Arduino");
+            this.button_demo.UseVisualStyleBackColor = true;
+            this.button_demo.Click += new System.EventHandler(this.button_demo_Click);
+            // 
             // numericUpDown_delay_HID
             // 
             this.numericUpDown_delay_HID.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::zdsimScanner.Properties.Settings.Default, "delay_send_HID", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown_delay_HID.Location = new System.Drawing.Point(804, 68);
-            this.numericUpDown_delay_HID.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.numericUpDown_delay_HID.Location = new System.Drawing.Point(536, 44);
             this.numericUpDown_delay_HID.Maximum = new decimal(new int[] {
             65000,
             0,
@@ -229,7 +231,7 @@
             0,
             0});
             this.numericUpDown_delay_HID.Name = "numericUpDown_delay_HID";
-            this.numericUpDown_delay_HID.Size = new System.Drawing.Size(180, 26);
+            this.numericUpDown_delay_HID.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown_delay_HID.TabIndex = 24;
             this.toolTip1.SetToolTip(this.numericUpDown_delay_HID, "Интервал передачи данных в игру\r\nс устройства ввода HID в мсек");
             this.numericUpDown_delay_HID.Value = global::zdsimScanner.Properties.Settings.Default.delay_send_HID;
@@ -243,8 +245,7 @@
             0,
             0,
             0});
-            this.numericUpDown_skorCOM.Location = new System.Drawing.Point(399, 68);
-            this.numericUpDown_skorCOM.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.numericUpDown_skorCOM.Location = new System.Drawing.Point(266, 44);
             this.numericUpDown_skorCOM.Maximum = new decimal(new int[] {
             256000,
             0,
@@ -256,7 +257,7 @@
             0,
             0});
             this.numericUpDown_skorCOM.Name = "numericUpDown_skorCOM";
-            this.numericUpDown_skorCOM.Size = new System.Drawing.Size(180, 26);
+            this.numericUpDown_skorCOM.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown_skorCOM.TabIndex = 16;
             this.toolTip1.SetToolTip(this.numericUpDown_skorCOM, "Скорость передачи COM порта, \r\nпо прошивкам 56000, но можно\r\nрегулировать, если е" +
         "сть помехи при передаче");
@@ -266,8 +267,7 @@
             // numericUpDown_delay
             // 
             this.numericUpDown_delay.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::zdsimScanner.Properties.Settings.Default, "delay_send", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown_delay.Location = new System.Drawing.Point(603, 68);
-            this.numericUpDown_delay.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.numericUpDown_delay.Location = new System.Drawing.Point(402, 44);
             this.numericUpDown_delay.Maximum = new decimal(new int[] {
             65000,
             0,
@@ -279,7 +279,7 @@
             0,
             0});
             this.numericUpDown_delay.Name = "numericUpDown_delay";
-            this.numericUpDown_delay.Size = new System.Drawing.Size(180, 26);
+            this.numericUpDown_delay.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown_delay.TabIndex = 13;
             this.toolTip1.SetToolTip(this.numericUpDown_delay, "Интервал передачи данных на COM порт в мсек");
             this.numericUpDown_delay.Value = global::zdsimScanner.Properties.Settings.Default.delay_send;
@@ -288,10 +288,9 @@
             // numericUpDown_time
             // 
             this.numericUpDown_time.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::zdsimScanner.Properties.Settings.Default, "Time", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown_time.Location = new System.Drawing.Point(19, 68);
-            this.numericUpDown_time.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.numericUpDown_time.Location = new System.Drawing.Point(13, 44);
             this.numericUpDown_time.Name = "numericUpDown_time";
-            this.numericUpDown_time.Size = new System.Drawing.Size(180, 26);
+            this.numericUpDown_time.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown_time.TabIndex = 11;
             this.toolTip1.SetToolTip(this.numericUpDown_time, "Время до запуска трейнера\r\n(для того, чтобы потом не сворачивать игру)");
             this.numericUpDown_time.Value = global::zdsimScanner.Properties.Settings.Default.Time;
@@ -300,10 +299,9 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(800, 28);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Location = new System.Drawing.Point(533, 18);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(195, 20);
+            this.label5.Size = new System.Drawing.Size(128, 13);
             this.label5.TabIndex = 23;
             this.label5.Text = "Интервал передачи HID";
             // 
@@ -342,10 +340,11 @@
             // Form1
             // 
             this.AcceptButton = this.button2;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button1;
-            this.ClientSize = new System.Drawing.Size(1149, 639);
+            this.ClientSize = new System.Drawing.Size(766, 415);
+            this.Controls.Add(this.button_demo);
             this.Controls.Add(this.numericUpDown_delay_HID);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button_about);
@@ -363,8 +362,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.MinimumSize = new System.Drawing.Size(1152, 654);
+            this.MinimumSize = new System.Drawing.Size(687, 439);
             this.Name = "Form1";
             this.Text = "zdsim Scanner55 v7.0";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_Closed);
@@ -406,6 +404,7 @@
         private System.Windows.Forms.Button button_stop;
         private System.Windows.Forms.Timer timer_500ms;
         private System.Windows.Forms.Timer timer_oborot_disel;
+        private System.Windows.Forms.Button button_demo;
     }
 }
 

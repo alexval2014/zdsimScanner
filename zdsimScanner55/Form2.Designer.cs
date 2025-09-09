@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -157,6 +157,7 @@
             resources.ApplyResources(this.label9, "label9");
             this.label9.Name = "label9";
             this.toolTip1.SetToolTip(this.label9, resources.GetString("label9.ToolTip"));
+            this.label9.Click += new System.EventHandler(this.label9_Click);
             // 
             // label10
             // 
@@ -275,26 +276,26 @@
             this.dataGridView_Zdsimulator.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridView_Zdsimulator.ColumnHeadersVisible = false;
             this.dataGridView_Zdsimulator.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Gold;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Orange;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView_Zdsimulator.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Gold;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.Orange;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView_Zdsimulator.DefaultCellStyle = dataGridViewCellStyle9;
             this.dataGridView_Zdsimulator.GridColor = System.Drawing.Color.Silver;
             this.dataGridView_Zdsimulator.MultiSelect = false;
             this.dataGridView_Zdsimulator.Name = "dataGridView_Zdsimulator";
             this.dataGridView_Zdsimulator.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Gold;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView_Zdsimulator.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.Gold;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView_Zdsimulator.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.dataGridView_Zdsimulator.RowHeadersVisible = false;
             this.dataGridView_Zdsimulator.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridView_Zdsimulator.RowTemplate.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -435,7 +436,7 @@
             // numericUpDown7
             // 
             resources.ApplyResources(this.numericUpDown7, "numericUpDown7");
-            this.numericUpDown7.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::zdsimScanner.Properties.Settings.Default, "delay_motor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.numericUpDown7.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::zdsimScanner.Properties.Settings.Default, "step_steper_motor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.numericUpDown7.Increment = new decimal(new int[] {
             100,
             0,
@@ -448,7 +449,8 @@
             0});
             this.numericUpDown7.Name = "numericUpDown7";
             this.toolTip1.SetToolTip(this.numericUpDown7, resources.GetString("numericUpDown7.ToolTip"));
-            this.numericUpDown7.Value = global::zdsimScanner.Properties.Settings.Default.delay_motor;
+            this.numericUpDown7.Value = global::zdsimScanner.Properties.Settings.Default.step_steper_motor;
+            this.numericUpDown7.ValueChanged += new System.EventHandler(this.numericUpDown7_ValueChanged);
             // 
             // checkBox_sound_peredacha
             // 
@@ -662,7 +664,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown numericUpDown7;
         private System.Windows.Forms.Label label9;
@@ -701,5 +702,6 @@
         private System.Windows.Forms.CheckBox checkBox_dvery_control;
         private System.Windows.Forms.CheckBox checkBox_sound_peredacha;
         private System.Windows.Forms.Button button_zdsim_sbros_sound;
+        private System.Windows.Forms.Button button2;
     }
 }

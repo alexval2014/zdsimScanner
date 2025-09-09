@@ -1,27 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.IO.Ports;
-using Microsoft.Win32;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Diagnostics;
-using Microsoft.DirectX;
 using Microsoft.DirectX.DirectInput;
-using System.Xml;
-using System.Xml.Linq;
+using System.Configuration;
+using System.Text;
 
 namespace zdsimScanner
 {
     public partial class Form1 : Form
     {
+        //Инициализируем переменные кнопок
         public static void LocoButtonsStructInit0()
         {
             //постоянные 28
@@ -1168,6 +1161,7 @@ namespace zdsimScanner
             LocoButtons.tem18_prozh_2 = 0;
         }
 
+        //Инициализируем массивы кнопок осей и нештаток
         public static void LocoButtonsStructInit()
         {
             //постоянные 28
@@ -2314,6 +2308,9 @@ namespace zdsimScanner
             if (tem18_axis_buffer[31, 0] == 0 && tem18_key_buffer[31] == 0) LocoButtons.tem18_prozh_2 = 255;
         }
 
+        //--------------------------------------------------------------------
+        //Обявления переменных
+        //--------------------------------------------------------------------
         public static int i_time_begin = 0;//время до запуска
         public static Int32 i_skor_COM = 0;//скорость COM порта
         public static string i_COM;
@@ -2330,16 +2327,16 @@ namespace zdsimScanner
         public static uint i_dvery_close_flag = 0;
         public static uint i_lampa_LK_sec_flag = 0;
         public static string[] buffer_COM_ports;
-        public static int i_delay_motor = 0;
+        public static int i_step_steper_motor = 0;
         public static int i_bdit = 1;
         public static byte i_bdit_out = 1;
-
-        //Объявляю переменные
         public static int i_skor_tek2 = 0;               //СКОРОСТЬ ТЕКУЩАЯ
         public static int i_skor_dop = 0;
         public static UInt16 i_skor_tek = 0;
-        public static byte i_skor_dop_out = 1;
+        public static int i_rasstoyanie_do_tseli = 0;
 
+
+        public static byte i_skor_dop_out = 1;
         public static string i_joy_name="";
         public static string i_zdsimloco_name = "";
         public static int i_loco_find = 0;
@@ -2348,13 +2345,14 @@ namespace zdsimScanner
         public static int i_sound_peredacha = 0;//обработка звуков при передаче - 0 - нет, 1 - да
         public static string[] sb_settings;
         public static string i_path_zdsimscanner = "";
-
         public byte[] b_joystick_axis_numbers_update = new byte[200];
         public static int i_shum_joystick = 0;//шум джойстика
         public static int[] joystick_axis_buffer = new int[64];//буфер осей
         public static byte[] joystick_buttons_buffer;//буфер кнопок
 
-        //буфера настроек кнопок
+        //--------------------------------------------------------------------
+        //Объявляем массивы для буферов настроек кнопок
+        //--------------------------------------------------------------------
         public static int[] Controls_key_buffer = new int[34];
         public static int[] Neshtatki_key_buffer = new int[100];
         public static int[] ES5K_key_buffer = new int[109];
@@ -2375,7 +2373,10 @@ namespace zdsimScanner
         public static int[] ED4M_key_buffer = new int[33];
         public static int[] ED9M_key_buffer = new int[30];
         public static int[] tem18_key_buffer = new int[32];
-        //буфера настроек точек осей
+
+        //--------------------------------------------------------------------
+        //Объявляем массивы для буферов настроек точек осей
+        //--------------------------------------------------------------------
         public static int[,] Controls_axis_buffer = new int[34,2];
         public static int[,] Neshtatki_axis_buffer = new int[100, 2];
         public static int[,] ES5K_axis_buffer = new int[109,2];
@@ -2397,7 +2398,9 @@ namespace zdsimScanner
         public static int[,] ED9M_axis_buffer = new int[30,2];
         public static int[,] tem18_axis_buffer = new int[32, 2];
 
-        //буфера путей звуков
+        //--------------------------------------------------------------------
+        //Объявляем массивы для буферов путей звуков
+        //--------------------------------------------------------------------
         public static string[] controls_wav_path_key_buffer = new string[34];
         public static string[] neshtatki_wav_path_key_buffer = new string[100];
         public static string[] es5k_wav_path_key_buffer = new string[109];
@@ -2418,8 +2421,10 @@ namespace zdsimScanner
         public static string[] ed4m_wav_path_key_buffer = new string[33];
         public static string[] ed9m_wav_path_key_buffer = new string[30];
         public static string[] tem18_wav_path_key_buffer = new string[32];
-        /************************************zdsim*****************************************/
-        //буфера для точек осей
+
+        //--------------------------------------------------------------------
+        //Объявляем массивы для буферов для точек осей
+        //--------------------------------------------------------------------
         public static int[] joystick_ARx_point_buffer;//1
         public static int[] joystick_ARy_point_buffer;//2
         public static int[] joystick_ARz_point_buffer;//3
@@ -2450,24 +2455,29 @@ namespace zdsimScanner
         public static int[] joystick_FSlider_point_buffer;//28
         public static int[] joystick_VSlider_point_buffer;//29
 
+        //--------------------------------------------------------------------
         //Ищем окно для отправки клавиши
         [DllImport("USER32.DLL", CharSet = CharSet.Unicode)]
-        public static extern IntPtr FindWindow(string lpClassName,
-            string lpWindowName);
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
         //Фокус на окно
         [DllImport("USER32.DLL")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
-
         SerialPort port;
-
         Device device;
+
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         public Form1()
         {  
             InitializeComponent();
-            
+            this.Text = "zdsimScanner 55.008 v9.0.0";
         }
-        
+
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         private void OnTimedEvent()
         {
             console1.Clear();
@@ -2475,108 +2485,128 @@ namespace zdsimScanner
             console1.AppendText("осталось : " + (i_time_begin - 1) + "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n");
             i_time_begin--;
         }
-
         public int i_array = 0;
-        //сохранение буферов кнопок, осей и точек
+
+        //------------------------------------------------------------------------------------
+        //Сохранение буферов кнопок, осей и точек
+        //------------------------------------------------------------------------------------
         public static void SaveBuffersSettings()
         {
-            //сохраняем кнопки
-            //zdsim
+            //сохраняем кнопки zdsim
             Properties.Settings.Default.controls_buffer_key_settings.Clear();
             for (int i = 0; i < Controls_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.controls_buffer_key_settings.Add(Convert.ToString(Controls_key_buffer[i]));
             }
+
             Properties.Settings.Default.neshtatki_buffer_key_settings.Clear();
             for (int i = 0; i < Neshtatki_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.neshtatki_buffer_key_settings.Add(Convert.ToString(Neshtatki_key_buffer[i]));
             }
+
             Properties.Settings.Default.es5k_buffer_key_settings.Clear();
             for (int i = 0; i < ES5K_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.es5k_buffer_key_settings.Add(Convert.ToString(ES5K_key_buffer[i]));
             }
+
             Properties.Settings.Default.ep1m_buffer_key_settings.Clear();
             for (int i = 0; i < EP1M_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.ep1m_buffer_key_settings.Add(Convert.ToString(EP1M_key_buffer[i]));
             }
+
             Properties.Settings.Default.chs2k_buffer_key_settings.Clear();
             for (int i = 0; i < CHS2K_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.chs2k_buffer_key_settings.Add(Convert.ToString(CHS2K_key_buffer[i]));
             }
+
             Properties.Settings.Default.chs4_buffer_key_settings.Clear();
             for (int i = 0; i < CHS4_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.chs4_buffer_key_settings.Add(Convert.ToString(CHS4_key_buffer[i]));
             }
+
             Properties.Settings.Default.chs4kvr_buffer_key_settings.Clear();
             for (int i = 0; i < CHS4KVR_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.chs4kvr_buffer_key_settings.Add(Convert.ToString(CHS4KVR_key_buffer[i]));
             }
+
             Properties.Settings.Default.chs4t_buffer_key_settings.Clear();
             for (int i = 0; i < CHS4T_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.chs4t_buffer_key_settings.Add(Convert.ToString(CHS4T_key_buffer[i]));
             }
+
             Properties.Settings.Default.chs7_buffer_key_settings.Clear();
             for (int i = 0; i < CHS7_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.chs7_buffer_key_settings.Add(Convert.ToString(CHS7_key_buffer[i]));
             }
+
             Properties.Settings.Default.chs8_buffer_key_settings.Clear();
             for (int i = 0; i < CHS8_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.chs8_buffer_key_settings.Add(Convert.ToString(CHS8_key_buffer[i]));
             }
+
             Properties.Settings.Default.vl11_buffer_key_settings.Clear();
             for (int i = 0; i < VL11M_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.vl11_buffer_key_settings.Add(Convert.ToString(VL11M_key_buffer[i]));
             }
+
             Properties.Settings.Default.vl82_buffer_key_settings.Clear();
             for (int i = 0; i < VL82M_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.vl82_buffer_key_settings.Add(Convert.ToString(VL82M_key_buffer[i]));
             }
+
             Properties.Settings.Default.vl80t_buffer_key_settings.Clear();
             for (int i = 0; i < VL80T_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.vl80t_buffer_key_settings.Add(Convert.ToString(VL80T_key_buffer[i]));
             }
+
             Properties.Settings.Default.vl85_buffer_key_settings.Clear();
             for (int i = 0; i < VL85_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.vl85_buffer_key_settings.Add(Convert.ToString(VL85_key_buffer[i]));
             }
+
             Properties.Settings.Default.tep70_buffer_key_settings.Clear();
             for (int i = 0; i < TEP70_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.tep70_buffer_key_settings.Add(Convert.ToString(TEP70_key_buffer[i]));
             }
+
             Properties.Settings.Default.te10u_buffer_key_settings.Clear();
             for (int i = 0; i < TE10U_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.te10u_buffer_key_settings.Add(Convert.ToString(TE10U_key_buffer[i]));
             }
+
             Properties.Settings.Default.m62_buffer_key_settings.Clear();
             for (int i = 0; i < M62_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.m62_buffer_key_settings.Add(Convert.ToString(M62_key_buffer[i]));
             }
+
             Properties.Settings.Default.ed4m_buffer_key_settings.Clear();
             for (int i = 0; i < ED4M_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.ed4m_buffer_key_settings.Add(Convert.ToString(ED4M_key_buffer[i]));
             }
+
             Properties.Settings.Default.ed9m_buffer_key_settings.Clear();
             for (int i = 0; i < ED9M_key_buffer.Length; i++)
             {
                 Properties.Settings.Default.ed9m_buffer_key_settings.Add(Convert.ToString(ED9M_key_buffer[i]));
             }
+
             Properties.Settings.Default.tem18_buffer_key_settings.Clear();
             for (int i = 0; i < tem18_key_buffer.Length; i++)
             {
@@ -2693,96 +2723,115 @@ namespace zdsimScanner
             {
                 Properties.Settings.Default.controls_buffer_axis_settings2.Add(Convert.ToString(Controls_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.neshtatki_buffer_axis_settings2.Clear();
             for (int i = 0; i < Neshtatki_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.neshtatki_buffer_axis_settings2.Add(Convert.ToString(Neshtatki_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.es5k_buffer_axis_settings2.Clear();
             for (int i = 0; i < ES5K_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.es5k_buffer_axis_settings2.Add(Convert.ToString(ES5K_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.ep1m_buffer_axis_settings2.Clear();
             for (int i = 0; i < EP1M_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.ep1m_buffer_axis_settings2.Add(Convert.ToString(EP1M_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.chs2k_buffer_axis_settings2.Clear();
             for (int i = 0; i < CHS2K_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.chs2k_buffer_axis_settings2.Add(Convert.ToString(CHS2K_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.chs4_buffer_axis_settings2.Clear();
             for (int i = 0; i < CHS4_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.chs4_buffer_axis_settings2.Add(Convert.ToString(CHS4_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.chs4kvr_buffer_axis_settings2.Clear();
             for (int i = 0; i < CHS4KVR_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.chs4kvr_buffer_axis_settings2.Add(Convert.ToString(CHS4KVR_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.chs4t_buffer_axis_settings2.Clear();
             for (int i = 0; i < CHS4T_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.chs4t_buffer_axis_settings2.Add(Convert.ToString(CHS4T_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.chs7_buffer_axis_settings2.Clear();
             for (int i = 0; i < CHS7_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.chs7_buffer_axis_settings2.Add(Convert.ToString(CHS7_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.chs8_buffer_axis_settings2.Clear();
             for (int i = 0; i < CHS8_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.chs8_buffer_axis_settings2.Add(Convert.ToString(CHS8_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.vl11_buffer_axis_settings2.Clear();
             for (int i = 0; i < VL11M_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.vl11_buffer_axis_settings2.Add(Convert.ToString(VL11M_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.vl82_buffer_axis_settings2.Clear();
             for (int i = 0; i < VL82M_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.vl82_buffer_axis_settings2.Add(Convert.ToString(VL82M_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.vl80t_buffer_axis_settings2.Clear();
             for (int i = 0; i < VL80T_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.vl80t_buffer_axis_settings2.Add(Convert.ToString(VL80T_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.vl85_buffer_axis_settings2.Clear();
             for (int i = 0; i < VL85_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.vl85_buffer_axis_settings2.Add(Convert.ToString(VL85_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.tep70_buffer_axis_settings2.Clear();
             for (int i = 0; i < TEP70_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.tep70_buffer_axis_settings2.Add(Convert.ToString(TEP70_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.te10u_buffer_axis_settings2.Clear();
             for (int i = 0; i < TE10U_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.te10u_buffer_axis_settings2.Add(Convert.ToString(TE10U_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.m62_buffer_axis_settings2.Clear();
             for (int i = 0; i < M62_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.m62_buffer_axis_settings2.Add(Convert.ToString(M62_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.ed4m_buffer_axis_settings2.Clear();
             for (int i = 0; i < ED4M_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.ed4m_buffer_axis_settings2.Add(Convert.ToString(ED4M_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.ed9m_buffer_axis_settings2.Clear();
             for (int i = 0; i < ED9M_axis_buffer.Length / 2; i++)
             {
                 Properties.Settings.Default.ed9m_buffer_axis_settings2.Add(Convert.ToString(ED9M_axis_buffer[i, 1]));
             }
+
             Properties.Settings.Default.tem18_buffer_axis_settings2.Clear();
             for (int i = 0; i < tem18_axis_buffer.Length / 2; i++)
             {
@@ -2798,6 +2847,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.ARx_point_buffer_settings.Add(Convert.ToString(joystick_ARx_point_buffer[i]));
                 }
             }
+
             if (joystick_ARy_point_buffer != null)
             {
                 Properties.Settings.Default.ARy_point_buffer_settings.Clear();
@@ -2806,6 +2856,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.ARy_point_buffer_settings.Add(Convert.ToString(joystick_ARy_point_buffer[i]));
                 }
             }
+
             if (joystick_ARz_point_buffer != null)
             {
                 Properties.Settings.Default.ARz_point_buffer_settings.Clear();
@@ -2814,6 +2865,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.ARz_point_buffer_settings.Add(Convert.ToString(joystick_ARz_point_buffer[i]));
                 }
             }
+
             if (joystick_AX_point_buffer != null)
             {
                 Properties.Settings.Default.AX_point_buffer_settings.Clear();
@@ -2822,6 +2874,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.AX_point_buffer_settings.Add(Convert.ToString(joystick_AX_point_buffer[i]));
                 }
             }
+
             if (joystick_AY_point_buffer != null)
             {
                 Properties.Settings.Default.AY_point_buffer_settings.Clear();
@@ -2830,6 +2883,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.AY_point_buffer_settings.Add(Convert.ToString(joystick_AY_point_buffer[i]));
                 }
             }
+
             if (joystick_AZ_point_buffer != null)
             {
                 Properties.Settings.Default.AZ_point_buffer_settings.Clear();
@@ -2838,6 +2892,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.AZ_point_buffer_settings.Add(Convert.ToString(joystick_AZ_point_buffer[i]));
                 }
             }
+
             if (joystick_FRx_point_buffer != null)
             {
                 Properties.Settings.Default.FRx_point_buffer_settings.Clear();
@@ -2846,6 +2901,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.FRx_point_buffer_settings.Add(Convert.ToString(joystick_FRx_point_buffer[i]));
                 }
             }
+
             if (joystick_FRy_point_buffer != null)
             {
                 Properties.Settings.Default.FRy_point_buffer_settings.Clear();
@@ -2854,6 +2910,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.FRy_point_buffer_settings.Add(Convert.ToString(joystick_FRy_point_buffer[i]));
                 }
             }
+
             if (joystick_FRz_point_buffer != null)
             {
                 Properties.Settings.Default.FRz_point_buffer_settings.Clear();
@@ -2862,6 +2919,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.FRz_point_buffer_settings.Add(Convert.ToString(joystick_FRz_point_buffer[i]));
                 }
             }
+
             if (joystick_FX_point_buffer != null)
             {
                 Properties.Settings.Default.FX_point_buffer_settings.Clear();
@@ -2870,6 +2928,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.FX_point_buffer_settings.Add(Convert.ToString(joystick_FX_point_buffer[i]));
                 }
             }
+
             if (joystick_FY_point_buffer != null)
             {
                 Properties.Settings.Default.FY_point_buffer_settings.Clear();
@@ -2878,6 +2937,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.FY_point_buffer_settings.Add(Convert.ToString(joystick_FY_point_buffer[i]));
                 }
             }
+
             if (joystick_FZ_point_buffer != null)
             {
                 Properties.Settings.Default.FZ_point_buffer_settings.Clear();
@@ -2886,6 +2946,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.FZ_point_buffer_settings.Add(Convert.ToString(joystick_FZ_point_buffer[i]));
                 }
             }
+
             if (joystick_Rx_point_buffer != null)
             {
                 Properties.Settings.Default.Rx_point_buffer_settings.Clear();
@@ -2894,6 +2955,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.Rx_point_buffer_settings.Add(Convert.ToString(joystick_Rx_point_buffer[i]));
                 }
             }
+
             if (joystick_Ry_point_buffer != null)
             {
                 Properties.Settings.Default.Ry_point_buffer_settings.Clear();
@@ -2902,6 +2964,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.Ry_point_buffer_settings.Add(Convert.ToString(joystick_Ry_point_buffer[i]));
                 }
             }
+
             if (joystick_Rz_point_buffer != null)
             {
                 Properties.Settings.Default.Rz_point_buffer_settings.Clear();
@@ -2910,6 +2973,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.Rz_point_buffer_settings.Add(Convert.ToString(joystick_Rz_point_buffer[i]));
                 }
             }
+
             if (joystick_VRx_point_buffer != null)
             {
                 Properties.Settings.Default.VRx_point_buffer_settings.Clear();
@@ -2918,6 +2982,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.VRx_point_buffer_settings.Add(Convert.ToString(joystick_VRx_point_buffer[i]));
                 }
             }
+
             if (joystick_VRy_point_buffer != null)
             {
                 Properties.Settings.Default.VRy_point_buffer_settings.Clear();
@@ -2926,6 +2991,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.VRy_point_buffer_settings.Add(Convert.ToString(joystick_VRy_point_buffer[i]));
                 }
             }
+
             if (joystick_VRz_point_buffer != null)
             {
                 Properties.Settings.Default.VRz_point_buffer_settings.Clear();
@@ -2934,6 +3000,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.VRz_point_buffer_settings.Add(Convert.ToString(joystick_VRz_point_buffer[i]));
                 }
             }
+
             if (joystick_VX_point_buffer != null)
             {
                 Properties.Settings.Default.VX_point_buffer_settings.Clear();
@@ -2942,6 +3009,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.VX_point_buffer_settings.Add(Convert.ToString(joystick_VX_point_buffer[i]));
                 }
             }
+
             if (joystick_VY_point_buffer != null)
             {
                 Properties.Settings.Default.VY_point_buffer_settings.Clear();
@@ -2950,6 +3018,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.VY_point_buffer_settings.Add(Convert.ToString(joystick_VY_point_buffer[i]));
                 }
             }
+
             if (joystick_VZ_point_buffer != null)
             {
                 Properties.Settings.Default.VZ_point_buffer_settings.Clear();
@@ -2958,6 +3027,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.VZ_point_buffer_settings.Add(Convert.ToString(joystick_VZ_point_buffer[i]));
                 }
             }
+
             if (joystick_X_point_buffer != null)
             {
                 Properties.Settings.Default.X_point_buffer_settings.Clear();
@@ -2966,6 +3036,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.X_point_buffer_settings.Add(Convert.ToString(joystick_X_point_buffer[i]));
                 }
             }
+
             if (joystick_Y_point_buffer != null)
             {
                 Properties.Settings.Default.Y_point_buffer_settings.Clear();
@@ -2974,6 +3045,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.Y_point_buffer_settings.Add(Convert.ToString(joystick_Y_point_buffer[i]));
                 }
             }
+
             if (joystick_Z_point_buffer != null)
             {
                 Properties.Settings.Default.Z_point_buffer_settings.Clear();
@@ -2982,6 +3054,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.Z_point_buffer_settings.Add(Convert.ToString(joystick_Z_point_buffer[i]));
                 }
             }
+
             if (joystick_POV_point_buffer != null)
             {
                 Properties.Settings.Default.POV_point_buffer_settings.Clear();
@@ -2990,6 +3063,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.POV_point_buffer_settings.Add(Convert.ToString(joystick_POV_point_buffer[i]));
                 }
             }
+
             if (joystick_Slider_point_buffer != null)
             {
                 Properties.Settings.Default.Slider_point_buffer_settings.Clear();
@@ -2998,6 +3072,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.Slider_point_buffer_settings.Add(Convert.ToString(joystick_Slider_point_buffer[i]));
                 }
             }
+
             if (joystick_ASlider_point_buffer != null)
             {
                 Properties.Settings.Default.ASlider_point_buffer_settings.Clear();
@@ -3006,6 +3081,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.ASlider_point_buffer_settings.Add(Convert.ToString(joystick_ASlider_point_buffer[i]));
                 }
             }
+
             if (joystick_FSlider_point_buffer != null)
             {
                 Properties.Settings.Default.FSlider_point_buffer_settings.Clear();
@@ -3014,6 +3090,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.FSlider_point_buffer_settings.Add(Convert.ToString(joystick_FSlider_point_buffer[i]));
                 }
             }
+
             if (joystick_VSlider_point_buffer != null)
             {
                 Properties.Settings.Default.VSlider_point_buffer_settings.Clear();
@@ -3022,9 +3099,11 @@ namespace zdsimScanner
                     Properties.Settings.Default.VSlider_point_buffer_settings.Add(Convert.ToString(joystick_VSlider_point_buffer[i]));
                 }
             }
-            
         }
-        //сохранение буферов звуков
+
+        //------------------------------------------------------------------------------------
+        //Сохранение буферов звуков
+        //------------------------------------------------------------------------------------
         public static void SaveWavePathBuffersSettings()
         {
             //сохраняем пути звуков zdsim
@@ -3126,7 +3205,9 @@ namespace zdsimScanner
 
          }
 
-        //загрузка буферов кнопок, осей и точек
+        //------------------------------------------------------------------------------------
+        //Загрузка буферов кнопок, осей и точек
+        //------------------------------------------------------------------------------------
         public static void LoadBuffersSettings()
         {
             //загружаем кнопки
@@ -3799,7 +3880,9 @@ namespace zdsimScanner
             
         }
 
-        //загрузка буферов звуков
+        //------------------------------------------------------------------------------------
+        //Загрузка буферов звуков
+        //------------------------------------------------------------------------------------
         public static void LoadWavePathBuffersSettings()
         {
             //загружаем пути звуков zdsim
@@ -3945,6 +4028,9 @@ namespace zdsimScanner
             }
          }
 
+        //------------------------------------------------------------------------------------
+        //Загрузка Form1 Главный экран программы
+        //------------------------------------------------------------------------------------
         private void Form1_Load(object sender, EventArgs e)
         {
             ActiveControl = button2;
@@ -3962,7 +4048,7 @@ namespace zdsimScanner
             Loco.i_napruga_td_convert = Convert.ToSingle(Properties.Settings.Default.napr_td);
             Loco.i_tok_convert = Convert.ToSingle(Properties.Settings.Default.tok);
             Loco.i_pnevmo_convert = Convert.ToSingle(Properties.Settings.Default.pnevmatika);
-            i_delay_motor = Convert.ToInt16(Properties.Settings.Default.delay_motor);
+            i_step_steper_motor = Convert.ToInt16(Properties.Settings.Default.step_steper_motor);
             i_bdit = Convert.ToInt16(Properties.Settings.Default.bdit);
             i_shum_joystick = Convert.ToInt16(Properties.Settings.Default.joystick_shum);
             i_priem_peredacha = Properties.Settings.Default.i_priem_peredacha;
@@ -4000,6 +4086,9 @@ namespace zdsimScanner
             i_COM = Properties.Settings.Default.COM;
         }
 
+        //------------------------------------------------------------------------------------
+        //Закрытие Form1 Главный экран программы
+        //------------------------------------------------------------------------------------
         private void Form1_Closed(object sender, FormClosedEventArgs e)
         {
             Properties.Settings.Default.Time = numericUpDown_time.Value;
@@ -4013,6 +4102,10 @@ namespace zdsimScanner
             SaveBuffersSettings();
             SaveWavePathBuffersSettings();
             Properties.Settings.Default.Save();
+
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+            Debug.WriteLine("Настройки сохранены в: " + config.FilePath);
+
             timer1.Enabled = false;
             timer2.Enabled = false;
             try
@@ -4029,12 +4122,17 @@ namespace zdsimScanner
             DeleteXmlBinFiles();
         }
 
-
+        //------------------------------------------------------------------------------------
+        //Кнопка Выход главный экран программы
+        //------------------------------------------------------------------------------------
         private void button1_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
+        //------------------------------------------------------------------------------------
+        //Инициализация настроек для приборов значения по умолчанию
+        //------------------------------------------------------------------------------------
         public static void Init_pribor()
         {
             Loco.i_skor_tek_convert = 1.475f;
@@ -4047,6 +4145,9 @@ namespace zdsimScanner
             i_bdit = 0;
         }
 
+        //------------------------------------------------------------------------------------
+        //Кропка Пуск главный экран программы
+        //------------------------------------------------------------------------------------
         private void button2_Click(object sender, EventArgs e)
         {
             string process_name = "";
@@ -4152,6 +4253,9 @@ namespace zdsimScanner
             }
         }
 
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         private void but_settings_Click(object sender, EventArgs e)
         {
             Form2 f2 = new Form2();
@@ -4159,6 +4263,83 @@ namespace zdsimScanner
             f2.ShowDialog();
         }
 
+        //------------------------------------------------------------------------------------
+        //Кнопка Демо режима главное окно программы
+        //------------------------------------------------------------------------------------
+        private void button_demo_Click(object sender, EventArgs e)
+        {
+            timer_delay_key_50.Enabled = true;
+            string process_name = "";
+            button2.Enabled = false;
+            button_demo.Enabled = false;
+            console1.ForeColor = Color.Yellow;
+            console1.ScrollToCaret();
+
+            while (i_time_begin != 0)
+            {
+                OnTimedEvent();
+                Thread.Sleep(1000);
+            }
+            i_time_begin = Convert.ToInt16(numericUpDown_time.Value);
+
+            if (!Loco.open_process("zlauncher"))
+            {
+                console1.ForeColor = Color.Red;
+                button_stop.PerformClick();
+            }
+            else process_name = "zlauncher";
+
+            if (!Loco.open_process("launcher"))
+            {
+                console1.ForeColor = Color.Red;
+                button_stop.PerformClick();
+            }
+            else process_name = "launcher";
+
+            if (!Loco.open_process("zlauncher") && !Loco.open_process("launcher"))
+            {
+                console1.Clear();
+                console1.ForeColor = Color.Red;
+                console1.AppendText("Процесс zlauncher.exe не найден...");
+                console1.AppendText("Процесс launcher.exe не найден...");
+                return;
+            }
+
+            if (process_name == "zlauncher")
+            {
+                button2.Enabled = false;
+                button_demo.Enabled = false;
+                console1.Clear();
+                console1.ForeColor = Color.LawnGreen;
+                console1.AppendText("Обнаружен процесс zlauncher.exe...");
+                console1.ForeColor = Color.Yellow;
+                console1.AppendText("\r\nПоиск локомотива...");
+                Loco.sig_loco = Loco.find_loco();
+                select_loco();
+            }
+
+            if (process_name == "launcher")
+            {
+                button2.Enabled = false;
+                button_demo.Enabled = false;
+                console1.Clear();
+                console1.ForeColor = Color.LawnGreen;
+                console1.AppendText("Обнаружен процесс launcher.exe...");
+                console1.ForeColor = Color.Yellow;
+                console1.AppendText("\r\nПоиск локомотива...");
+                Loco.sig_loco = Loco.find_loco();
+                select_loco();
+            }
+
+            Thread.Sleep(3000);
+            console1.ForeColor = Color.Yellow;
+            console1.AppendText("\r\nИдет демо передача...");
+            timer2.Enabled = true;
+        }
+
+        //------------------------------------------------------------------------------------
+        //Кнопка Стоп главное окно программы
+        //------------------------------------------------------------------------------------
         private void button_stop_Click(object sender, EventArgs e)
         {
             timer1.Enabled = false;
@@ -4190,6 +4371,7 @@ namespace zdsimScanner
             Thread.Sleep(300);
             DeleteXmlBinFiles();
             button2.Enabled = true;
+            button_demo.Enabled = true;
             console1.Clear();
             console1.ForeColor = Color.Yellow;
             console1.ScrollToCaret();
@@ -4197,185 +4379,66 @@ namespace zdsimScanner
             console1.AppendText("\r\nЗапустите игру и нажмите Пуск...");
         }
 
-        public static void Extract7z(string archiver, string archiveName, string fileName, string outputFolder)
-        {
-            try
-            {
-                // Предварительные проверки
-                if (!File.Exists(archiver))
-                    throw new Exception("Архиватор 7z по пути \"" + archiver +
-                    "\" не найден");
-
-                if (!File.Exists(archiveName))
-                    throw new Exception("Файл архива \"" + archiveName +
-                    "\" не найден");
-
-                if (!Directory.Exists(outputFolder))
-                    Directory.CreateDirectory(outputFolder);
-
-                // Формируем параметры вызова 7z
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.FileName = "\"" + archiver + "\"";
-
-                // Распаковать (для полных путей - x)
-                startInfo.Arguments = " e";
-
-                // На все отвечать yes
-                startInfo.Arguments += " -y";
-
-                // Архив, который нужно распаковать
-                startInfo.Arguments += " " + "\"" + archiveName + "\"";
-
-                // Файл, который нужно распаковать
-                startInfo.Arguments += " " + fileName;
-
-                // Папка распаковки
-                startInfo.Arguments += " -o" + "\"" + outputFolder + "\"";
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                int sevenZipExitCode = 0;
-
-                using (Process sevenZip = Process.Start(startInfo))
-                {
-                    sevenZip.WaitForExit();
-                    sevenZipExitCode = sevenZip.ExitCode;
-                }
-
-                // Если с первого раза не получилось,
-                //пробуем еще раз через 1 секунду
-                if (sevenZipExitCode != 0 && sevenZipExitCode != 1)
-                {
-                    using (Process sevenZip = Process.Start(startInfo))
-                    {
-                        Thread.Sleep(1000);
-                        sevenZip.WaitForExit();
-
-                        switch (sevenZip.ExitCode)
-                        {
-                            case 0: return; // Без ошибок и предупреждений
-
-                            case 1: return; // Есть некритичные предупреждения
-
-                            case 2: throw new Exception("Фатальная ошибка");
-
-                            case 7: throw new Exception("Ошибка в командной строке");
-
-                            case 8:
-                                throw new Exception("Недостаточно памяти для выполнения операции");
-
-                            case 225:
-                                throw new Exception("Пользователь отменил выполнение операции");
-
-                            default: throw new Exception("Архиватор 7z вернулнедокументированный код ошибки: " + sevenZip.ExitCode.ToString());
-                        }
-                    }
-                }
-            }
-
-            catch (Exception e)
-            {
-                MessageBox.Show("\nНе удалась распаковка архива *.ap !\r\nПопробуйте перезапустить игру или сменить сценарий, маршрут, локомотив.");
-                //throw new Exception("SevenZip.ExtractFromArchive: " + e.Message);
-            }
-        }
-
-        public static void ConvertBinToXml(string archiver, string fileName)
-        {
-            try
-            {
-                // Предварительные проверки
-               // if (!File.Exists(archiver))
-               //     throw new Exception("serz.exe по пути \"" + Loco.path_game_ts2018 +
-               //     "\" не найден");
-
-                //вызов serz.exe
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.FileName = "\"" + archiver + "\"";
-
-                // Архив, который нужно распаковать
-                //startInfo.Arguments += " " + "\"" + Loco.path_game_ts2018 + Loco.s_loco_name_2018 + "\"";
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                using (Process serz = Process.Start(startInfo))
-                {
-                    serz.WaitForExit();
-                }
-            }
-
-            catch (Exception e)
-            {
-                MessageBox.Show("\nНе удалась конвертация bin !\r\nПопробуйте перезапустить игру или сменить сценарий, маршрут, локомотив.");
-                //throw new Exception("SevenZip.ExtractFromArchive: " + e.Message);
-            }
-            Thread.Sleep(500);
-        }
-
-        public static void ConvertBinToXmlCurrentSave(string archiver, string fileName)
-        {
-            try
-            {
-                // Предварительные проверки
-                //if (!File.Exists(archiver))
-                 //   throw new Exception("serz.exe по пути \"" + Loco.path_game_ts2018 +
-                 //   "\" не найден");
-
-                //вызов serz.exe
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.FileName = "\"" + archiver + "\"";
-
-                // Архив, который нужно распаковать
-                //startInfo.Arguments += " " + "\"" + Loco.path_game_ts2018 + @"\CurrentSave.bin" + "\"";
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                using (Process serz = Process.Start(startInfo))
-                {
-                    serz.WaitForExit();
-                }
-                //переименовать xml, удалить, если есть предидущий ScenarioProperties.xml
-            }
-
-            catch (Exception e)
-            {
-                MessageBox.Show("\nНе удалась конвертация bin !\r\nПопробуйте перезапустить игру или сменить сценарий, маршрут, локомотив.");
-                //throw new Exception("SevenZip.ExtractFromArchive: " + e.Message);
-            }
-            Thread.Sleep(500);
-        }
-
-
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         private void button_about_Click(object sender, EventArgs e)
         {
-          MessageBox.Show("v7.0 \nДля \n-zdsimulator 55.000");
+          MessageBox.Show("v8.1.0 \nДля \n-zdsimulator 54.006 + ZTE_for_ED4m_lamp");
         }
 
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         private void combobox_Port_SelectedIndexChanged(object sender, EventArgs e)
         {
             i_COM = combobox_Port.Text;
         }
 
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         private void numericUpDown_skorCOM_ValueChanged(object sender, EventArgs e)
         {
             i_skor_COM = Convert.ToInt32(numericUpDown_skorCOM.Value);
         }
 
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         private void numericUpDown_time_ValueChanged(object sender, EventArgs e)
         {
             i_time_begin = Convert.ToInt16(numericUpDown_time.Value) * 60;
         }
 
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         private void numericUpDown_delay_ValueChanged(object sender, EventArgs e)
         {
             i_delay_send = Convert.ToInt16(numericUpDown_delay.Value);
         }
 
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         private void numericUpDown_delay_HID_ValueChanged(object sender, EventArgs e)
         {
             i_delay_send_HID = Convert.ToInt16(numericUpDown_delay.Value);
         }
 
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         private void Init_COM()
         {
             // получаем список доступных портов
             buffer_COM_ports = SerialPort.GetPortNames();
         }
 
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         private void open_COM()
         {
             if (combobox_Port.Text == "")
@@ -4419,6 +4482,9 @@ namespace zdsimScanner
             timer1.Enabled = true;
         }
 
+        //------------------------------------------------------------------------------------
+        //Инициализация джойстика
+        //------------------------------------------------------------------------------------
         public void Joystick_init()
         {
             foreach (DeviceInstance instance in Manager.GetDevices(DeviceClass.GameControl, EnumDevicesFlags.AttachedOnly))
@@ -4430,11 +4496,8 @@ namespace zdsimScanner
                 {
                     if ((doi.ObjectId & (int)DeviceObjectTypeFlags.Axis) != 0)
                     {
-                        device.Properties.SetRange(
-                                ParameterHow.ById,
-                                doi.ObjectId,
-                                //new InputRange(-32768, 32768));
-                                new InputRange(0, 65535));
+                        device.Properties.SetRange(ParameterHow.ById,doi.ObjectId, new InputRange(0, 65535));
+                                                                                 //new InputRange(-32768, 32768));
                     }
                 }
 
@@ -4448,11 +4511,11 @@ namespace zdsimScanner
                 i_joy_name = Convert.ToString(device.DeviceInformation.InstanceName);
             }
             if (device == null) i_joy_name = "";
-
-
         }
 
-
+        //------------------------------------------------------------------------------------
+        //Обновление состояния джойстика
+        //------------------------------------------------------------------------------------
         public void UpdateJoystickState()
         {
             int[] b_temp;
@@ -4492,11 +4555,12 @@ namespace zdsimScanner
             joystick_axis_buffer[27] = b_temp[0];
             b_temp = j.GetVSlider();//...
             joystick_axis_buffer[28] = b_temp[0];
-
             joystick_buttons_buffer = j.GetButtons();//кнопки
-            
         }
 
+        //------------------------------------------------------------------------------------
+        //Обновление состояния кнопок
+        //------------------------------------------------------------------------------------
         public void UpdateLocoButtons()
         {
             int i_temp = 0;
@@ -13142,12 +13206,16 @@ namespace zdsimScanner
             }
         }
 
+        //------------------------------------------------------------------------------------
+        //Обновление состояния осей джойстика
+        //------------------------------------------------------------------------------------
         public void UpdateLocoAxis()
         {
             if (Loco.i_process_name == 6)
             {
-               
+                //-------------------------------------------------------------------------------------------
                 //проверяем точки Controls
+                //-------------------------------------------------------------------------------------------
                 for (int i = 0; i < 34; i++)
                 {
                     for (int j = 1; j <= 28; j++)
@@ -13198,8 +13266,10 @@ namespace zdsimScanner
                 if (Controls_axis_buffer[31, 0] != 0) LocoButtons.dvorniki_3 = b_joystick_axis_numbers_update[31];
                 if (Controls_axis_buffer[32, 0] != 0) LocoButtons.dvorniki_4 = b_joystick_axis_numbers_update[32];
                 if (Controls_axis_buffer[33, 0] != 0) LocoButtons.dvorniki_5 = b_joystick_axis_numbers_update[33];
-                
+
+                //-------------------------------------------------------------------------------------------
                 //проверяем точки нештатки
+                //-------------------------------------------------------------------------------------------
                 for (int i = 0; i < 100; i++)
                 {
                     for (int j = 1; j <= 28; j++)
@@ -13221,7 +13291,9 @@ namespace zdsimScanner
                 }
             }
 
+            //-------------------------------------------------------------------------------------------
             //проверяем точки 2es5k
+            //-------------------------------------------------------------------------------------------
             if (Loco.sig_loco == 1)
             {
                 for (int i = 0; i < 109; i++)
@@ -13353,6 +13425,9 @@ namespace zdsimScanner
 
             }
 
+            //-------------------------------------------------------------------------------------------
+            //проверяем точки 2es5k
+            //-------------------------------------------------------------------------------------------
             //проверяем точки 2ep1m
             if (Loco.sig_loco == 2)
             {
@@ -13488,6 +13563,9 @@ namespace zdsimScanner
 
             }
 
+            //-------------------------------------------------------------------------------------------
+            //проверяем точки 2es5k
+            //-------------------------------------------------------------------------------------------
             //проверяем точки chs2k
             if (Loco.sig_loco == 3)
             {
@@ -13543,7 +13621,9 @@ namespace zdsimScanner
 
             }
 
+            //-------------------------------------------------------------------------------------------
             //проверяем точки chs4
+            //-------------------------------------------------------------------------------------------
             if (Loco.sig_loco == 4)
             {
                 for (int i = 0; i < 55; i++)
@@ -13620,7 +13700,9 @@ namespace zdsimScanner
 
             }
 
+            //-------------------------------------------------------------------------------------------
             //проверяем точки chs4kvr
+            //-------------------------------------------------------------------------------------------
             if (Loco.sig_loco == 5)
             {
                 for (int i = 0; i < 55; i++)
@@ -13697,7 +13779,9 @@ namespace zdsimScanner
 
             }
 
+            //-------------------------------------------------------------------------------------------
             //проверяем точки chs4t
+            //-------------------------------------------------------------------------------------------
             if (Loco.sig_loco == 6)
             {
                 for (int i = 0; i < 52; i++)
@@ -13771,7 +13855,9 @@ namespace zdsimScanner
 
             }
 
+            //-------------------------------------------------------------------------------------------
             //проверяем точки chs7
+            //-------------------------------------------------------------------------------------------
             if (Loco.sig_loco == 7)
             {
                 for (int i = 0; i < 46; i++)
@@ -13838,7 +13924,9 @@ namespace zdsimScanner
                 if (CHS7_axis_buffer[45,0] != 0) LocoButtons.chs7_zhalyzi1_1 = b_joystick_axis_numbers_update[45];
             }
 
+            //-------------------------------------------------------------------------------------------
             //проверяем точки chs8
+            //-------------------------------------------------------------------------------------------
             if (Loco.sig_loco == 8)
             {
                 for (int i = 0; i < 63; i++)
@@ -14635,10 +14723,12 @@ namespace zdsimScanner
                 if (tem18_axis_buffer[30, 0] != 0) LocoButtons.tem18_prozh_1 = b_joystick_axis_numbers_update[30];
                 if (tem18_axis_buffer[31, 0] != 0) LocoButtons.tem18_prozh_2 = b_joystick_axis_numbers_update[31];
             }
-
         }
 
-
+        //------------------------------------------------------------------------------------
+        //Выбираем локомотив и выводим его название в консоль если локомотив найден и передаем
+        //указатели пневматики и электрики
+        //------------------------------------------------------------------------------------
         private void select_loco()
         {
             switch (Loco.sig_loco)
@@ -14798,36 +14888,117 @@ namespace zdsimScanner
             {
                 if (Loco.sig_pos_pnevm != 0) console1.AppendText("\r\nпневматика " + "0x" + Convert.ToString(Loco.sig_pos_pnevm, 16));
                 if (Loco.sig_pos_pnevm != 0) console1.AppendText("\r\nэлектрика " + "0x" + Convert.ToString(Loco.sig_pos_elektro, 16));
+                console1.AppendText("\r\nЛоко код " + Loco.locoCode);
+                console1.AppendText("\r\nsig_loco " + Loco.sig_loco);
+                console1.AppendText("\r\nТип лока " + Loco.sig_loco);
             }
         }
 
+        //------------------------------------------------------------------------------------
+        //Процедура получения данных из локомотива 
+        //------------------------------------------------------------------------------------
+        private void ReadLoco()
+        {
+            switch (Loco.i_process_name)
+            {
+                case 6: // ZDSimulator V54.006
+                    ReadLoco_V54_006();
+                break;
+
+                case 7: // ZDSimulator V55.008
+                    ReadLoco_V55_008();
+                break;
+
+                default:
+                        // можно fallback сделать
+                break;
+            }
+        }
+
+        //------------------------------------------------------------------------------------
+        // ZDSimulator V54.006
+        //------------------------------------------------------------------------------------
+        private void ReadLoco_V54_006()
+        {
+            switch (Loco.sig_loco)
+            {
+                case 1:  LocoRead.read_2se5k_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 2:  LocoRead.read_ep1m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 3:  LocoRead.read_chs2k_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 4:  LocoRead.read_chs4_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 5:  LocoRead.read_chs4kvr_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 6:  LocoRead.read_chs4t_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 7:  LocoRead.read_chs7_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 8:  LocoRead.read_chs8_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 9:  LocoRead.read_vl11m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 10: LocoRead.read_vl82m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 11: LocoRead.read_vl80t_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 12: LocoRead.read_vl85_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 13: LocoRead.read_tep70_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 14: LocoRead.read_2te10u_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 15: LocoRead.read_m62_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 16: LocoRead.read_ed4m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 17: LocoRead.read_ed9m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 18: LocoRead.read_tem18_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+
+            }
+        }
+
+        //------------------------------------------------------------------------------------
+        // ZDSimulator V55.008
+        //------------------------------------------------------------------------------------
+        private void ReadLoco_V55_008()
+        {
+            switch (Loco.sig_loco)
+            {
+                case 1: LocoRead.read_2se5k_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 2: LocoRead.read_ep1m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 3: LocoRead.read_chs2k_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 4: LocoRead.read_chs4_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 5: LocoRead.read_chs4kvr_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 6: LocoRead.read_chs4t_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 7: LocoRead.read_chs7_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 8: LocoRead.read_chs8_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 9: LocoRead.read_vl11m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 10: LocoRead.read_vl82m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 11: LocoRead.read_vl80t_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 12: LocoRead.read_vl85_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 13: LocoRead.read_tep70_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 14: LocoRead.read_2te10u_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 15: LocoRead.read_m62_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 16: LocoRead.read_ed4m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 17: LocoRead.read_ed9m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 18: LocoRead.read_tem18_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+            }
+        }
+
+        //------------------------------------------------------------------------------------
+        //Отправка данных в COM порт
+        //------------------------------------------------------------------------------------
+        private void SendToComPort()
+        {
+             //признак буфера
+             Loco.out_buffer[60] = 0xa0;
+             Loco.out_buffer[61] = 0xb0;
+             Loco.out_buffer[62] = 0xc0;
+             Loco.out_buffer[63] = 0xd0;
+            port.Write(Loco.out_buffer, 0, Loco.out_buffer.Length);
+        }
+
+        //------------------------------------------------------------------------------------
+        //Таймер 1 выбор и чтение локомотива, лампа бдительности, превышение скорости,
+        //задержка контроля дверей, отправка данных в com порт 
+        //timer1
+        //this.timer1.Interval = 1000;
+        //this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+        //------------------------------------------------------------------------------------
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (Loco.i_baze_address_flag_fail == 0)
             {
-                if (Loco.i_process_name == 6)
-                {
-                    if (Loco.sig_loco == 1) Loco.read_2se5k(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 2) Loco.read_ep1m(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 3) Loco.read_chs2k(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 4) Loco.read_chs4(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 5) Loco.read_chs4kvr(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 6) Loco.read_chs4t(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 7) Loco.read_chs7(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 8) Loco.read_chs8(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 9) Loco.read_vl11m(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 10) Loco.read_vl82m(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 11) Loco.read_vl80t(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 12) Loco.read_vl85(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 13) Loco.read_tep70(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 14) Loco.read_2te10u(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 15) Loco.read_m62(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 16) Loco.read_ed4m(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 17) Loco.read_ed9m(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                    if (Loco.sig_loco == 18) Loco.read_tem18(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-                }
+                ReadLoco();//Вызываем процедуру получения данных из локомотива 
 
-                Loco.temp_buffer = BitConverter.GetBytes(i_delay_motor);
+                Loco.temp_buffer = BitConverter.GetBytes(i_step_steper_motor);
                 Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 57, 2);
 
                 //лампа бдительности
@@ -14842,30 +15013,38 @@ namespace zdsimScanner
                     Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 5, 1);
                 }
 
-                //превышение скорости
-                if (i_skor_dop <= (i_skor_tek + 3) && (Loco.sig_loco == 1 || Loco.sig_loco == 2 || Loco.sig_loco == 3 ||
-                    Loco.sig_loco == 6 || Loco.sig_loco == 7 || Loco.sig_loco == 12 || Loco.sig_loco == 14 || Loco.sig_loco == 16 ||
-                    Loco.sig_loco == 17 || Loco.sig_loco == 18))
+                // превышение скорости
+                if (i_skor_dop <= (i_skor_tek + 3) &&
+                    (Loco.sig_loco == 1 || Loco.sig_loco == 2 || Loco.sig_loco == 3 ||
+                     Loco.sig_loco == 6 || Loco.sig_loco == 7 || Loco.sig_loco == 12 ||
+                     Loco.sig_loco == 14 || Loco.sig_loco == 16 || Loco.sig_loco == 17 ||
+                     Loco.sig_loco == 18))
                 {
+                    Console.WriteLine($"[DEBUG] Превышение скорости! i_skor_tek={i_skor_tek}, i_skor_dop={i_skor_dop}, loco={Loco.sig_loco}");
+
                     if (i_skor_dop_out == 1)
                     {
                         Loco.temp_buffer = BitConverter.GetBytes(i_skor_dop);
                         Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                        Console.WriteLine($"[DEBUG] В out_buffer записано ограничение: {i_skor_dop}");
                     }
 
                     if (i_skor_dop_out == 0)
                     {
                         Loco.temp_buffer = new byte[] { 255, 255 };
                         Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                        Console.WriteLine("[DEBUG] В out_buffer записано FF FF (заглушка)");
                     }
                 }
                 else
                 {
                     Loco.temp_buffer = BitConverter.GetBytes(i_skor_dop);
                     Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                    Console.WriteLine($"[DEBUG] Превышения нет. В out_buffer записано ограничение: {i_skor_dop}");
                 }
 
-                //задержка контроля дверей zdsim
+
+                //задержка контроля дверей
                 if (Loco.sig_loco == 16 || Loco.sig_loco == 17)
                 {
                     if (Loco.i_dvery_current == 1 && i_dvery_close_flag == 0)
@@ -14903,12 +15082,7 @@ namespace zdsimScanner
                     }
                 }
 
-                //признак буфера
-                Loco.out_buffer[60] = 0xa0;
-                Loco.out_buffer[61] = 0xb0;
-                Loco.out_buffer[62] = 0xc0;
-                Loco.out_buffer[63] = 0xd0;
-                port.Write(Loco.out_buffer, 0, Loco.out_buffer.Length);
+                SendToComPort(); //Отправка данных в COM порт
             }
             else
             {
@@ -14916,159 +15090,223 @@ namespace zdsimScanner
             }
         }
 
+        //------------------------------------------------------------------------------------
+        //timer2 Для вывода в Демо режиме
+        //this.timer2.Interval = 3000;
+        //this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+        //------------------------------------------------------------------------------------
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            // Сначала читаем данные по номеру локомотива
+            ReadLoco();//Вызываем процедуру получения данных из локомотива 
+
+            // превышение скорости
+            if (i_skor_dop <= (i_skor_tek + 3) &&
+                (Loco.sig_loco == 1 || Loco.sig_loco == 2 || Loco.sig_loco == 3 ||
+                 Loco.sig_loco == 6 || Loco.sig_loco == 7 || Loco.sig_loco == 12 ||
+                 Loco.sig_loco == 14 || Loco.sig_loco == 16 || Loco.sig_loco == 17 ||
+                 Loco.sig_loco == 18))
+            {
+                Console.WriteLine($"[DEBUG] Превышение скорости! i_skor_tek={i_skor_tek}, i_skor_dop={i_skor_dop}, loco={Loco.sig_loco}");
+                
+                //Мигание значения индикатора при привышении скорости
+                if (i_skor_dop_out == 1)
+                {
+                    Loco.temp_buffer = BitConverter.GetBytes(i_skor_dop);
+                    Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                    Console.WriteLine($"[DEBUG] В out_buffer записано Текущая скорость: {i_skor_tek}");
+                    Console.WriteLine($"[DEBUG] В out_buffer записано Ограничение скорости: {i_skor_dop}");
+                }
+
+                if (i_skor_dop_out == 0)
+                {
+                    Loco.temp_buffer = new byte[] { 255, 255 };
+                    Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                    Console.WriteLine("[DEBUG] В out_buffer записано FF FF (заглушка)");
+                }
+            }
+            else
+            {
+                Loco.temp_buffer = BitConverter.GetBytes(i_skor_dop);
+                Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                Console.WriteLine($"[DEBUG] Превышения нет. В out_buffer записано: i_skor_tek ={ i_skor_tek}, i_skor_dop ={ i_skor_dop}");
+            }
+
+
+
+            // Теперь разбираем буфер и показываем разные отчёты
+            console1.Clear();
+            switch (Loco.sig_loco)
+            {
+                // Вывод отладки для локомотива ed4m
+                case 16:
+                   //console1.AppendText($"\r\nСкорость текущая: {Loco.out_buffer[2]}");
+                   //console1.AppendText($"\r\nОграничение скорости: {i_skor_dop}");
+                    DisplayEd4mInfo(Loco.out_buffer);
+                    break;
+
+                // Примеры для других типов можно оформить аналогичным образом:
+                // case 1:
+                //     Display2Se5kInfo(Loco.out_buffer);
+                //     break;
+                // case 2:
+                //     DisplayEp1mInfo(Loco.out_buffer);
+                //     break;
+
+                default:
+                    console1.AppendText("Для данного типа локомотива отчёт не реализован.\r\n");
+                    break;
+            }
+
+            console1.AppendText("\r\n\r\n***** Для просмотра разверните экран ******");
+        }
+
+        //------------------------------------------------------------------------------------
+        //Таймер записи данных полученных из HID джойстика в игру
+        //------------------------------------------------------------------------------------
         private void timer_send_HID_Tick(object sender, EventArgs e)
         {
             if (Loco.i_baze_address_flag_fail == 0)
             {
                 if (Loco.i_process_name == 6)
                 {
-                    Loco.write_controls();
-                    Loco.write_neshtatki();
-                    if (Loco.sig_loco == 1) Loco.write_2es5k();
-                    if (Loco.sig_loco == 2) Loco.write_ep1m();
-                    if (Loco.sig_loco == 3) Loco.write_chs2k();
-                    if (Loco.sig_loco == 4) Loco.write_chs4();
-                    if (Loco.sig_loco == 5) Loco.write_chs4kvr();
-                    if (Loco.sig_loco == 6) Loco.write_chs4t();
-                    if (Loco.sig_loco == 7) Loco.write_chs7();
-                    if (Loco.sig_loco == 8) Loco.write_chs8();
-                    if (Loco.sig_loco == 9) Loco.write_vl11();
-                    if (Loco.sig_loco == 10) Loco.write_vl82();
-                    if (Loco.sig_loco == 11) Loco.write_vl80t();
-                    if (Loco.sig_loco == 12) Loco.write_vl85();
-                    if (Loco.sig_loco == 13) Loco.write_tep70();
-                    if (Loco.sig_loco == 14) Loco.write_2te10u();
-                    if (Loco.sig_loco == 15) Loco.write_m62();
-                    if (Loco.sig_loco == 16) Loco.write_ed4m();
-                    if (Loco.sig_loco == 17) Loco.write_ed9m();
-                    if (Loco.sig_loco == 18) Loco.write_tem18();
+
+                    LocoWrite.write_controls();
+                    LocoWrite.write_neshtatki();
+
+                    if (Loco.sig_loco == 1) LocoWrite.write_2es5k();
+                    if (Loco.sig_loco == 2) LocoWrite.write_ep1m();
+                    if (Loco.sig_loco == 3) LocoWrite.write_chs2k();
+                    if (Loco.sig_loco == 4) LocoWrite.write_chs4();
+                    if (Loco.sig_loco == 5) LocoWrite.write_chs4kvr();
+                    if (Loco.sig_loco == 6) LocoWrite.write_chs4t();
+                    if (Loco.sig_loco == 7) LocoWrite.write_chs7();
+                    if (Loco.sig_loco == 8) LocoWrite.write_chs8();
+                    if (Loco.sig_loco == 9) LocoWrite.write_vl11();
+                    if (Loco.sig_loco == 10) LocoWrite.write_vl82();
+                    if (Loco.sig_loco == 11) LocoWrite.write_vl80t();
+                    if (Loco.sig_loco == 12) LocoWrite.write_vl85();
+                    if (Loco.sig_loco == 13) LocoWrite.write_tep70();
+                    if (Loco.sig_loco == 14) LocoWrite.write_2te10u();
+                    if (Loco.sig_loco == 15) LocoWrite.write_m62();
+                    if (Loco.sig_loco == 16) LocoWrite.write_ed4m();
+                    if (Loco.sig_loco == 17) LocoWrite.write_ed9m();
+                    if (Loco.sig_loco == 18) LocoWrite.write_tem18();
                 }
             }
-            else button_stop.PerformClick();
-        }
-
-        private void timer2_Tick(object sender, EventArgs e)
-        {
-            if (Loco.sig_loco == 1) Loco.read_2se5k(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 2) Loco.read_ep1m(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 3) Loco.read_chs2k(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 4) Loco.read_chs4(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 5) Loco.read_chs4kvr(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 6) Loco.read_chs4t(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 7) Loco.read_chs7(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 8) Loco.read_chs8(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 9) Loco.read_vl11m(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 10) Loco.read_vl82m(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 11) Loco.read_vl80t(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 12) Loco.read_vl85(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 13) Loco.read_tep70(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 14) Loco.read_2te10u(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 15) Loco.read_m62(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 16) Loco.read_ed4m(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 17) Loco.read_ed9m(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-            if (Loco.sig_loco == 18) Loco.read_tem18(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
-
-            if (Loco.sig_loco != 0)
+            else
             {
-                console1.Clear();
-
-                Loco.temp_buffer = new byte[2];
-                Array.Copy(Loco.out_buffer, 0, Loco.temp_buffer, 0, 2); //скорость доп. int16
-                console1.AppendText("\r\nскорость доп. = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-                Loco.temp_buffer = new byte[2];
-                Array.Copy(Loco.out_buffer, 2, Loco.temp_buffer, 0, 2); //скорость тек. float
-                console1.AppendText("\r\nскорость тек. = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-                console1.AppendText("\r\nАЛС = " + Loco.out_buffer[4]);
-                console1.AppendText("\r\nбдительность = " + Loco.out_buffer[5]);
-                console1.AppendText("\r\nкран 395 = " + Loco.out_buffer[6]);
-                console1.AppendText("\r\nэпт контроль = " + Loco.out_buffer[7]);
-
-                Loco.temp_buffer = new byte[2];
-                Array.Copy(Loco.out_buffer, 8, Loco.temp_buffer, 0, 2); //ток эпт double
-                console1.AppendText("\r\nток эпт = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-                console1.AppendText("\r\nчас = " + Loco.out_buffer[10]);
-                console1.AppendText("\r\nмин. = " + Loco.out_buffer[11]);
-                console1.AppendText("\r\nсек. = " + Loco.out_buffer[12]);
-
-                Loco.temp_buffer = new byte[2];
-                Array.Copy(Loco.out_buffer, 13, Loco.temp_buffer, 0, 2); //напр. КС float
-                console1.AppendText("\r\nнапр. КС f = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-
-                Loco.temp_buffer = new byte[2];
-                Array.Copy(Loco.out_buffer, 15, Loco.temp_buffer, 0, 2); //контр поз. градусы double
-                console1.AppendText("\r\nконтр поз. градусы (для секций) = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-
-                Loco.temp_buffer = new byte[2];
-                Array.Copy(Loco.out_buffer, 17, Loco.temp_buffer, 0, 2); //напр. тд float
-                console1.AppendText("\r\nнапр. тд = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-
-                Loco.temp_buffer = new byte[2];
-                Array.Copy(Loco.out_buffer, 19, Loco.temp_buffer, 0, 2); //ток1 float
-                console1.AppendText("\r\nток1 = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-
-                Loco.temp_buffer = new byte[2];
-                Array.Copy(Loco.out_buffer, 21, Loco.temp_buffer, 0, 2); //ток2 float
-                console1.AppendText("\r\nток2 = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-
-                //Loco.temp_buffer = new byte[2];
-               // Array.Copy(Loco.out_buffer, 23, Loco.temp_buffer, 0, 2); //ток3 float
-               // console1.AppendText("\r\nток3 = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-
-                //Loco.temp_buffer = new byte[2];
-                //Array.Copy(Loco.out_buffer, 25, Loco.temp_buffer, 0, 2); //ток4 float
-                //console1.AppendText("\r\nток4 = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-
-                //Loco.temp_buffer = new byte[2];
-                //Array.Copy(Loco.out_buffer, 27, Loco.temp_buffer, 0, 2); //РК поз1 int16
-                //console1.AppendText("\r\nРК поз1 = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-
-                Loco.temp_buffer = new byte[2];
-                Array.Copy(Loco.out_buffer, 29, Loco.temp_buffer, 0, 2); //НМ
-                console1.AppendText("\r\n\r\nПневматика\r\n\r\nНМ = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-
-                Loco.temp_buffer = new byte[2];
-                Array.Copy(Loco.out_buffer, 31, Loco.temp_buffer, 0, 2); //ТМ
-                console1.AppendText("\r\nТМ = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-
-                Loco.temp_buffer = new byte[2];
-                Array.Copy(Loco.out_buffer, 33, Loco.temp_buffer, 0, 2); //УР
-                console1.AppendText("\r\nУР = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-
-                Loco.temp_buffer = new byte[2];
-                Array.Copy(Loco.out_buffer, 35, Loco.temp_buffer, 0, 2); //ТЦ
-                console1.AppendText("\r\nТЦ = " + BitConverter.ToInt16(Loco.temp_buffer, 0));
-
-                console1.AppendText("\r\n\r\nЛампы\r\nтц = " + Loco.out_buffer[37]);
-                //console1.AppendText("\r\nэпт О = " + Loco.out_buffer[38]);
-                //console1.AppendText("\r\nэпт П = " + Loco.out_buffer[39]);
-                //console1.AppendText("\r\nэпт Т = " + Loco.out_buffer[40]);
-                //console1.AppendText("\r\nРК С = " + Loco.out_buffer[41]);
-                //console1.AppendText("\r\nРК СП = " + Loco.out_buffer[42]);
-                //console1.AppendText("\r\nРК П = " + Loco.out_buffer[43]);
-                console1.AppendText("\r\nутечка ТМ = " + Loco.out_buffer[44]);
-                console1.AppendText("\r\nС1_тд = " + Loco.out_buffer[45]);
-                console1.AppendText("\r\nвв откр.1_двери = " + Loco.out_buffer[46]);
-                console1.AppendText("\r\nвспом. комп._зб = " + Loco.out_buffer[47]);
-                console1.AppendText("\r\nкомп1_мк = " + Loco.out_buffer[48]);
-                console1.AppendText("\r\nвент1 = " + Loco.out_buffer[49]);
-                console1.AppendText("\r\nрп 850_1_гв = " + Loco.out_buffer[50]);
-                console1.AppendText("\r\nземля1_бв = " + Loco.out_buffer[51]);
-                console1.AppendText("\r\nРК 0_1 = " + Loco.out_buffer[52]);
-                console1.AppendText("\r\nРК пром1 = " + Loco.out_buffer[53]);
-                console1.AppendText("\r\nпесок = " + Loco.out_buffer[54]);
-                console1.AppendText("\r\nнасосы_фр = " + Loco.out_buffer[55]);
-                console1.AppendText("\r\nход прав = " + Loco.out_buffer[56]);
-
-                console1.AppendText("\r\n\r\n***** Для просмотра разверните экран ******");
+                button_stop.PerformClick();
             }
         }
 
+        //------------------------------------------------------------------------------------
+        //Вывод в консоль для Демо режима
+        //------------------------------------------------------------------------------------
+        private void DisplayEd4mInfo(byte[] buffer)
+        {
+            // Вспомогательная локальная буферная переменная, чтобы не писать повторно
+            byte[] tmp = new byte[2];
+
+            // скорость дополнительная (int16) — байты 0–1
+            Array.Copy(buffer, 0, tmp, 0, 2);
+            console1.AppendText($"\r\nОграничение скорости = {BitConverter.ToInt16(tmp, 0)}");
+
+            // скорость текущая (int16) — байты 2–3
+            Array.Copy(buffer, 2, tmp, 0, 2);
+            console1.AppendText($"\r\nСкорость текущая = {BitConverter.ToInt16(tmp, 0)}");
+
+            // АЛС — байт 4
+            console1.AppendText($"\r\nАЛС = {buffer[4]}");
+
+            // Расстояние до цели в метрах
+            console1.AppendText($"\r\nРасстояние до цели в метрах = {Form1.i_rasstoyanie_do_tseli}");
+
+            // бдительность — байт 5
+            console1.AppendText($"\r\nБдительность = {buffer[5]}");
+
+            // ток ЭПТ — байты 8–9
+            Array.Copy(buffer, 8, tmp, 0, 2);
+            console1.AppendText($"\r\nТок эпт = {BitConverter.ToInt16(tmp, 0)}");
+
+            // часы/мин/сек — байты 10,11,12
+            console1.AppendText($"\r\nВремя: {buffer[10]}:{buffer[11]}:{buffer[12]}");
+
+            // напряжение КС — байты 13–14
+            Array.Copy(buffer, 13, tmp, 0, 2);
+            console1.AppendText($"\r\nНапряжение КС = {BitConverter.ToInt16(tmp, 0)}");
+
+            // контроллер — байт 15
+            console1.AppendText($"\r\nКонтроллер = {buffer[15]}");
+
+            // манометры НМ, ТМ, УР, ТЦ — байты 29–36
+            int[] offsets = { 29, 31, 33, 35 };
+            string[] names = { "НМ", "ТМ", "УР", "ТЦ" };
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Манометры: ");
+
+            for (int i = 0; i < offsets.Length; i++)
+            {
+                Array.Copy(buffer, offsets[i], tmp, 0, 2);
+                int value = BitConverter.ToInt16(tmp, 0);
+
+                sb.Append($"{names[i]}={value}");
+                if (i < offsets.Length - 1)
+                {
+                    sb.Append(", ");
+                }
+            }
+
+            // выводим в console1
+            console1.AppendText("\r\n" + sb.ToString());
+
+
+
+
+
+
+            /*
+            // Лампы ZTE и прочие — просто выводим байты по индексам
+            console1.AppendText("\r\n\r\nЛампы:");
+            var lampInfo = new (int index, string label)[]
+            {
+               (37, "ТЦ"), (38, "ЭПТ-О"), (39, "ЭПТ-П"), (40, "ЭПТ-Т"),
+               (41, "ПР ZTE"), (42, "ВЦ ZTE"), (43, "EPK_State SIM"),
+               (44, "ЛК ZTE"), (47, "двери ZTE"), (48, "О ZTE"),
+               (49, "РН ZTE"), (52, "БВ ZTE"), (53, "К ZTE"),
+               (54, "РБ Бокс. SIM"), (55, "СОТ ZTE"), (56, "СОТx ZTE")
+            };
+            */
+
+
+            // Лампы прочие — просто выводим байты по индексам
+            console1.AppendText("\r\n\r\nЛампы:");
+            var lampInfo = new (int index, string label)[]
+            {
+               (37, "ТЦ"), (38, "ЭПТ-О"), (39, "ЭПТ-П"), (40, "ЭПТ-Т"),
+               (43, "EPK_State"), 
+               (54, "РБ Бокс"), (56, "СОТx ZTE")
+            };
+
+
+            foreach (var (idx, lbl) in lampInfo)
+            {
+                console1.AppendText($"\r\n{lbl} = {buffer[idx]}");
+            }
+        }
+
+        //------------------------------------------------------------------------------------
+        //Таймер бдительности
+        //------------------------------------------------------------------------------------
         private void timer_bdit_Tick(object sender, EventArgs e)
         {
             if (i_bdit_out == 0) i_bdit_out = 1; else i_bdit_out = 0;
         }
 
-
+        //------------------------------------------------------------------------------------
+        //Таймер обновления данных джойстика
+        //------------------------------------------------------------------------------------
         private void timer_joystick_update_Tick(object sender, EventArgs e)
         {
             if (device == null)
@@ -15087,7 +15325,10 @@ namespace zdsimScanner
                 UpdateLocoAxis();
             }
         }
-
+       
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         private void timer_delay_key_Tick(object sender, EventArgs e)
         {
             if (i_dvery_random > 5) i_dvery_random = 0;
@@ -15095,6 +15336,9 @@ namespace zdsimScanner
             i_delay_send_key++;
         }
 
+        //------------------------------------------------------------------------------------
+        //Таймер открытия дверей
+        //------------------------------------------------------------------------------------
         private void timer_dvery_delay_Tick_1(object sender, EventArgs e)
         {
             //задержка дверей
@@ -15104,7 +15348,10 @@ namespace zdsimScanner
             }
             i_dvery_sec++;
         }
-
+        
+        //------------------------------------------------------------------------------------
+        //Таймер 500мс для мигания ограничения скорости и и лампы ЛК
+        //------------------------------------------------------------------------------------
         private void timer_500ms_Tick(object sender, EventArgs e)
         {
             if (i_skor_dop_out == 0)
@@ -15126,7 +15373,9 @@ namespace zdsimScanner
             
         }
 
-        //таймер дрожания оборотов дизеля
+        //------------------------------------------------------------------------------------
+        //Таймер дрожания оборотов дизеля
+        //------------------------------------------------------------------------------------
         public static float f_oborot_disel = 0;
         int flag_oborot_disel = 0;
         private void timer_oborot_disel_Tick(object sender, EventArgs e)
@@ -15143,7 +15392,9 @@ namespace zdsimScanner
             }
         }
 
-
+        //------------------------------------------------------------------------------------
+        //
+        //------------------------------------------------------------------------------------
         //удаляем файлы xml и bin из папки zdsimscanner
         public static void DeleteXmlBinFiles()
         {
@@ -15177,6 +15428,5 @@ namespace zdsimScanner
                 }
             }
         }
-
     }
 }
