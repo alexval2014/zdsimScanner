@@ -141,7 +141,8 @@
     </Compile>
     <Compile Include="Loco.cs" />
     <Compile Include="LocoButtons.cs" />
-    <Compile Include="LocoRead.cs" />
+    <Compile Include="LocoRead_V54_006.cs" />
+    <Compile Include="LocoRead_V55_008.cs" />
     <Compile Include="LocoWrite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

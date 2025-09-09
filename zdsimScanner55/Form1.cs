@@ -14922,24 +14922,24 @@ namespace zdsimScanner
         {
             switch (Loco.sig_loco)
             {
-                case 1:  LocoRead.read_2se5k_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 2:  LocoRead.read_ep1m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 3:  LocoRead.read_chs2k_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 4:  LocoRead.read_chs4_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 5:  LocoRead.read_chs4kvr_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 6:  LocoRead.read_chs4t_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 7:  LocoRead.read_chs7_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 8:  LocoRead.read_chs8_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 9:  LocoRead.read_vl11m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 10: LocoRead.read_vl82m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 11: LocoRead.read_vl80t_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 12: LocoRead.read_vl85_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 13: LocoRead.read_tep70_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 14: LocoRead.read_2te10u_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 15: LocoRead.read_m62_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 16: LocoRead.read_ed4m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 17: LocoRead.read_ed9m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 18: LocoRead.read_tem18_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 1: LocoRead_V54_006.read_2se5k_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 2: LocoRead_V54_006.read_ep1m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 3: LocoRead_V54_006.read_chs2k_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 4: LocoRead_V54_006.read_chs4_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 5: LocoRead_V54_006.read_chs4kvr_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 6: LocoRead_V54_006.read_chs4t_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 7: LocoRead_V54_006.read_chs7_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 8: LocoRead_V54_006.read_chs8_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 9: LocoRead_V54_006.read_vl11m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 10: LocoRead_V54_006.read_vl82m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 11: LocoRead_V54_006.read_vl80t_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 12: LocoRead_V54_006.read_vl85_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 13: LocoRead_V54_006.read_tep70_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 14: LocoRead_V54_006.read_2te10u_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 15: LocoRead_V54_006.read_m62_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 16: LocoRead_V54_006.read_ed4m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 17: LocoRead_V54_006.read_ed9m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 18: LocoRead_V54_006.read_tem18_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
 
             }
         }
@@ -14951,24 +14951,24 @@ namespace zdsimScanner
         {
             switch (Loco.sig_loco)
             {
-                case 1: LocoRead.read_2se5k_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 2: LocoRead.read_ep1m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 3: LocoRead.read_chs2k_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 4: LocoRead.read_chs4_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 5: LocoRead.read_chs4kvr_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 6: LocoRead.read_chs4t_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 7: LocoRead.read_chs7_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 8: LocoRead.read_chs8_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 9: LocoRead.read_vl11m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 10: LocoRead.read_vl82m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 11: LocoRead.read_vl80t_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 12: LocoRead.read_vl85_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 13: LocoRead.read_tep70_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 14: LocoRead.read_2te10u_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 15: LocoRead.read_m62_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 16: LocoRead.read_ed4m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 17: LocoRead.read_ed9m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 18: LocoRead.read_tem18_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 1: LocoRead_V55_008.read_2se5k_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 2: LocoRead_V55_008.read_ep1m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 3: LocoRead_V55_008.read_chs2k_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 4: LocoRead_V55_008.read_chs4_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 5: LocoRead_V55_008.read_chs4kvr_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 6: LocoRead_V55_008.read_chs4t_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 7: LocoRead_V55_008.read_chs7_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 8: LocoRead_V55_008.read_chs8_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 9: LocoRead_V55_008.read_vl11m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 10: LocoRead_V55_008.read_vl82m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 11: LocoRead_V55_008.read_vl80t_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 12: LocoRead_V55_008.read_vl85_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 13: LocoRead_V55_008.read_tep70_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 14: LocoRead_V55_008.read_2te10u_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 15: LocoRead_V55_008.read_m62_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 16: LocoRead_V55_008.read_ed4m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 17: LocoRead_V55_008.read_ed9m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case 18: LocoRead_V55_008.read_tem18_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
             }
         }
 
@@ -15257,6 +15257,9 @@ namespace zdsimScanner
                     sb.Append(", ");
                 }
             }
+
+            
+
 
             // выводим в console1
             console1.AppendText("\r\n" + sb.ToString());

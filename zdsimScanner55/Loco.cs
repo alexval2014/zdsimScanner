@@ -188,11 +188,79 @@ namespace zdsimScanner
                 }
                 else
                 {
-                    baze_address = BitConverter.ToInt32(Loco.read_bytes(baze_address, 4), 0);
+                    baze_address = BitConverter.ToInt32(read_bytes(baze_address, 4), 0);
                 }
             }
             return baze_address;
         }
+
+        // ===============================================================
+        // Чтение 1 байта
+        // ===============================================================
+        public static void ReadByteToBuffer(int offset, int outIndex, byte[] cache = null)
+        {
+            byte[] buf = read_bytes((Int32)BA + offset, 1);
+            byte val = (buf != null && buf.Length > 0) ? buf[0] : (byte)0;
+
+            // копируем в выходной буфер
+            out_buffer[outIndex] = val;
+
+            // при необходимости сохраняем в кэш (например, b_temp_byte1)
+            if (cache != null) cache[0] = val;
+        }
+
+        // ===============================================================
+        // Чтение 2 байт (Int16/UInt16)
+        // ===============================================================
+        public static void ReadUInt16ToBuffer(int offset, int outIndex)
+        {
+            byte[] buf = read_bytes((Int32)BA + offset, 2);
+            Array.Copy(buf, 0, out_buffer, outIndex, 2);
+        }
+
+        // ===============================================================
+        // Чтение 4 байт (float → UInt16 → 2 байта)
+        // ===============================================================
+        public static void ReadScaledFloatToBuffer(int offset, int outIndex, float scale)
+        {
+            byte[] buf = read_bytes((Int32)BA + offset, 4);
+            float f = BitConverter.ToSingle(buf, 0);
+            f = Math.Abs(f);
+            UInt16 val = Convert.ToUInt16(f * scale);
+
+            byte[] bval = BitConverter.GetBytes(val);
+            Array.Copy(bval, 0, out_buffer, outIndex, 2);
+        }
+
+        // ===============================================================
+        // Чтение double → UInt16 → 2 байта
+        // ===============================================================
+        public static void ReadScaledDoubleToBuffer(int offset, int outIndex, double scale)
+        {
+            byte[] buf = read_bytes((Int32)BA + offset, 8);
+            double d = BitConverter.ToDouble(buf, 0);
+            d = Math.Abs(d);
+            UInt16 val = Convert.ToUInt16(d * scale);
+
+            byte[] bval = BitConverter.GetBytes(val);
+            Array.Copy(bval, 0, out_buffer, outIndex, 2);
+        }
+
+        public static byte ReadByteValue(int offset)
+        {
+            byte[] buf = read_bytes((Int32)BA + offset, 1);
+            return (buf != null && buf.Length > 0) ? buf[0] : (byte)0;
+        }
+
+
+
+
+
+
+
+
+
+
 
         //------------------------------------------------------------------------------------
         public static void InitBuffers()
