@@ -7,6 +7,54 @@ namespace zdsimScanner
 {
     class LocoRead_V54_006
     {
+        //скорость доп         2-байта    Loco.out_buffer - 0
+        //скорость тек         2-байта    Loco.out_buffer - 2
+        //АЛС                  1-байт     Loco.out_buffer - 4
+        //бдительность         1-байт     Loco.out_buffer - 5
+        //скор тек2            2-байта    Loco.out_buffer - 6
+        //резерв               2-байт     Loco.out_buffer - 8
+        //час                  1-байт     Loco.out_buffer - 10
+        //минута               1-байт     Loco.out_buffer - 11
+        //секунда              1-байт     Loco.out_buffer - 12
+        //Напряжение кс        2-байта    Loco.out_buffer - 13
+        //контроллер           1-байт     Loco.out_buffer - 15
+        //резерв               1-байт     Loco.out_buffer - 16
+        //резерв               2-байт     Loco.out_buffer - 17
+        //резерв               2-байт     Loco.out_buffer - 19
+        //резерв               2-байт     Loco.out_buffer - 21
+        //резерв               2-байт     Loco.out_buffer - 23
+        //резерв               1-байт     Loco.out_buffer - 25
+        //резерв               1-байт     Loco.out_buffer - 26
+        //Лампа Тяга ZTE       1-байт     Loco.out_buffer - 27
+        //Лампа ЭДТ  ZTE       1-байт     Loco.out_buffer - 28
+        //Манометр НМ          2-байта    Loco.out_buffer - 29 
+        //Манометр ТМ          2-байта    Loco.out_buffer - 31
+        //Манометр УР          2-байта    Loco.out_buffer - 33
+        //Манометр ТЦ          2-байта    Loco.out_buffer - 35
+        //Лампа ТЦ             1-байт     Loco.out_buffer - 37
+        //Лампа эпт-О          1-байт     Loco.out_buffer - 38
+        //Лампа эпт-П          1-байт     Loco.out_buffer - 39
+        //Лампа эпт-Т          1-байт     Loco.out_buffer - 40
+        //Лампа ПР ZTE         1-байт     Loco.out_buffer - 41
+        //Лампа ВЦ ZTE         1-байт     Loco.out_buffer - 42
+        //EPK_State SIM        1-байт     Loco.out_buffer - 43
+        //Лампа ЛК ZTE         1-байт     Loco.out_buffer - 44
+        //Лампа ЛК SIM         1-байт     Loco.out_buffer - 45
+        //Лампа двери SIM      1-байт     Loco.out_buffer - 46
+        //Лампа двери ZTE      1-байт     Loco.out_buffer - 47
+        //Лампа О ZTE          1-байт     Loco.out_buffer - 48
+        //Лампа РН ZTE         1-байт     Loco.out_buffer - 49
+        //Лампа РН SIM         1-байт     Loco.out_buffer - 50
+        //Лампа БВ SIM         1-байт     Loco.out_buffer - 51
+        //Лампа БВ ZTE         1-байт     Loco.out_buffer - 52
+        //Лампа К ZTE          1-байт     Loco.out_buffer - 53
+        //Лампа РБ Бокс. SIM   1-байт     Loco.out_buffer - 54
+        //Лампа СОТ   ZTE      1-байт     Loco.out_buffer - 55
+        //Лампа СОТx  ZTE      1-байт     Loco.out_buffer - 56
+
+        //Шаги ШД              2-байта    Loco.out_buffer - 57
+
+
         private static byte ReadByteFromString(Int32 address, int maxLength = 4)
         {
             // читаем несколько байт (с запасом, т.к. строка "12" = 2 символа + '\0')
@@ -4862,7 +4910,6 @@ namespace zdsimScanner
            return Loco.out_buffer;
         }
 
-
         //-----------------------------------------------------------------------------------
         // Функция читает из памяти игры параметры локомотива "Тепловоз ТЭП70"
         //-----------------------------------------------------------------------------------
@@ -5097,7 +5144,6 @@ namespace zdsimScanner
            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 56, 1);
            return Loco.out_buffer;
         }
-
 
         //-----------------------------------------------------------------------------------
         // Функция читает из памяти игры параметры локомотива "Тепловоз 2ТЭ10У"
@@ -5633,54 +5679,6 @@ namespace zdsimScanner
            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 56, 1);
            return Loco.out_buffer;
         }
-
-        //скорость доп         2-байта    Loco.out_buffer - 0
-        //скорость тек         2-байта    Loco.out_buffer - 2
-        //АЛС                  1-байт     Loco.out_buffer - 4
-        //бдительность         1-байт     Loco.out_buffer - 5
-        //скор тек2            2-байта    Loco.out_buffer - 6
-        //резерв               2-байт     Loco.out_buffer - 8
-        //час                  1-байт     Loco.out_buffer - 10
-        //минута               1-байт     Loco.out_buffer - 11
-        //секунда              1-байт     Loco.out_buffer - 12
-        //Напряжение кс        2-байта    Loco.out_buffer - 13
-        //контроллер           1-байт     Loco.out_buffer - 15
-        //резерв               1-байт     Loco.out_buffer - 16
-        //резерв               2-байт     Loco.out_buffer - 17
-        //резерв               2-байт     Loco.out_buffer - 19
-        //резерв               2-байт     Loco.out_buffer - 21
-        //резерв               2-байт     Loco.out_buffer - 23
-        //резерв               1-байт     Loco.out_buffer - 25
-        //резерв               1-байт     Loco.out_buffer - 26
-        //Лампа Тяга ZTE       1-байт     Loco.out_buffer - 27
-        //Лампа ЭДТ  ZTE       1-байт     Loco.out_buffer - 28
-        //Манометр НМ          2-байта    Loco.out_buffer - 29 
-        //Манометр ТМ          2-байта    Loco.out_buffer - 31
-        //Манометр УР          2-байта    Loco.out_buffer - 33
-        //Манометр ТЦ          2-байта    Loco.out_buffer - 35
-        //Лампа ТЦ             1-байт     Loco.out_buffer - 37
-        //Лампа эпт-О          1-байт     Loco.out_buffer - 38
-        //Лампа эпт-П          1-байт     Loco.out_buffer - 39
-        //Лампа эпт-Т          1-байт     Loco.out_buffer - 40
-        //Лампа ПР ZTE         1-байт     Loco.out_buffer - 41
-        //Лампа ВЦ ZTE         1-байт     Loco.out_buffer - 42
-        //EPK_State SIM        1-байт     Loco.out_buffer - 43
-        //Лампа ЛК ZTE         1-байт     Loco.out_buffer - 44
-        //Лампа ЛК SIM         1-байт     Loco.out_buffer - 45
-        //Лампа двери SIM      1-байт     Loco.out_buffer - 46
-        //Лампа двери ZTE      1-байт     Loco.out_buffer - 47
-        //Лампа О ZTE          1-байт     Loco.out_buffer - 48
-        //Лампа РН ZTE         1-байт     Loco.out_buffer - 49
-        //Лампа РН SIM         1-байт     Loco.out_buffer - 50
-        //Лампа БВ SIM         1-байт     Loco.out_buffer - 51
-        //Лампа БВ ZTE         1-байт     Loco.out_buffer - 52
-        //Лампа К ZTE          1-байт     Loco.out_buffer - 53
-        //Лампа РБ Бокс. SIM   1-байт     Loco.out_buffer - 54
-        //Лампа СОТ   ZTE      1-байт     Loco.out_buffer - 55
-        //Лампа СОТx  ZTE      1-байт     Loco.out_buffer - 56
-
-        //Шаги ШД              2-байта    Loco.out_buffer - 57
-
 
         // ===============================================================
         // Чтение данных ED4M (версия 55)
