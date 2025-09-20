@@ -162,8 +162,6 @@ namespace zdsimScanner
             }
             Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 37, 1);
 
-
-
             // Для ламп (индикаторов) правильнее передавать битовую маску, а не 1 байт на каждую лампу.
             // Это экономит трафик и делает протокол компактнее.
             // Идея: Каждой лампе назначаем номер (индекс) — от 0 до 31.
@@ -189,35 +187,7 @@ namespace zdsimScanner
             // После сбора маски — кладём её в out_buffer
             byte[] Lamp_maskBytes = BitConverter.GetBytes(lampMask);
             Array.Copy(Lamp_maskBytes, 0, Loco.out_buffer, 40, 4);  // например, начиная с позиции 40
-            
-
-
-
-            /*
-            //скорость доп.
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x0032CA78, 2);
-            Form1.i_skor_dop = BitConverter.ToInt16(Loco.temp_buffer, 0);
-
-            //бдительность
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x0032CBC0, 1);
-            Loco.i_bdit_current = Loco.temp_buffer[0];
-
-            //-------------------------------------------------------------------------
-            //Лампа ТЦ
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_pnevm + 0xa8, 8); //давление тц
-            d_temp = BitConverter.ToDouble(Loco.temp_buffer, 0);
-
-            if (d_temp <= 0.3)
-            {
-                Loco.temp_buffer = new byte[] { 0 };
-            }
-            else
-            {
-                Loco.temp_buffer = new byte[] { 1 };
-            }
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 37, 1);
-            */
+     
             return Loco.out_buffer;
         }
 
