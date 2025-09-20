@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using static System.Windows.Forms.AxHost;
 
 namespace zdsimScanner
 {
@@ -196,6 +197,7 @@ namespace zdsimScanner
 
         // ===============================================================
         // Чтение 1 байта
+        // Loco.ReadByteToBuffer(Loco_2ES5K.Lamp_TMLeak, outIndex: 20);
         // ===============================================================
         public static void ReadByteToBuffer(int offset, int outIndex, byte[] cache = null)
         {
@@ -246,11 +248,91 @@ namespace zdsimScanner
             Array.Copy(bval, 0, out_buffer, outIndex, 2);
         }
 
+        // ===============================================================
+        // Читаем байт из памяти
+        // ===============================================================
         public static byte ReadByteValue(int offset)
         {
             byte[] buf = read_bytes((Int32)BA + offset, 1);
             return (buf != null && buf.Length > 0) ? buf[0] : (byte)0;
         }
+
+        // ===============================================================
+        // Универсальная функция для чтения ламп с фильтрацией.
+        // Она внутри прочитает N раз, подождёт при необходимости,
+        // и вернёт «устойчивое» значение.
+        // ===============================================================
+        private static byte ReadLampStable(int address, int retries = 3, int delayMs = 5)
+        {
+            int ones = 0;
+
+            for (int i = 0; i < retries; i++)
+            {
+                var buffer = Loco.read_bytes(address, 1);
+                if (buffer[0] == 1) ones++;
+                if (delayMs > 0) Thread.Sleep(delayMs);
+            }
+
+            // если хотя бы один раз получили "1" — считаем что лампа горит
+            return (byte)(ones > 0 ? 1 : 0);
+        }
+
+        // ===============================================================
+        // Чтение лампы с фильтрацией → сразу в выходной буфер.
+        // ===============================================================
+        public static void ReadLampStableToBuffer(int offset, int outIndex, int retries = 3, int delayMs = 5)
+        {
+            byte val = ReadLampStable((int)BA + offset, retries, delayMs);
+            out_buffer[outIndex] = val;
+        }
+
+        // ===============================================================
+        // Хелпер для установки бита
+        // Устанавливает значение лампы (0/1) в битовую маску
+        // ===============================================================
+        public static void SetLampBit(ref uint mask, int lampIndex, byte value)
+        {
+            if (value == 1)
+                mask |= (uint)(1 << lampIndex); // включить бит
+            else
+                mask &= ~(uint)(1 << lampIndex); // выключить бит
+        }
+
+        // ===============================================================
+        // Хелпер для чтения лампы в битовую маску
+        // ===============================================================
+        public static void ReadLampStableToMask(ref uint mask, int lampIndex, int offset, int retries = 3, int delayMs = 5)
+        {
+            byte val = ReadLampStable((int)BA + offset, retries, delayMs);
+            SetLampBit(ref mask, lampIndex, val);
+        }
+
+
+        // ===============================================================
+        // функцию: читает float по адресу; берёт модуль значения;
+        // умножает на коэффициент(scale или Loco.i_skor_tek_convert); 
+        // преобразует в UInt16;пишет в out_buffer.
+        // Если нужен фиксированный коэффициент (например, scale: 10f),
+        // просто передаёшь factor: 10f.
+        // Если нужна настройка через переменную — используешь Loco.i_skor_tek_convert.
+        // ===============================================================
+        public static void ReadScaledFloatToBufferWithFactor(int offset, int outIndex, float factor)
+        {
+            // читаем float (4 байта)
+            var temp = read_bytes((int)BA + offset, 4);
+            float f_val = BitConverter.ToSingle(temp, 0);
+
+            // модуль, масштабирование, преобразование
+            f_val = Math.Abs(f_val);
+            UInt16 i_val = Convert.ToUInt16(f_val * factor);
+
+            // пишем в выходной буфер (2 байта)
+            var bytes = BitConverter.GetBytes(i_val);
+            Array.Copy(bytes, 0, out_buffer, outIndex, 2);
+        }
+
+
+
 
 
 

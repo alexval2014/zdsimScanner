@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Text;
 using System.Threading;
-//using zdsimScanner;
+using zdsimScanner.Offsets.V54_006; //Подключаю папку с офсетами
+
 
 namespace zdsimScanner
 {
@@ -86,126 +87,65 @@ namespace zdsimScanner
         //-----------------------------------------------------------------------------------
         public static byte[] read_2se5k_V54_006(int sig_pos_pnevm = 0, int sig_pos_elektro = 0)
         {
-            //скорость доп.
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x0032CA78, 2);
-            Form1.i_skor_dop = BitConverter.ToInt16(Loco.temp_buffer, 0);
+            double d_temp = 0;
 
-            //скорость тек.
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x04F6FCE0, 4);
-            float f_temp = BitConverter.ToSingle(Loco.temp_buffer, 0);
-            f_temp = Math.Abs(f_temp);
-            UInt16 i_temp = Convert.ToUInt16(f_temp * Loco.i_skor_tek_convert);
-            Loco.temp_buffer = BitConverter.GetBytes(i_temp);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 2, 2);
+            // -----------------------------
+            // Скорости
+            // -----------------------------
+            // дополнительная скорость (Int16 → 2 байта напрямую)
+            //Loco.ReadUInt16ToBuffer(Loco_2ES5K.SpeedDop, outIndex: 0);
+            Form1.i_skor_dop = Loco.ReadByteValue(Loco_2ES5K.SpeedDop);
 
-            //АЛС
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB744, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 4, 1);
+            // Текущая скорость с коэффициентом масштабирования на шкалу прибора
+            // (float → UInt16 → 2 байта)
+            Loco.ReadScaledFloatToBufferWithFactor(Loco_2ES5K.SpeedTek, outIndex: 2, factor: Loco.i_skor_tek_convert);
 
-            //бдительность
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x0032CBC0, 1);
-            Loco.i_bdit_current = Loco.temp_buffer[0];
+            // Текущая скорость без коэффициента масштабирования
+            // (float → UInt16 → 2 байта)
+            Loco.ReadScaledFloatToBufferWithFactor(Loco_2ES5K.SpeedTek, outIndex: 4, factor: 1f);
 
-            //скор тек 2
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x04F6FCE0, 4);
-            f_temp = BitConverter.ToSingle(Loco.temp_buffer, 0);
-            f_temp = Math.Abs(f_temp);
-            i_temp = Convert.ToUInt16(f_temp);
-            Form1.i_skor_tek = i_temp;
-            Loco.temp_buffer = BitConverter.GetBytes(i_temp);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 6, 2);
+            // -----------------------------
+            // Сигналы безопасности
+            // -----------------------------
+            byte als = Loco.ReadByteValue(Loco_2ES5K.ALS);
+            Loco.out_buffer[6] = als;
 
-            //ток эпт отсуствует
-            Loco.temp_buffer = new byte[] { 0, 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 8, 2);
+            //byte bdit = Loco.ReadByteValue(Loco_2ES5K.Bditelnost);
+            //Loco.out_buffer[7] = bdit;
 
-            //час
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB8AC, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 10, 1);
+            Loco.i_bdit_current = Loco.ReadByteValue(Loco_2ES5K.Bditelnost);
 
-            //минута
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB8B0, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 11, 1);
+            // -----------------------------
+            // Давления (float → UInt16 → 2 байта)
+            // -----------------------------
+            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.PNM, outIndex: 8, scale: Loco.i_pnevmo_convert);  // НМ
+            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.PTM, outIndex: 10, scale: Loco.i_pnevmo_convert); // ТМ
+            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.PUR, outIndex: 12, scale: Loco.i_pnevmo_convert); // УР
+            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.PTC, outIndex: 14, scale: Loco.i_pnevmo_convert); // ТЦ
 
-            //секунда
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB8B4, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 12, 1);
+            // -----------------------------
+            // Электрические параметры
+            // -----------------------------
+            Loco.ReadScaledDoubleToBuffer(Loco_2ES5K.NaprugaKS, outIndex: 16, scale: Loco.i_napruga_ks_convert); // В кВ   (0.1)
+            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.NaprugaTD, outIndex: 18, scale: Loco.i_napruga_td_convert);  // Вольты ТД
+            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.Tok1, outIndex: 20, scale: Loco.i_tok_convert);              // Амперы
 
-            //напруга float
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08CF3F30, 8);
-            double d_temp = BitConverter.ToDouble(Loco.temp_buffer, 0);
-            d_temp = Math.Abs(d_temp);
-            i_temp = Convert.ToUInt16(d_temp * Loco.i_napruga_ks_convert);
-            Loco.temp_buffer = BitConverter.GetBytes(i_temp);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 13, 2);
+            // -----------------------------
+            // Время (часы, минуты, секунды)
+            // -----------------------------
+            Loco.ReadByteToBuffer(Loco_2ES5K.TimeHour, outIndex: 25);
+            Loco.ReadByteToBuffer(Loco_2ES5K.TimeMinute, outIndex: 26);
+            Loco.ReadByteToBuffer(Loco_2ES5K.TimeSecond, outIndex: 27);
 
-            //контроллер поз. отсуствует
-            Loco.temp_buffer = new byte[] { 0, 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 15, 2);
+            // -----------------------------
+            // Лампы (устойчивое чтение)
+            // -----------------------------
+            Loco.ReadLampStableToBuffer(Loco_2ES5K.Lamp_TMLeak, outIndex: 40);    // Лампа: утечка ТМ
+            Loco.ReadLampStableToBuffer(Loco_2ES5K.Lamp_C1, outIndex: 41);        // Лампа: С1
+            Loco.ReadLampStableToBuffer(Loco_2ES5K.Lamp_C2, outIndex: 42);        // Лампа: С2
+            Loco.ReadLampStableToBuffer(Loco_2ES5K.Lamp_Vent1, outIndex: 43);     // Лампа: вентилятор 1
+            Loco.ReadLampStableToBuffer(Loco_2ES5K.Lamp_GV_Right, outIndex: 44);  // Лампа: ГВ правый
 
-            //напруга тд
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x04F6FA38, 4);
-            f_temp = BitConverter.ToSingle(Loco.temp_buffer, 0);
-            f_temp = Math.Abs(f_temp);
-            i_temp = Convert.ToUInt16(f_temp / Loco.i_napruga_td_convert);
-            Loco.temp_buffer = BitConverter.GetBytes(i_temp);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 17, 2);
-
-            //ток1
-            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x04F6FCC8, 4);
-            f_temp = BitConverter.ToSingle(Loco.temp_buffer, 0);
-            f_temp = Math.Abs(f_temp);
-            i_temp = Convert.ToUInt16(f_temp / Loco.i_tok_convert);
-            Loco.temp_buffer = BitConverter.GetBytes(i_temp);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 19, 2);
-
-            //ток2 отсуствует
-            Loco.temp_buffer = new byte[] { 0, 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 21, 2);
-
-            //ток3 отсуствует
-            Loco.temp_buffer = new byte[] { 0, 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 23, 2);
-
-            //ток4 отсуствует
-            Loco.temp_buffer = new byte[] { 0, 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 25, 2);
-
-            //РК поз1 отсуствует
-            Loco.temp_buffer = new byte[] { 255, 255 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 27, 2);
-
-            //динамические
-            //НМ float
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_pnevm + 0x80, 8);
-            d_temp = BitConverter.ToDouble(Loco.temp_buffer, 0);
-            i_temp = Convert.ToUInt16(d_temp * Loco.i_pnevmo_convert);
-            Loco.temp_buffer = BitConverter.GetBytes(i_temp);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 29, 2);
-
-            //ТМ float
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_pnevm + 0x58, 8);
-            d_temp = BitConverter.ToDouble(Loco.temp_buffer, 0);
-            i_temp = Convert.ToUInt16(d_temp * Loco.i_pnevmo_convert);
-            Loco.temp_buffer = BitConverter.GetBytes(i_temp);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 31, 2);
-
-            //УР float
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_pnevm + 0x30, 8);
-            d_temp = BitConverter.ToDouble(Loco.temp_buffer, 0);
-            i_temp = Convert.ToUInt16(d_temp * Loco.i_pnevmo_convert);
-            Loco.temp_buffer = BitConverter.GetBytes(i_temp);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 33, 2);
-
-            //ТЦ float
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_pnevm + 0xa8, 8);
-            d_temp = BitConverter.ToDouble(Loco.temp_buffer, 0);
-            i_temp = Convert.ToUInt16(d_temp * Loco.i_pnevmo_convert);
-            Loco.temp_buffer = BitConverter.GetBytes(i_temp);
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 35, 2);
-
-            //-------------------------------------------------------------------------
-            //                               Лампы
             //-------------------------------------------------------------------------
             //Лампа ТЦ
             //-------------------------------------------------------------------------
@@ -222,247 +162,62 @@ namespace zdsimScanner
             }
             Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 37, 1);
 
-            //-------------------------------------------------------------------------
-            //Лампа ЭПТ О отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 38, 1);
+
+
+            // Для ламп (индикаторов) правильнее передавать битовую маску, а не 1 байт на каждую лампу.
+            // Это экономит трафик и делает протокол компактнее.
+            // Идея: Каждой лампе назначаем номер (индекс) — от 0 до 31.
+            // В коде при чтении лампы мы получаем 0 или 1.
+            // Эти значения записываем в битовую маску(uint), где каждый бит соответствует лампе.
+            // Потом при передаче в out_buffer достаточно скопировать 4 байта(32 бита) сразу.
+            // Преимущества: 32 лампы → всего 4 байта вместо 32.
+            // Добавление новых ламп = просто назначить новый индекс.
+            // Передача компактнее = быстрее опрос через COM - порт.
+            // На стороне приёмника удобно проверять: bool lampOn = (lampMask & (1 << lampIndex)) != 0;
+            // Пример реализации
+            // Собираем все лампы в 32-битную маску
+            uint lampMask = 0;
+
+            Loco.ReadLampStableToMask(ref lampMask, 0, Loco_2ES5K.Lamp_TMLeak);
+            Loco.ReadLampStableToMask(ref lampMask, 1, Loco_2ES5K.Lamp_C1);
+            Loco.ReadLampStableToMask(ref lampMask, 2, Loco_2ES5K.Lamp_C2);
+            Loco.ReadLampStableToMask(ref lampMask, 3, Loco_2ES5K.Lamp_Vent1);
+            Loco.ReadLampStableToMask(ref lampMask, 4, Loco_2ES5K.Lamp_GV_Right);
+
+            // ...добавляешь остальные лампы
+
+            // После сбора маски — кладём её в out_buffer
+            byte[] Lamp_maskBytes = BitConverter.GetBytes(lampMask);
+            Array.Copy(Lamp_maskBytes, 0, Loco.out_buffer, 40, 4);  // например, начиная с позиции 40
+            
+
+
+
+            /*
+            //скорость доп.
+            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x0032CA78, 2);
+            Form1.i_skor_dop = BitConverter.ToInt16(Loco.temp_buffer, 0);
+
+            //бдительность
+            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x0032CBC0, 1);
+            Loco.i_bdit_current = Loco.temp_buffer[0];
 
             //-------------------------------------------------------------------------
-            //Лампа ЭПТ П отсуствует
+            //Лампа ТЦ
             //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 39, 1);
+            Loco.temp_buffer = Loco.read_bytes(sig_pos_pnevm + 0xa8, 8); //давление тц
+            d_temp = BitConverter.ToDouble(Loco.temp_buffer, 0);
 
-            //-------------------------------------------------------------------------
-            //Лампа ЭПТ Т отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 40, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа РК С отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 41, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа РК СП отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 42, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа РК П отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 43, 1);
-
-            //-------------------------------------------------------------------------
-            //                          лампы 1 круг 49 ламп
-            //-------------------------------------------------------------------------
-            //Лампа 1 круг Утечка ТМ 0x39c4
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x39c4, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.temp_buffer2, 1, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа 1 круг С1 0x614d
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x614d, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.temp_buffer2, 2, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа 1 круг С2 0x6229
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x6229, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.temp_buffer2, 3, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа 1 круг Вент1 0x6bc8
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x6bc8, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.temp_buffer2, 4, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа 1 круг Гв прав 0x64e8
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x64e8, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.temp_buffer2, 5, 1);
-
-            Thread.Sleep(10);
-
-            //-------------------------------------------------------------------------
-            //                          лампы 2 круг 49 ламп
-            //-------------------------------------------------------------------------
-            //Лампа 2 круг Утечка ТМ 0x39c4
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x39c4, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.temp_buffer3, 1, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа 2 круг С1 0x614d
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x614d, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.temp_buffer3, 2, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа 2 круг С2 0x6229
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x6229, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.temp_buffer3, 3, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа 2 круг Вент1 0x6bc8
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x6bc8, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.temp_buffer2, 4, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа 2 круг Гв прав 0x64e8
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x64e8, 1);
-            Array.Copy(Loco.temp_buffer, 0, Loco.temp_buffer3, 5, 1);
-
-            Thread.Sleep(10);
-
-            //-------------------------------------------------------------------------
-            //                          лампы 3 круг 49 ламп
-            //-------------------------------------------------------------------------
-            //Лампа 3 круг Утечка ТМ 0x39c4
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x39c4, 1);
-
-            //(3круг Утечка ТМ 0x39c4 == 1) или (1круг Утечка ТМ 0x39c4 == 1) или (2круг Утечка ТМ 0x39c4 == 1)
-            if (Loco.temp_buffer[0] == 1 || Loco.temp_buffer2[1] == 1 || Loco.temp_buffer3[1] == 1)
+            if (d_temp <= 0.3)
             {
-                Loco.temp_buffer[0] = 1;
+                Loco.temp_buffer = new byte[] { 0 };
             }
             else
             {
-                Loco.temp_buffer[0] = 0;
+                Loco.temp_buffer = new byte[] { 1 };
             }
-
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 44, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа 3 круг С1 0x614d
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x614d, 1);
-
-            //(3круг С1 0x614d == 1) или (1круг С1 0x614d == 1) или (2круг С1 0x614d == 1)
-            if (Loco.temp_buffer[0] == 1 || Loco.temp_buffer2[2] == 1 || Loco.temp_buffer3[2] == 1)
-            {
-                Loco.temp_buffer[0] = 1;
-            }
-            else
-            {
-                Loco.temp_buffer[0] = 0;
-            }
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 45, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа 3 круг С2 0x6229
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x6229, 1);
-
-            //(3круг С2 0x6229 == 1) или (1круг С2 0x6229 == 1) или (2круг С2 0x6229 == 1) или ((3круг С1 == 1) или (3круг С2 == 1))
-            if (Loco.temp_buffer[0] == 1 || Loco.temp_buffer2[3] == 1 || Loco.temp_buffer3[3] == 1 || Loco.out_buffer[45] == 1)
-            {
-                Loco.temp_buffer[0] = 1;
-            }
-            else
-            {
-                Loco.temp_buffer[0] = 0;
-            }
-
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 45, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа ВВ откр1 отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 46, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа Вспом. комп. отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 47, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа Комп1 отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 48, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа Вент1. 0x6229
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x6229, 1);
-
-            //(Вент1. 0x6229 == 1) или (1круг Вент1 0x6bc8 == 1) или (2круг Вент1 0x6bc8 == 1)
-            if (Loco.temp_buffer[0] == 1 || Loco.temp_buffer2[4] == 1 || Loco.temp_buffer3[4] == 1)
-            {
-                Loco.temp_buffer[0] = 1;
-            }
-            else
-            {
-                Loco.temp_buffer[0] = 0;
-            }
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 49, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа rp_850_gv 0x64e8
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = Loco.read_bytes(sig_pos_elektro + 0x64e8, 1);
-
-            //(rp_850_gv 0x64e8 == 1) или (
-            if (Loco.temp_buffer[0] == 1 || Loco.temp_buffer2[25] == 1)
-            {
-                Loco.temp_buffer[0] = 1;
-            }
-            else
-            {
-                Loco.temp_buffer[0] = 0;
-            }
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 50, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа zemla_bv отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 51, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа РК 0_1 отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 52, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа РК пром.1 отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 53, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа Песок отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 54, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа Насос отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 55, 1);
-
-            //-------------------------------------------------------------------------
-            //Лампа Ход прав отсуствует
-            //-------------------------------------------------------------------------
-            Loco.temp_buffer = new byte[] { 0 };
-            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 56, 1);
+            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 37, 1);
+            */
             return Loco.out_buffer;
         }
 
@@ -593,8 +348,7 @@ namespace zdsimScanner
             Loco.temp_buffer = BitConverter.GetBytes(i_temp);
             Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 35, 2);
 
-            //Лампы
-            //тц
+            //Лампа тц
             Loco.temp_buffer = Loco.read_bytes(sig_pos_pnevm + 0xa8, 8); //читаем давление тц
             d_temp = BitConverter.ToDouble(Loco.temp_buffer, 0);
             if (d_temp <= 0.3)

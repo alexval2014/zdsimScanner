@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.IO;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Microsoft.DirectX;
 using Microsoft.DirectX.DirectInput;
 
 
@@ -58,8 +52,6 @@ namespace zdsimScanner
         "VSld",
         };
 
-
-        /************************************zdsim*****************************************/
         public string[] sb_controls_axis_data = new string[34];
         public string[] sb_neshtatki_axis_data = new string[100];
         public string[] sb_es5k_axis_data = new string[109];
@@ -80,7 +72,7 @@ namespace zdsimScanner
         public string[] sb_ed4m_axis_data = new string[33];
         public string[] sb_ed9m_axis_data = new string[30];
         public string[] sb_tem18_axis_data = new string[32];
-        /************************************zdsim*****************************************/
+
         Device device;
 
         public Form2()
@@ -178,6 +170,8 @@ namespace zdsimScanner
             }
 
         }
+
+
         //загрузка отрисовки осей
         private void sbBufferUpdate()
         {
@@ -266,6 +260,7 @@ namespace zdsimScanner
                     sb_vl82_axis_data[i] = Properties.Settings.Default.sb_vl82_axis_data_settings[i];
                 }
             }
+
             if (Properties.Settings.Default.sb_vl80t_axis_data_settings[0] != "start")
             {
                 for (int i = 0; i < sb_vl80t_axis_data.Length; i++)
@@ -273,6 +268,7 @@ namespace zdsimScanner
                     sb_vl80t_axis_data[i] = Properties.Settings.Default.sb_vl80t_axis_data_settings[i];
                 }
             }
+
             if (Properties.Settings.Default.sb_vl85_axis_data_settings[0] != "start")
             {
                 for (int i = 0; i < sb_vl85_axis_data.Length; i++)
@@ -325,7 +321,11 @@ namespace zdsimScanner
 
              Properties.Settings.Default.Save();
         }
+
+
+        //=====================================================================
         //сохранение отрисовки осей
+        //=====================================================================
         private void sbBufferSave()
         {
             //сохраняем буфер отрисовки datagridzdsim
@@ -430,7 +430,10 @@ namespace zdsimScanner
                 Properties.Settings.Default.sb_tem18_axis_data_settings.Add(Convert.ToString(sb_tem18_axis_data[i]));
             }
          }
+
+        //=====================================================================
         //сохранение отрисовки звуков
+        //=====================================================================
         private void sbBufferWavPathSave()
         {
             //сохраняем буфер отрисовки звуков zdsim
@@ -547,10 +550,7 @@ namespace zdsimScanner
                 {
                     if ((doi.ObjectId & (int)DeviceObjectTypeFlags.Axis) != 0)
                     {
-                        device.Properties.SetRange(
-                                ParameterHow.ById,
-                                doi.ObjectId,
-                                new InputRange(0,65535));
+                        device.Properties.SetRange(ParameterHow.ById,doi.ObjectId,new InputRange(0,65535));
                     }
                 }
 
@@ -757,8 +757,11 @@ namespace zdsimScanner
             }
         }
 
-        public string[] LocoKeyData = new string[]{
-
+        //=====================================================================
+        //Список органов управления локомотивами
+        //=====================================================================
+        public string[] LocoKeyData = new string[]
+        {
             //общие
             "Свисток",
             "Тифон",
@@ -1394,6 +1397,7 @@ namespace zdsimScanner
             "Контр ход46",
             "Контр ход47",
             "Контр ход48",
+
 
             "Шунт_0",
             "Шунт_1",
@@ -2039,6 +2043,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "EP1M")
             {
                 i_temp_loco_select = 2;
@@ -2067,6 +2072,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "CHS2K")
             {
                 i_temp_loco_select = 3;
@@ -2095,6 +2101,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "CHS4")
             {
                 i_temp_loco_select = 4;
@@ -2123,6 +2130,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "CHS4 KVR")
             {
                 i_temp_loco_select = 5;
@@ -2151,6 +2159,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "CHS4T")
             {
                 i_temp_loco_select = 6;
@@ -2179,6 +2188,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "CHS7")
             {
                 i_temp_loco_select = 7;
@@ -2207,6 +2217,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "CHS8")
             {
                 i_temp_loco_select = 8;
@@ -2235,6 +2246,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "VL11M")
             {
                 i_temp_loco_select = 9;
@@ -2263,6 +2275,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "VL82M")
             {
                 i_temp_loco_select = 10;
@@ -2291,6 +2304,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "VL80T")
             {
                 i_temp_loco_select = 11;
@@ -2319,6 +2333,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "VL85")
             {
                 i_temp_loco_select = 12;
@@ -2347,6 +2362,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "TEP70")
             {
                 i_temp_loco_select = 13;
@@ -2375,6 +2391,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "2TE10U")
             {
                 i_temp_loco_select = 14;
@@ -2403,6 +2420,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "M62")
             {
                 i_temp_loco_select = 15;
@@ -2431,6 +2449,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "ED9M")
             {
                 i_temp_loco_select = 17;
@@ -2459,6 +2478,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "ED4M")
             {
                 i_temp_loco_select = 16;
@@ -2487,6 +2507,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "tem18")
             {
                 i_temp_loco_select = 18;
@@ -2515,6 +2536,7 @@ namespace zdsimScanner
                     j++;
                 }
             }
+
             if (Convert.ToString(comboBox_zdsimLoco.Text) == "Neshtatki")
             {
                 i_temp_loco_select = 19;
@@ -2559,6 +2581,8 @@ namespace zdsimScanner
             numericUpDown8.Value = 500;              //Время мигания лампы бдительности и ограничения скорости
         }
 
+
+        //Кнопка ОК
         private void button1_Click(object sender, EventArgs e)
         {
             Loco.i_skor_tek_convert = Convert.ToSingle(textBox1.Text);
@@ -2589,12 +2613,12 @@ namespace zdsimScanner
             sbBufferSave();
             sbBufferWavPathSave();
 
-            this.Close();
+            Close();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
 
@@ -2669,6 +2693,7 @@ namespace zdsimScanner
             label7.Focus();
         }
 
+        //Выбор Режима работы сканера (кружок) только Приём
         private void radio_priem_CheckedChanged(object sender, EventArgs e)
         {
             tabControl1.Enabled = false;
@@ -2678,6 +2703,7 @@ namespace zdsimScanner
             Form1.i_priem_peredacha = 1;
         }
 
+        //Выбор Режима работы сканера (кружок) только Передача
         private void radio_peredacha_CheckedChanged(object sender, EventArgs e)
         {
             tabControl1.Enabled = true;
@@ -2687,6 +2713,7 @@ namespace zdsimScanner
             Form1.i_priem_peredacha = 2;
         }
 
+        //Выбор Режима работы сканера (кружок) Приём и Передача
         private void radio_priem_peredacha_CheckedChanged(object sender, EventArgs e)
         {
             tabControl1.Enabled = true;
@@ -2721,9 +2748,9 @@ namespace zdsimScanner
             //если нажат 3 столбец, открываем FileDialog
 
             openFileDialog1.InitialDirectory = Application.StartupPath;//начальный путь в папке приложения
-            openFileDialog1.Filter = "Wav files (*.wav)|*.wav";//только wav
+            openFileDialog1.Filter = "Wav files (*.wav)|*.wav";        //только wav
             openFileDialog1.FilterIndex = 1;
-            openFileDialog1.RestoreDirectory = true;//восстанавливать прежний путь
+            openFileDialog1.RestoreDirectory = true;                   //восстанавливать прежний путь
 
             if (i_temp_column_number_f2 == 2)
             {
@@ -2733,13 +2760,11 @@ namespace zdsimScanner
 
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    FileInfo fInfo = new System.IO.FileInfo(openFileDialog1.FileName);
+                    FileInfo fInfo = new FileInfo(openFileDialog1.FileName);
                     strFileName = fInfo.Name;
                     strFilePath = fInfo.DirectoryName;
                     strAllPath = strFilePath + "\\" + strFileName;
                 }
-                
-                
                 
                 s_current_loco_select = comboBox_zdsimLoco.Text;
                 if (Convert.ToString(comboBox_zdsimLoco.Text) == "Локомотив")
@@ -2826,17 +2851,23 @@ namespace zdsimScanner
             KeyDataUpdate();
             dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = dataGridView_Zdsimulator.Rows[i_temp_row_number_f2].Index;
             dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i_temp_row_number_f2].Cells[i_temp_column_number_f2];
-
         }
 
+        //============================================================================
+        //Регулировка фильтра шума джойстика
+        //============================================================================
         private void numericUpDown_shum_ValueChanged(object sender, EventArgs e)
         {
             Form1.i_shum_joystick = Convert.ToInt16(numericUpDown_shum.Value);
         }
 
+        //============================================================================
+        //Кнопка установки метки на быбранной оси джойстика
+        //============================================================================
         private void button_metka_osi_Click(object sender, EventArgs e)
         {
             int[] b_temp;
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "ARx")
             {
                 if (Form1.joystick_ARx_point_buffer == null)
@@ -2852,6 +2883,7 @@ namespace zdsimScanner
                     Form1.joystick_ARx_point_buffer[Form1.joystick_ARx_point_buffer.Length - 1] = device.CurrentJoystickState.ARx;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "ARy")
             {
                 if (Form1.joystick_ARy_point_buffer == null)
@@ -2867,6 +2899,7 @@ namespace zdsimScanner
                     Form1.joystick_ARy_point_buffer[Form1.joystick_ARy_point_buffer.Length - 1] = device.CurrentJoystickState.ARy;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "ARz")
             {
                 if (Form1.joystick_ARz_point_buffer == null)
@@ -2882,6 +2915,7 @@ namespace zdsimScanner
                     Form1.joystick_ARz_point_buffer[Form1.joystick_ARz_point_buffer.Length - 1] = device.CurrentJoystickState.ARz;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "AX")
             {
                 if (Form1.joystick_AX_point_buffer == null)
@@ -2897,6 +2931,7 @@ namespace zdsimScanner
                     Form1.joystick_AX_point_buffer[Form1.joystick_AX_point_buffer.Length - 1] = device.CurrentJoystickState.AX;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "AY")
             {
                 if (Form1.joystick_AY_point_buffer == null)
@@ -2912,6 +2947,7 @@ namespace zdsimScanner
                     Form1.joystick_AY_point_buffer[Form1.joystick_AY_point_buffer.Length - 1] = device.CurrentJoystickState.AY;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "AZ")
             {
                 if (Form1.joystick_AZ_point_buffer == null)
@@ -2927,6 +2963,7 @@ namespace zdsimScanner
                     Form1.joystick_AZ_point_buffer[Form1.joystick_AZ_point_buffer.Length - 1] = device.CurrentJoystickState.AZ;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FRx")
             {
                 if (Form1.joystick_FRx_point_buffer == null)
@@ -2942,6 +2979,7 @@ namespace zdsimScanner
                     Form1.joystick_FRx_point_buffer[Form1.joystick_FRx_point_buffer.Length - 1] = device.CurrentJoystickState.FRx;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FRy")
             {
                 if (Form1.joystick_FRy_point_buffer == null)
@@ -2957,6 +2995,7 @@ namespace zdsimScanner
                     Form1.joystick_FRy_point_buffer[Form1.joystick_FRy_point_buffer.Length - 1] = device.CurrentJoystickState.FRy;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FRz")
             {
                 if (Form1.joystick_FRz_point_buffer == null)
@@ -2972,6 +3011,7 @@ namespace zdsimScanner
                     Form1.joystick_FRz_point_buffer[Form1.joystick_FRz_point_buffer.Length - 1] = device.CurrentJoystickState.FRz;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FX")
             {
                 if (Form1.joystick_FX_point_buffer == null)
@@ -2987,6 +3027,7 @@ namespace zdsimScanner
                     Form1.joystick_FX_point_buffer[Form1.joystick_FX_point_buffer.Length - 1] = device.CurrentJoystickState.FX;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FY")
             {
                 if (Form1.joystick_FY_point_buffer == null)
@@ -3002,6 +3043,7 @@ namespace zdsimScanner
                     Form1.joystick_FY_point_buffer[Form1.joystick_FY_point_buffer.Length - 1] = device.CurrentJoystickState.FY;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FZ")
             {
                 if (Form1.joystick_FZ_point_buffer == null)
@@ -3017,6 +3059,7 @@ namespace zdsimScanner
                     Form1.joystick_FZ_point_buffer[Form1.joystick_FZ_point_buffer.Length - 1] = device.CurrentJoystickState.FZ;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Rx")
             {
                 if (Form1.joystick_Rx_point_buffer == null)
@@ -3032,6 +3075,7 @@ namespace zdsimScanner
                     Form1.joystick_Rx_point_buffer[Form1.joystick_Rx_point_buffer.Length - 1] = device.CurrentJoystickState.Rx;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Ry")
             {
                 if (Form1.joystick_Ry_point_buffer == null)
@@ -3047,6 +3091,7 @@ namespace zdsimScanner
                     Form1.joystick_Ry_point_buffer[Form1.joystick_Ry_point_buffer.Length - 1] = device.CurrentJoystickState.Ry;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Rz")
             {
                 if (Form1.joystick_Rz_point_buffer == null)
@@ -3062,6 +3107,7 @@ namespace zdsimScanner
                     Form1.joystick_Rz_point_buffer[Form1.joystick_Rz_point_buffer.Length - 1] = device.CurrentJoystickState.Rz;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VRx")
             {
                 if (Form1.joystick_VRx_point_buffer == null)
@@ -3077,6 +3123,7 @@ namespace zdsimScanner
                     Form1.joystick_VRx_point_buffer[Form1.joystick_VRx_point_buffer.Length - 1] = device.CurrentJoystickState.VRx;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VRy")
             {
                 if (Form1.joystick_VRy_point_buffer == null)
@@ -3092,6 +3139,7 @@ namespace zdsimScanner
                     Form1.joystick_VRy_point_buffer[Form1.joystick_VRy_point_buffer.Length - 1] = device.CurrentJoystickState.VRy;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VRz")
             {
                 if (Form1.joystick_VRz_point_buffer == null)
@@ -3107,6 +3155,7 @@ namespace zdsimScanner
                     Form1.joystick_VRz_point_buffer[Form1.joystick_VRz_point_buffer.Length - 1] = device.CurrentJoystickState.VRz;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VX")
             {
                 if (Form1.joystick_VX_point_buffer == null)
@@ -3122,6 +3171,7 @@ namespace zdsimScanner
                     Form1.joystick_VX_point_buffer[Form1.joystick_VX_point_buffer.Length - 1] = device.CurrentJoystickState.VX;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VY")
             {
                 if (Form1.joystick_VY_point_buffer == null)
@@ -3137,6 +3187,7 @@ namespace zdsimScanner
                     Form1.joystick_VY_point_buffer[Form1.joystick_VY_point_buffer.Length - 1] = device.CurrentJoystickState.VY;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VZ")
             {
                 if (Form1.joystick_VZ_point_buffer == null)
@@ -3152,6 +3203,7 @@ namespace zdsimScanner
                     Form1.joystick_VZ_point_buffer[Form1.joystick_VZ_point_buffer.Length - 1] = device.CurrentJoystickState.VZ;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "X")
             {
                 if (Form1.joystick_X_point_buffer == null)
@@ -3167,6 +3219,7 @@ namespace zdsimScanner
                     Form1.joystick_X_point_buffer[Form1.joystick_X_point_buffer.Length - 1] = device.CurrentJoystickState.X;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Y")
             {
                 if (Form1.joystick_Y_point_buffer == null)
@@ -3182,6 +3235,7 @@ namespace zdsimScanner
                     Form1.joystick_Y_point_buffer[Form1.joystick_Y_point_buffer.Length - 1] = device.CurrentJoystickState.Y;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Z")
             {
                 if (Form1.joystick_Z_point_buffer == null)
@@ -3197,6 +3251,7 @@ namespace zdsimScanner
                     Form1.joystick_Z_point_buffer[Form1.joystick_Z_point_buffer.Length - 1] = device.CurrentJoystickState.Z;
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "POV")
             {
                 if (Form1.joystick_POV_point_buffer == null)
@@ -3214,6 +3269,7 @@ namespace zdsimScanner
                     Form1.joystick_POV_point_buffer[Form1.joystick_POV_point_buffer.Length - 1] = b_temp[0];
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Slider")
             {
                 if (Form1.joystick_Slider_point_buffer == null)
@@ -3231,6 +3287,7 @@ namespace zdsimScanner
                     Form1.joystick_Slider_point_buffer[Form1.joystick_Slider_point_buffer.Length - 1] = b_temp[0];
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "ASlider")
             {
                 if (Form1.joystick_ASlider_point_buffer == null)
@@ -3248,6 +3305,7 @@ namespace zdsimScanner
                     Form1.joystick_ASlider_point_buffer[Form1.joystick_ASlider_point_buffer.Length - 1] = b_temp[0];
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FSlider")
             {
                 if (Form1.joystick_FSlider_point_buffer == null)
@@ -3265,6 +3323,7 @@ namespace zdsimScanner
                     Form1.joystick_FSlider_point_buffer[Form1.joystick_FSlider_point_buffer.Length - 1] = b_temp[0];
                 }
             }
+
             if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VSlider")
             {
                 if (Form1.joystick_VSlider_point_buffer == null)

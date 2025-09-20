@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Microsoft.DirectX;
 using Microsoft.DirectX.DirectInput;
 
 namespace zdsimScanner
@@ -122,7 +116,6 @@ namespace zdsimScanner
         private void UpdateKey()
         {
             Form2 f2 = this.Owner as Form2;
-            //zdsim
             if (f2.i_temp_datagird_select_f2 == 1)
             {
                 if (Convert.ToString(Form2.s_current_loco_select) == "Controls")

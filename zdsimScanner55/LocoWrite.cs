@@ -1,6 +1,4 @@
 using System;
-using System.Threading;
-using zdsimScanner;
 
 namespace zdsimScanner
 {
@@ -71,7 +69,7 @@ namespace zdsimScanner
         //-----------------------------------------------------------------------------------
         // Функция пишет в память игры параметры controls
         //-----------------------------------------------------------------------------------
-        /*
+           /*
             "Свисток",
             "Тифон",
             "Кран 395 1",
@@ -107,7 +105,7 @@ namespace zdsimScanner
             "Дворники 4",
             "Дворники 5",
         */
-        public static void write_controls()
+           public static void write_controls()
                 {
                    Loco.i_temp_buffer_count1 = 0;
                    byte[] b;
@@ -9257,7 +9255,6 @@ namespace zdsimScanner
            {
                Loco.i_temp_buffer_count1 = 0;
                byte[] b;
-               //float f;
                Int32 i32;
                Loco.i_temp_buffer_count1 = 0;
 
@@ -11820,7 +11817,7 @@ namespace zdsimScanner
                    }
                    Loco.i_temp_buffer_count1++;
                }
-           }
+        }
 
            //-----------------------------------------------------------------------------------
            // Функция пишет в память игры параметры локомотива "vl80t"
@@ -11829,27 +11826,43 @@ namespace zdsimScanner
            {
                Loco.i_temp_buffer_count1 = 0;
                byte[] b;
-               //float f;
                Int32 i32;
                Loco.i_temp_buffer_count1 = 0;
+
+
                if (Loco.i_process_name == 6)
                {
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Рэверс - 0"
+                   //==========================================================
                    if (LocoButtons.vl80t_rev_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
                        i32 = BitConverter.ToInt32(b, 0) + 0x414;
+
                        if (LocoButtons.vl80t_rev_0 == 1)
                        {
-                           Loco.write_bytes(i32, b_write_1byte_0);
+                           Loco.write_bytes(i32, b_write_1byte_0);//Записуем состояние реверса в память симулятора
+                           
+                           // Звук переключения реверса
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
+                               //буфер флагов звуков кнопок, если 1, то флаг взведен и звук запрещен
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
-                       else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
+                       else
+                       {
+                            Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
+                       }
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Рэверс - Вперёд"
+                   //==========================================================
                    if (LocoButtons.vl80t_rev_vpered != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -11859,13 +11872,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Рэверс - Назад"
+                   //==========================================================
                    if (LocoButtons.vl80t_rev_nazad != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -11875,13 +11892,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_255);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Шунт - 1"
+                   //==========================================================
                    if (LocoButtons.vl80t_rev_shunt1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -11891,13 +11912,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_2);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Шунт - 2"
+                   //==========================================================
                    if (LocoButtons.vl80t_rev_shunt2 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -11907,13 +11932,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_3);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Шунт - 3"
+                   //==========================================================
                    if (LocoButtons.vl80t_rev_shunt3 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -11923,13 +11952,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_4);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Контроллер - Отключение БВ"
+                   //==========================================================
                    if (LocoButtons.vl80t_kontr_bv != 255)
                    {
                        if (LocoButtons.vl80t_kontr_bv == 1 && Loco.i_module_select == 1)
@@ -11941,7 +11974,6 @@ namespace zdsimScanner
                                Loco.write_bytes(i32, b_write_1byte_255);
                                if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                                {
-                                   //
                                    Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                                }
                            }
@@ -11952,6 +11984,7 @@ namespace zdsimScanner
                            Loco.write_bytes((Int32)Loco.BA2 + 0x6AA00, b_write_1byte_0);
                            Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                        }
+
                        if (LocoButtons.vl80t_kontr_bv == 1 && Loco.i_module_select == 2)
                        {
                            b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -11961,7 +11994,6 @@ namespace zdsimScanner
                                Loco.write_bytes(i32, b_write_1byte_255);
                                if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                                {
-                                   //
                                    Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                                }
                            }
@@ -11977,6 +12009,11 @@ namespace zdsimScanner
                        }
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Контроллер - 0"
+                   //==========================================================
                    if (LocoButtons.vl80t_kontr_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -11986,13 +12023,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Контроллер - 1"
+                   //==========================================================
                    if (LocoButtons.vl80t_kontr_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12002,13 +12043,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Контроллер - 2"
+                   //==========================================================
                    if (LocoButtons.vl80t_kontr_2 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12025,6 +12070,11 @@ namespace zdsimScanner
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Контроллер - 3"
+                   //==========================================================
                    if (LocoButtons.vl80t_kontr_3 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12034,13 +12084,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_3);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Контроллер - 4"
+                   //==========================================================
                    if (LocoButtons.vl80t_kontr_4 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12050,13 +12104,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_4);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Контроллер - 5"
+                   //==========================================================
                    if (LocoButtons.vl80t_kontr_5 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12066,13 +12124,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_5);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Контроллер - 6"
+                   //==========================================================
                    if (LocoButtons.vl80t_kontr_6 != 255)
                    {
                        if (LocoButtons.vl80t_kontr_6 == 1 && Loco.i_module_select == 1)
@@ -12084,7 +12146,6 @@ namespace zdsimScanner
                                Loco.write_bytes(i32, b_write_1byte_6);
                                if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                                {
-                                   //
                                    Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                                }
                            }
@@ -12104,7 +12165,6 @@ namespace zdsimScanner
                                Loco.write_bytes(i32, b_write_1byte_6);
                                if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                                {
-                                   //
                                    Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                                }
                            }
@@ -12120,6 +12180,11 @@ namespace zdsimScanner
                        }
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Кран ТМ - 0"
+                   //==========================================================
                    if (LocoButtons.vl80t_kranTM_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x375D4C, 4);
@@ -12129,13 +12194,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Кран ТМ - 1"
+                   //==========================================================
                    if (LocoButtons.vl80t_kranTM_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x375D4C, 4);
@@ -12145,7 +12214,6 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
@@ -12153,6 +12221,10 @@ namespace zdsimScanner
                    }
                    Loco.i_temp_buffer_count1++;
 
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Токоприемник Общий - 0"
+                   //==========================================================
                    if (LocoButtons.vl80t_tokopr_obshiy_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12162,13 +12234,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Токоприемник Общий - 1"
+                   //==========================================================
                    if (LocoButtons.vl80t_tokopr_obshiy_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12178,13 +12254,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Токоприемник Передний - 0"
+                   //==========================================================
                    if (LocoButtons.vl80t_tokopr_per_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12194,13 +12274,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Токоприемник Передний - 1"
+                   //==========================================================
                    if (LocoButtons.vl80t_tokopr_per_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12210,13 +12294,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Токоприемник Задний - 0"
+                   //==========================================================
                    if (LocoButtons.vl80t_tokopr_zad_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12226,13 +12314,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Токоприемник Задний - 1"
+                   //==========================================================
                    if (LocoButtons.vl80t_tokopr_zad_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12242,13 +12334,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "ГВ - 0"
+                   //==========================================================
                    if (LocoButtons.vl80t_gv_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12258,13 +12354,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "ГВ - 1"
+                   //=========================================================
                    if (LocoButtons.vl80t_gv_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12274,13 +12374,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Востановить ГВ"
+                   //=========================================================
                    if (LocoButtons.vl80t_vosst_gv != 255)
                    {
                        if (LocoButtons.vl80t_vosst_gv == 1 && Loco.i_module_select == 1)
@@ -12288,7 +12392,6 @@ namespace zdsimScanner
                            Loco.write_bytes((Int32)Loco.BA2 + 0x6AA07, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
@@ -12302,7 +12405,6 @@ namespace zdsimScanner
                            Loco.write_bytes((Int32)Loco.BA3 + 0x6C0EF, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
@@ -12316,6 +12418,11 @@ namespace zdsimScanner
                        }
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Компрессор - 0"
+                   //=========================================================
                    if (LocoButtons.vl80t_komp_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12325,13 +12432,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Компрессор - 1"
+                   //=========================================================
                    if (LocoButtons.vl80t_komp_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12341,13 +12452,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Вентелятор_1 - 0"
+                   //=========================================================
                    if (LocoButtons.vl80t_vent1_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12357,13 +12472,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Вентелятор_1 - 1"
+                   //=========================================================
                    if (LocoButtons.vl80t_vent1_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12373,13 +12492,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Вентелятор_2 - 0"
+                   //=========================================================
                    if (LocoButtons.vl80t_vent2_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12389,13 +12512,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Вентелятор_2 - 1"
+                   //=========================================================
                    if (LocoButtons.vl80t_vent2_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12405,13 +12532,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Вентелятор_3 - 0"
+                   //=========================================================
                    if (LocoButtons.vl80t_vent3_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12421,13 +12552,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Вентелятор_3 - 1"
+                   //=========================================================
                    if (LocoButtons.vl80t_vent3_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12437,13 +12572,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Вентелятор_4 - 0"
+                   //=========================================================
                    if (LocoButtons.vl80t_vent4_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12453,13 +12592,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Вентелятор_4 - 1"
+                   //=========================================================
                    if (LocoButtons.vl80t_vent4_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12469,13 +12612,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Фазорасщепитель - 0"
+                   //=========================================================
                    if (LocoButtons.vl80t_fz_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12485,13 +12632,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Фазорасщепитель - 1"
+                   //=========================================================
                    if (LocoButtons.vl80t_fz_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12501,13 +12652,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Цепи управления - 0"
+                   //=========================================================
                    if (LocoButtons.vl80t_upravlenie_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12517,13 +12672,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Цепи управления - 1"
+                   //=========================================================
                    if (LocoButtons.vl80t_upravlenie_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12533,7 +12692,6 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
@@ -12541,6 +12699,10 @@ namespace zdsimScanner
                    }
                    Loco.i_temp_buffer_count1++;
 
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Свет в кабине - 0"
+                   //=========================================================
                    if (LocoButtons.vl80t_svet_cab_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12550,13 +12712,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Свет в кабине - 1"
+                   //=========================================================
                    if (LocoButtons.vl80t_svet_cab_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12566,13 +12732,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Свет в кабине - 2"
+                   //=========================================================
                    if (LocoButtons.vl80t_svet_cab_2 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12582,13 +12752,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_2);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "ЭПК - 0"
+                   //=========================================================
                    if (LocoButtons.vl80t_EPK_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12598,13 +12772,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "ЭПК - 1"
+                   //=========================================================
                    if (LocoButtons.vl80t_EPK_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12614,13 +12792,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Прожектор - 0"
+                   //=========================================================
                    if (LocoButtons.vl80t_prozh_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12630,13 +12812,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Прожектор - 1"
+                   //=========================================================
                    if (LocoButtons.vl80t_prozh_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12646,13 +12832,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Прожектор - 2"
+                   //=========================================================
                    if (LocoButtons.vl80t_prozh_2 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12662,13 +12852,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_2);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Сигнализация - 0"
+                   //=========================================================
                    if (LocoButtons.vl80t_sign_0 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12678,13 +12872,17 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+                   //==========================================================
+                   // Электровоз ВЛ80Т
+                   // Устанавливаем положение реверсивной рукоятки "Сигнализация - 1"
+                   //=========================================================
                    if (LocoButtons.vl80t_sign_1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12694,15 +12892,15 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl80t[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL80T_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
-               }
-           }
+
+               }//Конец if (Loco.i_process_name == 6)
+           }//Конец public static void write_vl80t()
 
            //-----------------------------------------------------------------------------------
            // Функция пишет в память игры параметры локомотива "vl85"
@@ -12711,7 +12909,6 @@ namespace zdsimScanner
            {
                Loco.i_temp_buffer_count1 = 0;
                byte[] b;
-               //float f;
                Int32 i32;
                Loco.i_temp_buffer_count1 = 0;
 
@@ -12728,7 +12925,6 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_0);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl85[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
@@ -12744,13 +12940,14 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl85[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+
                    if (LocoButtons.vl85_rev_nazad != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12760,13 +12957,14 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_255);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl85[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+
                    if (LocoButtons.vl85_rev_shunt1 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12776,13 +12974,14 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_2);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl85[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+
                    if (LocoButtons.vl85_rev_shunt2 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12792,13 +12991,14 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_3);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl85[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+
                    if (LocoButtons.vl85_rev_shunt3 != 255)
                    {
                        b = Loco.read_bytes((Int32)Loco.BA + 0x7905ACC, 4);
@@ -12808,13 +13008,14 @@ namespace zdsimScanner
                            Loco.write_bytes(i32, b_write_1byte_4);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl85[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
                        else Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] = 0;
                    }
                    Loco.i_temp_buffer_count1++;
+
+
                    if (LocoButtons.vl85_kontr_bv != 255)
                    {
                        if (LocoButtons.vl85_kontr_bv == 1 && Loco.i_module_select == 1)
@@ -12824,7 +13025,6 @@ namespace zdsimScanner
                            Loco.write_bytes((Int32)Loco.BA2 + 0x6AA00, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl85[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
@@ -12840,7 +13040,6 @@ namespace zdsimScanner
                            Loco.write_bytes((Int32)Loco.BA3 + 0x6C0F5, b_write_1byte_1);
                            if (Form1.i_sound_peredacha == 1 && Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] == 0 && Loco.list_collect_sounds_zdsim_vl85[Loco.i_temp_buffer_count1] != b_write_1byte_0)
                            {
-                               //
                                Loco.VL85_flag_key_buffer[Loco.i_temp_buffer_count1] = 1;
                            }
                        }
@@ -12854,6 +13053,8 @@ namespace zdsimScanner
                        }
                    }
                    Loco.i_temp_buffer_count1++;
+
+
                    if (LocoButtons.vl85_kontr_0 != 255)
                    {
                        if (LocoButtons.vl85_kontr_0 == 1) 
@@ -13939,7 +14140,6 @@ namespace zdsimScanner
            {
                Loco.i_temp_buffer_count1 = 0;
                byte[] b;
-               //float f;
                Int32 i32;
                Loco.i_temp_buffer_count1 = 0;
 
@@ -14505,7 +14705,6 @@ namespace zdsimScanner
            {
                Loco.i_temp_buffer_count1 = 0;
                byte[] b;
-               //float f;
                Int32 i32;
                Loco.i_temp_buffer_count1 = 0;
 
@@ -15272,7 +15471,6 @@ namespace zdsimScanner
            {
                Loco.i_temp_buffer_count1 = 0;
                byte[] b;
-               //float f;
                Int32 i32;
                Loco.i_temp_buffer_count1 = 0;
 
@@ -15876,7 +16074,6 @@ namespace zdsimScanner
            {
                Loco.i_temp_buffer_count1 = 0;
                byte[] b;
-               //float f;
                Int32 i32;
 
                Loco.i_temp_buffer_count1 = 0;
@@ -16418,7 +16615,6 @@ namespace zdsimScanner
            {
                Loco.i_temp_buffer_count1 = 0;
                byte[] b;
-               //float f;
                Int32 i32;
                Loco.i_temp_buffer_count1 = 0;
 
@@ -16872,7 +17068,6 @@ namespace zdsimScanner
            {
                Loco.i_temp_buffer_count1 = 0;
                byte[] b;
-               //float f;
                Int32 i32;
                if (Loco.i_process_name == 6)
                {

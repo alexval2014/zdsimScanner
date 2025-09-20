@@ -137,11 +137,17 @@
   <data name="button2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 5, 4, 5</value>
   </data>
+  <data name="&gt;&gt;button_zdsim_sbros_sound.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;label9.Name" xml:space="preserve">
     <value>label9</value>
   </data>
   <data name="comboBox_osi_select.Items5" xml:space="preserve">
     <value>AZ</value>
+  </data>
+  <data name="&gt;&gt;button_metka_osi.Parent" xml:space="preserve">
+    <value>groupBox1</value>
   </data>
   <data name="label3.ToolTip" xml:space="preserve">
     <value />
@@ -162,8 +168,8 @@
   <data name="&gt;&gt;tabControl1.ZOrder" xml:space="preserve">
     <value>10</value>
   </data>
-  <data name="&gt;&gt;numericUpDown7.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="label10.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="textBox5.ToolTip" xml:space="preserve">
     <value />
@@ -171,8 +177,8 @@
   <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
     <value>32, 308</value>
   </data>
-  <data name="&gt;&gt;tab_zdsimulator.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;tab_zdsimulator.Parent" xml:space="preserve">
+    <value>tabControl1</value>
   </data>
   <data name="&gt;&gt;button_zdsim_sbros_key.Name" xml:space="preserve">
     <value>button_zdsim_sbros_key</value>
@@ -189,6 +195,9 @@
   <data name="&gt;&gt;label_progressbar_osi.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="label1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
   <data name="comboBox_osi_select.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 5, 4, 5</value>
   </data>
@@ -197,9 +206,6 @@
   </data>
   <data name="checkBox_dvery_control.Size" type="System.Drawing.Size, System.Drawing">
     <value>210, 24</value>
-  </data>
-  <data name="radio_priem_peredacha.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 5, 4, 5</value>
   </data>
   <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
     <value>281, 25</value>
@@ -213,14 +219,11 @@
   <data name="&gt;&gt;button_zdsim_sbros_all.Parent" xml:space="preserve">
     <value>tab_zdsimulator</value>
   </data>
-  <data name="&gt;&gt;label8.Name" xml:space="preserve">
-    <value>label8</value>
+  <data name="&gt;&gt;button2.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="checkBox_sound_peredacha.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
-  </data>
-  <data name="&gt;&gt;comboBox_osi_select.Name" xml:space="preserve">
-    <value>comboBox_osi_select</value>
   </data>
   <data name="&gt;&gt;checkBox_dvery_control.ZOrder" xml:space="preserve">
     <value>1</value>
@@ -270,11 +273,11 @@
   <data name="button_zdsim_sbros_all.Text" xml:space="preserve">
     <value>Сбросить всё</value>
   </data>
+  <data name="&gt;&gt;label10.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="button_zdsim_sbros_tek.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
-  </data>
-  <data name="button1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>29, 791</value>
   </data>
   <data name="comboBox_osi_select.ToolTip" xml:space="preserve">
     <value>Выбор оси</value>
@@ -324,11 +327,15 @@
   <data name="&gt;&gt;dataGridView_Zdsimulator.Name" xml:space="preserve">
     <value>dataGridView_Zdsimulator</value>
   </data>
-  <data name="checkBox_sound_peredacha.Text" xml:space="preserve">
-    <value>звуки в режиме передачи</value>
+  <data name="checkBox_dvery_control.ToolTip" xml:space="preserve">
+    <value>отключить сброс схемы при 
+отсутствии контроля дверей</value>
   </data>
   <data name="&gt;&gt;textBox6.Name" xml:space="preserve">
     <value>textBox6</value>
+  </data>
+  <data name="button_sbros_metok.Location" type="System.Drawing.Point, System.Drawing">
+    <value>606, 38</value>
   </data>
   <data name="button_metka_osi.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 38</value>
@@ -360,8 +367,8 @@
   <data name="button_zdsim_sbros_sound.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
-  <data name="label3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 0, 4, 0</value>
+  <data name="radio_priem_peredacha.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 5, 4, 5</value>
   </data>
   <data name="&gt;&gt;textBox4.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -374,9 +381,6 @@
   </data>
   <data name="button_sbros_metok.TabIndex" type="System.Int32, mscorlib">
     <value>41</value>
-  </data>
-  <data name="&gt;&gt;label2.Name" xml:space="preserve">
-    <value>label2</value>
   </data>
   <data name="&gt;&gt;checkBox_sound_peredacha.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -402,6 +406,9 @@
   <data name="label4.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
   </data>
+  <data name="&gt;&gt;button3.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
   <data name="&gt;&gt;textBox4.Name" xml:space="preserve">
     <value>textBox4</value>
   </data>
@@ -414,9 +421,6 @@
   <data name="textBox2.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="&gt;&gt;comboBox_osi_select.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
   <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
     <value>30</value>
   </data>
@@ -428,9 +432,6 @@
   </data>
   <data name="&gt;&gt;numericUpDown_shum.Type" xml:space="preserve">
     <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="label12.Location" type="System.Drawing.Point, System.Drawing">
-    <value>73, 60</value>
   </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
     <value>32, 182</value>
@@ -453,8 +454,8 @@
   <data name="&gt;&gt;label9.ZOrder" xml:space="preserve">
     <value>21</value>
   </data>
-  <data name="button3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>112, 35</value>
+  <data name="checkBox_sound_peredacha.ToolTip" xml:space="preserve">
+    <value>воспроизведение звуков при перемещении рукояток</value>
   </data>
   <data name="textBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 5, 4, 5</value>
@@ -471,6 +472,12 @@
   </data>
   <data name="comboBox_zdsimLoco.Items16" xml:space="preserve">
     <value>M62</value>
+  </data>
+  <data name="button_sbros_metok.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="&gt;&gt;checkBox_sound_peredacha.Name" xml:space="preserve">
     <value>checkBox_sound_peredacha</value>
@@ -511,17 +518,14 @@
   <data name="comboBox_osi_select.Items2" xml:space="preserve">
     <value>ARz</value>
   </data>
-  <data name="button2.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
   <data name="&gt;&gt;textBox1.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;button_sbros_metok.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tabControl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>735, 692</value>
+  <data name="numericUpDown_shum.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="&gt;&gt;tab_zdsimulator.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -529,17 +533,17 @@
   <data name="button_zdsim_sbros_all.Size" type="System.Drawing.Size, System.Drawing">
     <value>150, 35</value>
   </data>
-  <data name="&gt;&gt;tab_zdsimulator.Name" xml:space="preserve">
-    <value>tab_zdsimulator</value>
-  </data>
   <data name="&gt;&gt;label12.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
   <data name="&gt;&gt;radio_priem.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="button_sbros_metok.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 55</value>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Form2</value>
+  </data>
+  <data name="comboBox_zdsimLoco.Items1" xml:space="preserve">
+    <value>Neshtatki</value>
   </data>
   <data name="numericUpDown7.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 5, 4, 5</value>
@@ -583,6 +587,9 @@
   <data name="label7.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 10pt, style=Bold</value>
   </data>
+  <data name="numericUpDown7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 26</value>
+  </data>
   <data name="comboBox_zdsimLoco.Items10" xml:space="preserve">
     <value>VL11M</value>
   </data>
@@ -604,6 +611,9 @@
   <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
     <value>32, 349</value>
   </data>
+  <data name="textBox_joy_name.Location" type="System.Drawing.Point, System.Drawing">
+    <value>429, 55</value>
+  </data>
   <data name="label9.Text" xml:space="preserve">
     <value>µs</value>
   </data>
@@ -612,9 +622,6 @@
   </data>
   <data name="button1.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
-  </data>
-  <data name="&gt;&gt;button_zdsim_sbros_all.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;checkBox_dvery_control.Parent" xml:space="preserve">
     <value>$this</value>
@@ -634,9 +641,6 @@
   <data name="&gt;&gt;tabControl1.Name" xml:space="preserve">
     <value>tabControl1</value>
   </data>
-  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>110, 20</value>
-  </data>
   <data name="textBox4.ToolTip" xml:space="preserve">
     <value />
   </data>
@@ -649,8 +653,8 @@
   <data name="textBox2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 5, 4, 5</value>
   </data>
-  <data name="&gt;&gt;checkBox_sound_peredacha.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
+    <value>26</value>
   </data>
   <data name="&gt;&gt;label4.Name" xml:space="preserve">
     <value>label4</value>
@@ -688,8 +692,14 @@
   <data name="button_sbros_metok.Text" xml:space="preserve">
     <value>Сброс точек оси</value>
   </data>
+  <data name="&gt;&gt;button_zdsim_sbros_key.Parent" xml:space="preserve">
+    <value>tab_zdsimulator</value>
+  </data>
   <data name="radio_peredacha.ToolTip" xml:space="preserve">
     <value>Режим только на передачу данных в игру</value>
+  </data>
+  <data name="tabControl1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
   <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
     <value>32, 225</value>
@@ -736,14 +746,23 @@
   <data name="&gt;&gt;timer1.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;numericUpDown_shum.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
   <data name="textBox4.Location" type="System.Drawing.Point, System.Drawing">
     <value>240, 298</value>
+  </data>
+  <data name="&gt;&gt;comboBox_zdsimLoco.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox_sound_peredacha.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="radio_priem_peredacha.TabIndex" type="System.Int32, mscorlib">
     <value>38</value>
   </data>
-  <data name="&gt;&gt;button1.ZOrder" xml:space="preserve">
-    <value>25</value>
+  <data name="label8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>26, 468</value>
   </data>
   <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 5, 4, 5</value>
@@ -754,8 +773,8 @@
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
     <value>156, 20</value>
   </data>
-  <data name="button_sbros_metok.ToolTip" xml:space="preserve">
-    <value />
+  <data name="&gt;&gt;button_zdsim_sbros_all.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
     <value>82, 20</value>
@@ -783,14 +802,8 @@
   <data name="label7.Location" type="System.Drawing.Point, System.Drawing">
     <value>26, 121</value>
   </data>
-  <data name="label12.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="textBox5.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 5, 4, 5</value>
-  </data>
-  <data name="button_sbros_all.Location" type="System.Drawing.Point, System.Drawing">
-    <value>269, 791</value>
   </data>
   <data name="radio_peredacha.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -840,6 +853,9 @@
   <data name="radio_peredacha.Size" type="System.Drawing.Size, System.Drawing">
     <value>195, 24</value>
   </data>
+  <data name="&gt;&gt;textBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;textBox3.ZOrder" xml:space="preserve">
     <value>15</value>
   </data>
@@ -873,17 +889,11 @@
   <data name="&gt;&gt;label8.ZOrder" xml:space="preserve">
     <value>23</value>
   </data>
-  <data name="comboBox_zdsimLoco.Items6" xml:space="preserve">
-    <value>CHS4 KVR</value>
-  </data>
   <data name="comboBox_osi_select.Items22" xml:space="preserve">
     <value>Y</value>
   </data>
   <data name="&gt;&gt;button_zdsim_sbros_tek.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>32, 266</value>
   </data>
   <data name="tab_zdsimulator.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 5, 4, 5</value>
@@ -906,6 +916,9 @@
   <data name="textBox2.Location" type="System.Drawing.Point, System.Drawing">
     <value>240, 214</value>
   </data>
+  <data name="radio_priem_peredacha.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
   <data name="button_metka_osi.Text" xml:space="preserve">
     <value>Метка</value>
   </data>
@@ -921,8 +934,8 @@
   <data name="&gt;&gt;radio_priem.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
-  <data name="dataGridView_Zdsimulator.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 62</value>
+  <data name="label6.Text" xml:space="preserve">
+    <value>пневматика *</value>
   </data>
   <data name="comboBox_osi_select.Items28" xml:space="preserve">
     <value>SliderVS</value>
@@ -954,14 +967,8 @@
   <data name="comboBox_osi_select.Items23" xml:space="preserve">
     <value>Z</value>
   </data>
-  <data name="&gt;&gt;radio_priem_peredacha.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
   <data name="label_progressbar_osi.Text" xml:space="preserve">
     <value> </value>
-  </data>
-  <data name="&gt;&gt;button2.ZOrder" xml:space="preserve">
-    <value>24</value>
   </data>
   <data name="&gt;&gt;textBox_joy_name.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -969,11 +976,11 @@
   <data name="textBox5.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
   </data>
-  <data name="&gt;&gt;numericUpDown_shum.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
   <data name="tab_zdsimulator.Size" type="System.Drawing.Size, System.Drawing">
     <value>727, 659</value>
+  </data>
+  <data name="label3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="textBox2.MaxLength" type="System.Int32, mscorlib">
     <value>8</value>
@@ -984,11 +991,11 @@
   <data name="&gt;&gt;label3.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;tabControl1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="button2.Size" type="System.Drawing.Size, System.Drawing">
     <value>112, 35</value>
-  </data>
-  <data name="numericUpDown_shum.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="textBox1.TabIndex" type="System.Int32, mscorlib">
     <value>28</value>
@@ -1002,14 +1009,11 @@
   <data name="&gt;&gt;label3.Name" xml:space="preserve">
     <value>label3</value>
   </data>
-  <data name="comboBox_zdsimLoco.Items15" xml:space="preserve">
-    <value>2TE10U</value>
+  <data name="label9.TabIndex" type="System.Int32, mscorlib">
+    <value>24</value>
   </data>
   <data name="&gt;&gt;textBox6.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="numericUpDown8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>240, 628</value>
   </data>
   <data name="label3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1032,9 +1036,6 @@
   <data name="button_zdsim_sbros_sound.Text" xml:space="preserve">
     <value>Удал.звук</value>
   </data>
-  <data name="label_progressbar_osi.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 0, 4, 0</value>
-  </data>
   <data name="textBox_joy_name.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
@@ -1047,20 +1048,11 @@
   <data name="textBox4.MaxLength" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
-  <data name="comboBox_zdsimLoco.Items7" xml:space="preserve">
-    <value>CHS4T</value>
-  </data>
   <data name="comboBox_zdsimLoco.Items19" xml:space="preserve">
     <value>tem18</value>
   </data>
   <data name="textBox3.Size" type="System.Drawing.Size, System.Drawing">
     <value>148, 26</value>
-  </data>
-  <data name="textBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 26</value>
-  </data>
-  <data name="comboBox_osi_select.Items3" xml:space="preserve">
-    <value>AX</value>
   </data>
   <data name="&gt;&gt;checkBox_dvery_control.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1074,14 +1066,11 @@
   <data name="button_zdsim_sbros_tek.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="button_sbros_metok.Location" type="System.Drawing.Point, System.Drawing">
-    <value>606, 38</value>
+  <data name="&gt;&gt;button1.ZOrder" xml:space="preserve">
+    <value>25</value>
   </data>
   <data name="label8.ToolTip" xml:space="preserve">
     <value />
-  </data>
-  <data name="tab_zdsimulator.Text" xml:space="preserve">
-    <value>Zdsimulator</value>
   </data>
   <data name="label9.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
@@ -1104,11 +1093,11 @@
   <data name="numericUpDown8.Size" type="System.Drawing.Size, System.Drawing">
     <value>180, 26</value>
   </data>
-  <data name="checkBox_sound_peredacha.ToolTip" xml:space="preserve">
-    <value>воспроизведение звуков при перемещении рукояток</value>
+  <data name="comboBox_zdsimLoco.Items6" xml:space="preserve">
+    <value>CHS4 KVR</value>
   </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Form2</value>
+  <data name="comboBox_zdsimLoco.Items7" xml:space="preserve">
+    <value>CHS4T</value>
   </data>
   <data name="comboBox_zdsimLoco.Items4" xml:space="preserve">
     <value>CHS2K</value>
@@ -1125,8 +1114,8 @@
   <data name="&gt;&gt;label4.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="comboBox_zdsimLoco.Items1" xml:space="preserve">
-    <value>Neshtatki</value>
+  <data name="button2.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
     <value>32</value>
@@ -1146,11 +1135,11 @@
   <data name="label8.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 10pt, style=Bold</value>
   </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="comboBox_zdsimLoco.Items15" xml:space="preserve">
+    <value>2TE10U</value>
   </data>
-  <data name="&gt;&gt;tab_zdsimulator.Parent" xml:space="preserve">
-    <value>tabControl1</value>
+  <data name="button_zdsim_sbros_all.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
   <data name="button_zdsim_sbros_sound.Size" type="System.Drawing.Size, System.Drawing">
     <value>122, 35</value>
@@ -1158,11 +1147,14 @@
   <data name="button_zdsim_sbros_key.Location" type="System.Drawing.Point, System.Drawing">
     <value>181, 19</value>
   </data>
-  <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
-    <value>26</value>
+  <data name="&gt;&gt;tab_zdsimulator.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label4.Parent" xml:space="preserve">
     <value>$this</value>
+  </data>
+  <data name="label7.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <data name="radio_priem_peredacha.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
@@ -1172,9 +1164,6 @@
   </data>
   <data name="button1.Size" type="System.Drawing.Size, System.Drawing">
     <value>112, 35</value>
-  </data>
-  <data name="comboBox_osi_select.Items" xml:space="preserve">
-    <value>ARx</value>
   </data>
   <data name="textBox1.Size" type="System.Drawing.Size, System.Drawing">
     <value>148, 26</value>
@@ -1205,8 +1194,8 @@
   <data name="radio_priem.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
-  <data name="&gt;&gt;button3.ZOrder" xml:space="preserve">
-    <value>11</value>
+  <data name="&gt;&gt;tab_zdsimulator.Name" xml:space="preserve">
+    <value>tab_zdsimulator</value>
   </data>
   <data name="button_sbros_metok.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 5, 4, 5</value>
@@ -1220,14 +1209,17 @@
   <data name="&gt;&gt;label_progressbar_osi.Parent" xml:space="preserve">
     <value>groupBox1</value>
   </data>
-  <data name="&gt;&gt;label10.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;numericUpDown7.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="textBox6.Location" type="System.Drawing.Point, System.Drawing">
     <value>240, 379</value>
   </data>
-  <data name="&gt;&gt;button_metka_osi.Parent" xml:space="preserve">
-    <value>groupBox1</value>
+  <data name="&gt;&gt;numericUpDown_shum.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="comboBox_zdsimLoco.Location" type="System.Drawing.Point, System.Drawing">
+    <value>9, 21</value>
   </data>
   <data name="comboBox_zdsimLoco.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1250,8 +1242,8 @@
   <data name="button_zdsim_sbros_tek.Size" type="System.Drawing.Size, System.Drawing">
     <value>129, 35</value>
   </data>
-  <data name="&gt;&gt;button2.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="tabControl1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>735, 692</value>
   </data>
   <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
     <value>groupBox1</value>
@@ -1259,8 +1251,8 @@
   <data name="button_metka_osi.Size" type="System.Drawing.Size, System.Drawing">
     <value>112, 55</value>
   </data>
-  <data name="label10.ToolTip" xml:space="preserve">
-    <value />
+  <data name="comboBox_osi_select.Items3" xml:space="preserve">
+    <value>AX</value>
   </data>
   <data name="&gt;&gt;textBox5.ZOrder" xml:space="preserve">
     <value>13</value>
@@ -1271,8 +1263,8 @@
   <data name="comboBox_osi_select.Location" type="System.Drawing.Point, System.Drawing">
     <value>135, 18</value>
   </data>
-  <data name="&gt;&gt;numericUpDown_shum.ZOrder" xml:space="preserve">
-    <value>4</value>
+  <data name="label12.Location" type="System.Drawing.Point, System.Drawing">
+    <value>73, 60</value>
   </data>
   <data name="button_zdsim_sbros_key.ToolTip" xml:space="preserve">
     <value>Удаление текущей кнопки или точки оси</value>
@@ -1330,6 +1322,9 @@
   <data name="&gt;&gt;button_zdsim_sbros_tek.Parent" xml:space="preserve">
     <value>tab_zdsimulator</value>
   </data>
+  <data name="textBox_joy_name.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
   <data name="label4.ToolTip" xml:space="preserve">
     <value />
   </data>
@@ -1339,14 +1334,14 @@
   <data name="&gt;&gt;button_sbros_metok.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="numericUpDown7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 26</value>
+  <data name="dataGridView_Zdsimulator.Location" type="System.Drawing.Point, System.Drawing">
+    <value>9, 62</value>
   </data>
   <data name="&gt;&gt;button1.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="label8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>26, 468</value>
+  <data name="&gt;&gt;comboBox_osi_select.Parent" xml:space="preserve">
+    <value>groupBox1</value>
   </data>
   <data name="textBox6.ToolTip" xml:space="preserve">
     <value />
@@ -1357,9 +1352,6 @@
   <data name="&gt;&gt;numericUpDown7.Name" xml:space="preserve">
     <value>numericUpDown7</value>
   </data>
-  <data name="button_zdsim_sbros_key.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
-  </data>
   <data name="button3.Text" xml:space="preserve">
     <value>Отмена</value>
   </data>
@@ -1368,9 +1360,6 @@
   </data>
   <data name="&gt;&gt;radio_priem.Name" xml:space="preserve">
     <value>radio_priem</value>
-  </data>
-  <data name="groupBox1.Text" xml:space="preserve">
-    <value>Оси</value>
   </data>
   <data name="&gt;&gt;textBox4.ZOrder" xml:space="preserve">
     <value>14</value>
@@ -1435,8 +1424,8 @@
   <data name="&gt;&gt;button_sbros_metok.Parent" xml:space="preserve">
     <value>groupBox1</value>
   </data>
-  <data name="label6.Text" xml:space="preserve">
-    <value>пневматика *</value>
+  <data name="&gt;&gt;radio_priem_peredacha.ZOrder" xml:space="preserve">
+    <value>7</value>
   </data>
   <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
     <value>82, 20</value>
@@ -1450,11 +1439,14 @@
   <data name="label12.Text" xml:space="preserve">
     <value>Шум джойстика</value>
   </data>
+  <data name="radio_priem.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
   <data name="textBox_joy_name.Size" type="System.Drawing.Size, System.Drawing">
     <value>727, 26</value>
   </data>
-  <data name="radio_priem.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="checkBox_sound_peredacha.Text" xml:space="preserve">
+    <value>звуки в режиме передачи</value>
   </data>
   <data name="&gt;&gt;toolTip1.Name" xml:space="preserve">
     <value>toolTip1</value>
@@ -1462,8 +1454,8 @@
   <data name="checkBox_sound_peredacha.Location" type="System.Drawing.Point, System.Drawing">
     <value>9, 735</value>
   </data>
-  <data name="radio_priem_peredacha.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="button3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>112, 35</value>
   </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
     <value>1204, 1018</value>
@@ -1474,8 +1466,11 @@
   <data name="&gt;&gt;label2.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;checkBox_sound_peredacha.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="button_zdsim_sbros_tek.Location" type="System.Drawing.Point, System.Drawing">
+    <value>426, 19</value>
+  </data>
+  <data name="label12.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="tab_zdsimulator.ToolTip" xml:space="preserve">
     <value />
@@ -1501,14 +1496,11 @@
   <data name="dataGridView_Zdsimulator.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="textBox5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 26</value>
-  </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
     <value>31</value>
   </data>
-  <data name="&gt;&gt;button_zdsim_sbros_all.ZOrder" xml:space="preserve">
-    <value>2</value>
+  <data name="&gt;&gt;button2.ZOrder" xml:space="preserve">
+    <value>24</value>
   </data>
   <data name="&gt;&gt;button_sbros_all.ZOrder" xml:space="preserve">
     <value>2</value>
@@ -1516,8 +1508,8 @@
   <data name="comboBox_osi_select.Items4" xml:space="preserve">
     <value>AY</value>
   </data>
-  <data name="groupBox1.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+  <data name="label_progressbar_osi.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="label4.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1540,8 +1532,8 @@
   <data name="button_metka_osi.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 5, 4, 5</value>
   </data>
-  <data name="button_zdsim_sbros_all.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+  <data name="button_sbros_all.Location" type="System.Drawing.Point, System.Drawing">
+    <value>269, 791</value>
   </data>
   <data name="tab_zdsimulator.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1549,8 +1541,8 @@
   <data name="&gt;&gt;progressBar_osi.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="&gt;&gt;comboBox_zdsimLoco.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;label2.Name" xml:space="preserve">
+    <value>label2</value>
   </data>
   <data name="textBox6.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 5, 4, 5</value>
@@ -1594,15 +1586,17 @@
   <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 20</value>
   </data>
-  <data name="checkBox_dvery_control.ToolTip" xml:space="preserve">
-    <value>отключить сброс схемы при 
-отсутствии контроля дверей</value>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>Оси</value>
   </data>
-  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 20</value>
   </data>
-  <data name="textBox_joy_name.Location" type="System.Drawing.Point, System.Drawing">
-    <value>429, 55</value>
+  <data name="textBox2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>148, 26</value>
+  </data>
+  <data name="checkBox_dvery_control.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
   <data name="&gt;&gt;radio_peredacha.Parent" xml:space="preserve">
     <value>$this</value>
@@ -1613,11 +1607,14 @@
   <data name="radio_peredacha.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
-  <data name="label9.TabIndex" type="System.Int32, mscorlib">
-    <value>24</value>
+  <data name="tab_zdsimulator.Text" xml:space="preserve">
+    <value>Zdsimulator</value>
   </data>
-  <data name="&gt;&gt;button_zdsim_sbros_key.Parent" xml:space="preserve">
-    <value>tab_zdsimulator</value>
+  <data name="tabControl1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>429, 214</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="label4.Text" xml:space="preserve">
     <value>напр. ТД /</value>
@@ -1625,14 +1622,14 @@
   <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
     <value>32, 391</value>
   </data>
-  <data name="checkBox_dvery_control.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="button_zdsim_sbros_key.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
   <data name="&gt;&gt;textBox2.ZOrder" xml:space="preserve">
     <value>16</value>
   </data>
-  <data name="label1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 0, 4, 0</value>
+  <data name="&gt;&gt;comboBox_osi_select.Name" xml:space="preserve">
+    <value>comboBox_osi_select</value>
   </data>
   <data name="&gt;&gt;textBox6.Parent" xml:space="preserve">
     <value>$this</value>
@@ -1670,11 +1667,11 @@
   <data name="label12.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="&gt;&gt;textBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="comboBox_osi_select.Items" xml:space="preserve">
+    <value>ARx</value>
   </data>
-  <data name="button_zdsim_sbros_tek.Location" type="System.Drawing.Point, System.Drawing">
-    <value>426, 19</value>
+  <data name="textBox5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>148, 26</value>
   </data>
   <data name="textBox3.ToolTip" xml:space="preserve">
     <value />
@@ -1682,8 +1679,8 @@
   <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="comboBox_zdsimLoco.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 21</value>
+  <data name="&gt;&gt;label8.Name" xml:space="preserve">
+    <value>label8</value>
   </data>
   <data name="textBox3.TabIndex" type="System.Int32, mscorlib">
     <value>30</value>
@@ -1694,20 +1691,23 @@
   <data name="label_progressbar_osi.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="tabControl1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 5, 4, 5</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Шаговые приборы и органы управления</value>
   </data>
-  <data name="tabControl1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>429, 214</value>
+  <data name="numericUpDown8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>240, 628</value>
   </data>
-  <data name="&gt;&gt;button_zdsim_sbros_sound.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textBox_joy_name.Parent" xml:space="preserve">
+  <data name="&gt;&gt;checkBox_sound_peredacha.Parent" xml:space="preserve">
     <value>$this</value>
+  </data>
+  <data name="button_sbros_metok.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 55</value>
   </data>
   <data name="&gt;&gt;label3.Parent" xml:space="preserve">
     <value>$this</value>
@@ -1727,11 +1727,11 @@
   <data name="label11.Size" type="System.Drawing.Size, System.Drawing">
     <value>107, 20</value>
   </data>
-  <data name="label7.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="&gt;&gt;textBox_joy_name.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
-  <data name="&gt;&gt;tabControl1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="button1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>29, 791</value>
   </data>
   <data name="&gt;&gt;textBox2.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1739,8 +1739,8 @@
   <data name="&gt;&gt;radio_priem_peredacha.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;button_zdsim_sbros_all.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="&gt;&gt;label1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -1751,11 +1751,11 @@
   <data name="&gt;&gt;button_metka_osi.Name" xml:space="preserve">
     <value>button_metka_osi</value>
   </data>
-  <data name="textBox_joy_name.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tabControl1.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="groupBox1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+  </data>
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>32, 266</value>
   </data>
   <data name="&gt;&gt;button_zdsim_sbros_all.Name" xml:space="preserve">
     <value>button_zdsim_sbros_all</value>

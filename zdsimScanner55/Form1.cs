@@ -3211,7 +3211,6 @@ namespace zdsimScanner
         public static void LoadBuffersSettings()
         {
             //загружаем кнопки
-            //zdsim
             if (Properties.Settings.Default.controls_buffer_key_settings[0] != "start")
             {
                 for (int i = 0; i < Controls_key_buffer.Length; i++)
@@ -3359,7 +3358,6 @@ namespace zdsimScanner
             }
 
             //загружаем оси 1 колонка
-            //zdsim
             if (Properties.Settings.Default.controls_buffer_axis_settings[0] != "start")
             {
                 for (int i = 0; i < Controls_axis_buffer.Length / 2; i++)
@@ -3502,7 +3500,6 @@ namespace zdsimScanner
             }
 
              //загружаем оси 2 колонка
-            //zdsim
             if (Properties.Settings.Default.controls_buffer_axis_settings2[0] != "start")
             {
                 for (int i = 0; i < Controls_axis_buffer.Length / 2; i++)
