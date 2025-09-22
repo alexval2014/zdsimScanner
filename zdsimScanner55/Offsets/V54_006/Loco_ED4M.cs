@@ -40,6 +40,10 @@
         public const int PUR = 0x30;   // УР (float)
         public const int PTC = 0xA8;   // ТЦ (float)
 
+
+        public const int KontrollerState = 0x08DB92B4;  // 
+
+
         // -----------------------------
         // Электрооборудование (sig_pos_elektro)
         // -----------------------------
