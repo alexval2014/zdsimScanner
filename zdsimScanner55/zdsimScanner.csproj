@@ -119,6 +119,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\LocoMemoryHelpers.cs" />
+    <Compile Include="Core\ProcessMemory.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -141,9 +143,13 @@
     </Compile>
     <Compile Include="Loco.cs" />
     <Compile Include="LocoButtons.cs" />
-    <Compile Include="LocoRead_V54_006.cs" />
-    <Compile Include="LocoRead_V55_008.cs" />
+    <Compile Include="LocoSounds.cs" />
+    <Compile Include="Readers\LocoRead_V54_006.cs" />
+    <Compile Include="Readers\LocoRead_V55_008.cs" />
     <Compile Include="LocoWrite.cs" />
+    <Compile Include="Models\LocoSignatures.cs" />
+    <Compile Include="Models\LocoType.cs" />
+    <Compile Include="NativeApi\NativeMethods.cs" />
     <Compile Include="Offsets\V54_006\Loco_2ES5K.cs" />
     <Compile Include="Offsets\V54_006\Loco_2TE10U.cs" />
     <Compile Include="Offsets\V54_006\Loco_CHS2K.cs" />
@@ -183,6 +189,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Utils\Logger.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Designer</SubType>

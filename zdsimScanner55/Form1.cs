@@ -9,6 +9,10 @@ using System.Diagnostics;
 using Microsoft.DirectX.DirectInput;
 using System.Configuration;
 using System.Text;
+using zdsimScanner.NativeApi;
+using zdsimScanner.Core;
+using zdsimScanner.Models;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace zdsimScanner
 {
@@ -4061,7 +4065,7 @@ namespace zdsimScanner
 
             timer_bdit.Interval = i_bdit;
 
-            Loco.InitBuffers();
+            LocoMemoryHelpers.InitBuffers();
             LocoButtonsStructInit();
             Joystick_init();
 
@@ -4185,7 +4189,7 @@ namespace zdsimScanner
                 console1.AppendText("Обнаружен процесс launcher.exe...");
                 console1.ForeColor = Color.Yellow;
                 console1.AppendText("\r\nПоиск локомотива...");
-                Loco.sig_loco = Loco.find_loco();
+                Loco.sig_loco = ProcessMemory.find_loco();
                 select_loco();
             }
 
@@ -4311,7 +4315,7 @@ namespace zdsimScanner
                 console1.AppendText("Обнаружен процесс zlauncher.exe...");
                 console1.ForeColor = Color.Yellow;
                 console1.AppendText("\r\nПоиск локомотива...");
-                Loco.sig_loco = Loco.find_loco();
+                Loco.sig_loco = ProcessMemory.find_loco();
                 select_loco();
             }
 
@@ -4324,7 +4328,7 @@ namespace zdsimScanner
                 console1.AppendText("Обнаружен процесс launcher.exe...");
                 console1.ForeColor = Color.Yellow;
                 console1.AppendText("\r\nПоиск локомотива...");
-                Loco.sig_loco = Loco.find_loco();
+                Loco.sig_loco = ProcessMemory.find_loco();
                 select_loco();
             }
 
@@ -4346,7 +4350,7 @@ namespace zdsimScanner
 
             timer_joystick_update.Enabled = false;
             timer_send_HID.Enabled = false;
-            Loco.InitBuffers();
+            LocoMemoryHelpers.InitBuffers();
             Loco.sig_loco = 0;
 
             Thread.Sleep(300);
@@ -4561,6 +4565,7 @@ namespace zdsimScanner
         public void UpdateLocoButtons()
         {
             int i_temp = 0;
+
             if (Loco.i_process_name == 6)
             {
                 //проверяем кнопки в буфере Controls
@@ -4581,6 +4586,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.tifon = 0;
                 }
+
                 if (Controls_key_buffer[2] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[2] - 1] != 0)
@@ -4589,6 +4595,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.kran395_0 = 0;
                 }
+
                 if (Controls_key_buffer[3] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[3] - 1] != 0)
@@ -4597,6 +4604,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.kran395_1 = 0;
                 }
+
                 if (Controls_key_buffer[4] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[4] - 1] != 0)
@@ -4605,6 +4613,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.kran395_2 = 0;
                 }
+
                 if (Controls_key_buffer[5] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[5] - 1] != 0)
@@ -4613,6 +4622,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.kran395_3 = 0;
                 }
+
                 if (Controls_key_buffer[6] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[6] - 1] != 0)
@@ -4621,6 +4631,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.kran395_4 = 0;
                 }
+
                 if (Controls_key_buffer[7] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[7] - 1] != 0)
@@ -4629,6 +4640,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.kran395_5 = 0;
                 }
+
                 if (Controls_key_buffer[8] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[8] - 1] != 0)
@@ -4637,6 +4649,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.kran395_6 = 0;
                 }
+
                 if (Controls_key_buffer[9] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[9] - 1] != 0)
@@ -4645,6 +4658,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.kran254_0 = 0;
                 }
+
                 if (Controls_key_buffer[10] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[10] - 1] != 0)
@@ -4653,6 +4667,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.kran254_1 = 0;
                 }
+
                 if (Controls_key_buffer[11] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[11] - 1] != 0)
@@ -4661,6 +4676,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.kran254_2 = 0;
                 }
+
                 if (Controls_key_buffer[12] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[12] - 1] != 0)
@@ -4669,6 +4685,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.kran254_3 = 0;
                 }
+
                 if (Controls_key_buffer[13] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[13] - 1] != 0)
@@ -4677,6 +4694,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.kran254_4 = 0;
                 }
+
                 if (Controls_key_buffer[14] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[14] - 1] != 0)
@@ -4685,6 +4703,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.kran254_5 = 0;
                 }
+
                 if (Controls_key_buffer[15] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[15] - 1] != 0)
@@ -4693,6 +4712,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.vid_vlevo = 0;
                 }
+
                 if (Controls_key_buffer[16] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[16] - 1] != 0)
@@ -4701,6 +4721,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.vid_vpravo = 0;
                 }
+
                 if (Controls_key_buffer[17] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[17] - 1] != 0)
@@ -4709,6 +4730,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.vid_vverh = 0;
                 }
+
                 if (Controls_key_buffer[18] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[18] - 1] != 0)
@@ -4717,6 +4739,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.vid_vniz = 0;
                 }
+
                 if (Controls_key_buffer[19] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[19] - 1] != 0)
@@ -4725,6 +4748,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.vid_zoom_in = 0;
                 }
+
                 if (Controls_key_buffer[20] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[20] - 1] != 0)
@@ -4733,6 +4757,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.vid_zoom_out = 0;
                 }
+
                 if (Controls_key_buffer[21] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[21] - 1] != 0)
@@ -4741,6 +4766,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.vid_outside = 0;
                 }
+
                 if (Controls_key_buffer[22] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[22] - 1] != 0)
@@ -4749,6 +4775,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.vid_vpered = 0;
                 }
+
                 if (Controls_key_buffer[23] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[23] - 1] != 0)
@@ -4757,6 +4784,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.vid_nazad = 0;
                 }
+
                 if (Controls_key_buffer[24] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[24] - 1] != 0)
@@ -4765,6 +4793,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.protyazhka_lenty = 0;
                 }
+
                 if (Controls_key_buffer[25] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[25] - 1] != 0)
@@ -4773,6 +4802,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.bdit_Z = 0;
                 }
+
                 if (Controls_key_buffer[26] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[26] - 1] != 0)
@@ -4781,6 +4811,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.bdit_M = 0;
                 }
+
                 if (Controls_key_buffer[27] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[27] - 1] != 0)
@@ -4789,6 +4820,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.pesok = 0;
                 }
+
                 if (Controls_key_buffer[28] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[28] - 1] != 0)
@@ -4797,6 +4829,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.dvorniki_0 = 0;
                 }
+
                 if (Controls_key_buffer[29] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[29] - 1] != 0)
@@ -4805,6 +4838,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.dvorniki_1 = 0;
                 }
+
                 if (Controls_key_buffer[30] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[30] - 1] != 0)
@@ -4813,6 +4847,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.dvorniki_2 = 0;
                 }
+
                 if (Controls_key_buffer[31] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[31] - 1] != 0)
@@ -4821,6 +4856,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.dvorniki_3 = 0;
                 }
+
                 if (Controls_key_buffer[32] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[32] - 1] != 0)
@@ -4829,6 +4865,7 @@ namespace zdsimScanner
                     }
                     else LocoButtons.dvorniki_4 = 0;
                 }
+
                 if (Controls_key_buffer[33] != 0)
                 {
                     if (joystick_buttons_buffer[Controls_key_buffer[33] - 1] != 0)
@@ -4850,7 +4887,8 @@ namespace zdsimScanner
                         else LocoButtons.b_neshtatki[i] = 0;
                     }
                 }  
-            }                    
+            }    
+            
             //проверяем кнопки в буфере 2ES5K
             if (Loco.sig_loco == 1)
             {
@@ -5727,6 +5765,7 @@ namespace zdsimScanner
                     else LocoButtons.es5k_avtoreg_1 = 0;
                 }
             }
+
             //проверяем кнопки в буфере EP1M
             if (Loco.sig_loco == 2)
             {
@@ -6627,6 +6666,7 @@ namespace zdsimScanner
                     else LocoButtons.ep1m_avtoreg_1 = 0;
                 }
             }
+
             //проверяем кнопки в буфере CHS2K
             if (Loco.sig_loco == 3)
             {
@@ -6887,6 +6927,7 @@ namespace zdsimScanner
                     else LocoButtons.chs2k_prozh_2 = 0;
                 }
             }
+
             //проверяем кнопки в буфере CHS4
             if (Loco.sig_loco == 4)
             {
@@ -7332,6 +7373,7 @@ namespace zdsimScanner
                     else LocoButtons.chs4_prozh_2 = 0;
                 }
             }
+
             //проверяем кнопки в буфере CHS4KVR
             if (Loco.sig_loco == 5)
             {
@@ -7776,6 +7818,7 @@ namespace zdsimScanner
                     else LocoButtons.chs4kvr_prozh_2 = 0;
                 }
             }
+
             //проверяем кнопки в буфере CHS4T
             if (Loco.sig_loco == 6)
             {
@@ -8196,6 +8239,7 @@ namespace zdsimScanner
                     else LocoButtons.chs4t_zhalyzi_1 = 0;
                 }
             }
+
             //проверяем кнопки в буфере CHS7
             if (Loco.sig_loco == 7)
             {
@@ -8569,6 +8613,7 @@ namespace zdsimScanner
                     else LocoButtons.chs7_zhalyzi1_1 = 0;
                 }
             }
+
             //проверяем кнопки в буфере CHS8
             if (Loco.sig_loco == 8)
             {
@@ -9077,6 +9122,7 @@ namespace zdsimScanner
                     else LocoButtons.chs8_reost_torm_2 = 0;
                 }
             }
+
             //проверяем кнопки в буфере VL11M
             if (Loco.sig_loco == 9)
             {
@@ -9745,6 +9791,7 @@ namespace zdsimScanner
                     else LocoButtons.vl11_sign_1 = 0;
                 }
             }
+
             //проверяем кнопки в буфере VL82M
             if (Loco.sig_loco == 10)
             {
@@ -10413,6 +10460,7 @@ namespace zdsimScanner
                     else LocoButtons.vl82_sign_1 = 0;
                 }
             }
+
             //проверяем кнопки в буфере VL80T
             if (Loco.sig_loco == 11)
             {
@@ -10809,6 +10857,7 @@ namespace zdsimScanner
                     else LocoButtons.vl80t_sign_1 = 0;
                 }
             }
+
             //проверяем кнопки в буфере VL85
             if (Loco.sig_loco == 12)
             {
@@ -11429,6 +11478,7 @@ namespace zdsimScanner
                     else LocoButtons.vl85_sign2_1 = 0;
                 }
             }
+
             //проверяем кнопки в буфере TEP70
             if (Loco.sig_loco == 13)
             {
@@ -11721,6 +11771,7 @@ namespace zdsimScanner
                     else LocoButtons.tep70_prozh_2 = 0;
                 }
             }
+
             //проверяем кнопки в буфере TE10U
             if (Loco.sig_loco == 14)
             {
@@ -12101,6 +12152,7 @@ namespace zdsimScanner
                     else LocoButtons.te10u_prozh_2 = 0;
                 }
             }
+
             //проверяем кнопки в буфере M62
             if (Loco.sig_loco == 15)
             {
@@ -12393,6 +12445,7 @@ namespace zdsimScanner
                     else LocoButtons.m62_prozh_2 = 0;
                 }
             }
+
             //проверяем кнопки в буфере ED4M
             if (Loco.sig_loco == 16)
             {
@@ -12661,6 +12714,7 @@ namespace zdsimScanner
                     else LocoButtons.ed4m_prozh_2 = 0;
                 }
             }
+
             //проверяем кнопки в буфере ED9M
             if (Loco.sig_loco == 17)
             {
@@ -13308,7 +13362,7 @@ namespace zdsimScanner
                         }
                     }
                 }
-
+            
                 if (ES5K_axis_buffer[0,0] != 0) LocoButtons.es5k_kontr_0 = b_joystick_axis_numbers_update[0];
                 if (ES5K_axis_buffer[1,0] != 0) LocoButtons.es5k_kontr_h4 = b_joystick_axis_numbers_update[1];
                 if (ES5K_axis_buffer[2,0] != 0) LocoButtons.es5k_kontr_h5 = b_joystick_axis_numbers_update[2];
@@ -14723,171 +14777,206 @@ namespace zdsimScanner
         }
 
         //------------------------------------------------------------------------------------
-        //Выбираем локомотив и выводим его название в консоль если локомотив найден и передаем
-        //указатели пневматики и электрики
+        // Выбираем локомотив и выводим его название в консоль, 
+        // если локомотив найден и передаем указатели пневматики и электрики
         //------------------------------------------------------------------------------------
         private void select_loco()
         {
-            switch (Loco.sig_loco)
+            switch (Loco.sig_loco2)
             {
-                case 0:
+                case LocoType.Unknown:
                     i_loco_find = 0;
+                    Loco.sig_loco = 0;                      // тип локомотива старый формат
                     console1.ForeColor = Color.Red;
                     console1.AppendText("\r\nЛокомотив не найден !");
-                break;
+                    break;
 
-                case 1:
+                case LocoType.ES5K:
                     i_loco_find = 1;
+                    Loco.sig_loco = 1;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден 2es5k...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 2:
+                case LocoType.EP1m:
                     i_loco_find = 1;
+                    Loco.sig_loco = 2;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден ep1m...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 3:
+                case LocoType.CHS2K:
                     i_loco_find = 1;
+                    Loco.sig_loco = 3;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден chs2k...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 4:
+                case LocoType.CHS4:
                     i_loco_find = 1;
+                    Loco.sig_loco = 4;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден chs4...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 5:
+                case LocoType.CHS4KVR:
                     i_loco_find = 1;
+                    Loco.sig_loco = 5;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден chs4kvr...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 6:
+                case LocoType.CHS4T:
                     i_loco_find = 1;
+                    Loco.sig_loco = 6;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден chs4t...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 7:
+                case LocoType.CHS7:
                     i_loco_find = 1;
+                    Loco.sig_loco = 7;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден chs7...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 8:
+                case LocoType.CHS8:
                     i_loco_find = 1;
+                    Loco.sig_loco = 8;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден chs8...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 9:
+                case LocoType.VL11m:
                     i_loco_find = 1;
+                    Loco.sig_loco = 9;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден vl11m...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 10:
+                case LocoType.VL82m:
                     i_loco_find = 1;
+                    Loco.sig_loco = 10;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден vl82m...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 11:
+                case LocoType.VL80t:
                     i_loco_find = 1;
+                    Loco.sig_loco = 11;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден vl80t...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 12:
+                case LocoType.VL85:
                     i_loco_find = 1;
+                    Loco.sig_loco = 12;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден vl85...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 13:
+                case LocoType.TEP70:
                     i_loco_find = 1;
+                    Loco.sig_loco = 13;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден tep70...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 14:
+                case LocoType.TE10U:
                     i_loco_find = 1;
+                    Loco.sig_loco = 14;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден 2te10u...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 15:
+                case LocoType.M62:
                     i_loco_find = 1;
+                    Loco.sig_loco = 15;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден m62...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 16:
+                case LocoType.ED4M:
                     i_loco_find = 1;
+                    Loco.sig_loco = 16;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден ed4m...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 17:
+                case LocoType.ED9M:
                     i_loco_find = 1;
+                    Loco.sig_loco = 17;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден ed9m...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
 
-                case 18:
+                case LocoType.TEM18:
                     i_loco_find = 1;
+                    Loco.sig_loco = 18;                      // тип локомотива старый формат
                     console1.ForeColor = Color.LawnGreen;
                     console1.AppendText("\r\nНайден tem18...");
-                    Loco.sig_pos_pnevm = Loco.find_pnevm();
-                    Loco.sig_pos_elektro = Loco.find_elektro();
-                break;
+                    Loco.sig_pos_pnevm = ProcessMemory.find_pnevm();
+                    Loco.sig_pos_elektro = ProcessMemory.find_elektro();
+                    break;
             }
 
-            if (Loco.sig_loco != 0)
+            if (Loco.sig_loco2 != LocoType.Unknown)
             {
-                if (Loco.sig_pos_pnevm != 0) console1.AppendText("\r\nпневматика " + "0x" + Convert.ToString(Loco.sig_pos_pnevm, 16));
-                if (Loco.sig_pos_pnevm != 0) console1.AppendText("\r\nэлектрика " + "0x" + Convert.ToString(Loco.sig_pos_elektro, 16));
-                console1.AppendText("\r\nЛоко код " + Loco.locoCode);
-                console1.AppendText("\r\nsig_loco " + Loco.sig_loco);
-                console1.AppendText("\r\nТип лока " + Loco.sig_loco);
+                if (Loco.sig_pos_pnevm != 0)
+                {
+                    console1.AppendText("\r\nпневматика " + "0x" + Convert.ToString(Loco.sig_pos_pnevm, 16));
+                }
+
+                if (Loco.sig_pos_elektro != 0)
+                {
+                    console1.AppendText("\r\nэлектрика " + "0x" + Convert.ToString(Loco.sig_pos_elektro, 16));
+                }
+
+                // название через словарь
+                if (LocoSignatures.Names.TryGetValue(Loco.sig_loco2, out string locoName))
+                {
+                    console1.AppendText("\r\nЛоко код " + Loco.locoCode + $" ({locoName})");
+                }
+                else
+                {
+                    console1.AppendText("\r\nЛоко код " + Loco.locoCode);
+                }
+
+                console1.AppendText("\r\nТип лока " + Loco.sig_loco2); // выведет имя из enum
             }
         }
 
@@ -14903,7 +14992,7 @@ namespace zdsimScanner
                 break;
 
                 case 7: // ZDSimulator V55.008
-                    ReadLoco_V55_008();
+                      ReadLoco_V55_008();
                 break;
 
                 default:
@@ -14917,27 +15006,79 @@ namespace zdsimScanner
         //------------------------------------------------------------------------------------
         private void ReadLoco_V54_006()
         {
-            switch (Loco.sig_loco)
+            switch (Loco.sig_loco2)
             {
-                case 1: LocoRead_V54_006.read_2se5k_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 2: LocoRead_V54_006.read_ep1m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 3: LocoRead_V54_006.read_chs2k_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 4: LocoRead_V54_006.read_chs4_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 5: LocoRead_V54_006.read_chs4kvr_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 6: LocoRead_V54_006.read_chs4t_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 7: LocoRead_V54_006.read_chs7_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 8: LocoRead_V54_006.read_chs8_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 9: LocoRead_V54_006.read_vl11m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 10: LocoRead_V54_006.read_vl82m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 11: LocoRead_V54_006.read_vl80t_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 12: LocoRead_V54_006.read_vl85_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 13: LocoRead_V54_006.read_tep70_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 14: LocoRead_V54_006.read_2te10u_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 15: LocoRead_V54_006.read_m62_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 16: LocoRead_V54_006.read_ed4m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 17: LocoRead_V54_006.read_ed9m_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 18: LocoRead_V54_006.read_tem18_V54_006(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case LocoType.ES5K:
+                    Readers.LocoRead_V54_006.Read_2ES5K(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
 
+                case LocoType.EP1m:
+                    Readers.LocoRead_V54_006.Read_EP1M(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.CHS2K:
+                    Readers.LocoRead_V54_006.Read_CHS2K(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.CHS4:
+                    Readers.LocoRead_V54_006.Read_CHS4(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.CHS4KVR:
+                    Readers.LocoRead_V54_006.Read_CHS4KVR(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.CHS4T:
+                    Readers.LocoRead_V54_006.Read_CHS4T(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.CHS7:
+                    Readers.LocoRead_V54_006.Read_CHS7(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.CHS8:
+                    Readers.LocoRead_V54_006.Read_CHS8(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.VL11m:
+                    Readers.LocoRead_V54_006.Read_VL11M(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.VL82m:
+                    Readers.LocoRead_V54_006.Read_VL82M(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.VL80t:
+                    Readers.LocoRead_V54_006.Read_VL80T(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.VL85:
+                    Readers.LocoRead_V54_006.Read_VL85(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.TEP70:
+                    Readers.LocoRead_V54_006.Read_TEP70(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.TE10U:
+                    Readers.LocoRead_V54_006.Read_2TE10U(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.M62:
+                    Readers.LocoRead_V54_006.Read_M62(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.ED4M:
+                    Readers.LocoRead_V54_006.Read_ED4M(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.ED9M:
+                    Readers.LocoRead_V54_006.Read_ED9M(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
+
+                case LocoType.TEM18:
+                    Readers.LocoRead_V54_006.Read_TEM18(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); 
+                    break;
             }
         }
 
@@ -14946,26 +15087,79 @@ namespace zdsimScanner
         //------------------------------------------------------------------------------------
         private void ReadLoco_V55_008()
         {
-            switch (Loco.sig_loco)
+            switch (Loco.sig_loco2)
             {
-                case 1: LocoRead_V55_008.read_2se5k_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 2: LocoRead_V55_008.read_ep1m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 3: LocoRead_V55_008.read_chs2k_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 4: LocoRead_V55_008.read_chs4_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 5: LocoRead_V55_008.read_chs4kvr_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 6: LocoRead_V55_008.read_chs4t_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 7: LocoRead_V55_008.read_chs7_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 8: LocoRead_V55_008.read_chs8_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 9: LocoRead_V55_008.read_vl11m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 10: LocoRead_V55_008.read_vl82m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 11: LocoRead_V55_008.read_vl80t_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 12: LocoRead_V55_008.read_vl85_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 13: LocoRead_V55_008.read_tep70_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 14: LocoRead_V55_008.read_2te10u_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 15: LocoRead_V55_008.read_m62_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 16: LocoRead_V55_008.read_ed4m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 17: LocoRead_V55_008.read_ed9m_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
-                case 18: LocoRead_V55_008.read_tem18_V55_008(Loco.sig_pos_pnevm, Loco.sig_pos_elektro); break;
+                case LocoType.ES5K:
+                    Readers.LocoRead_V55_008.Read_2ES5K(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.EP1m:
+                    Readers.LocoRead_V55_008.Read_EP1M(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.CHS2K:
+                    Readers.LocoRead_V55_008.Read_CHS2K(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.CHS4:
+                    Readers.LocoRead_V55_008.Read_CHS4(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.CHS4KVR:
+                    Readers.LocoRead_V55_008.Read_CHS4KVR(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.CHS4T:
+                    Readers.LocoRead_V55_008.Read_CHS4T(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.CHS7:
+                    Readers.LocoRead_V55_008.Read_CHS7(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.CHS8:
+                    Readers.LocoRead_V55_008.Read_CHS8(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.VL11m:
+                    Readers.LocoRead_V55_008.Read_VL11M(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.VL82m:
+                    Readers.LocoRead_V55_008.Read_VL82M(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.VL80t:
+                    Readers.LocoRead_V55_008.Read_VL80T(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.VL85:
+                    Readers.LocoRead_V55_008.Read_VL85(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.TEP70:
+                    Readers.LocoRead_V55_008.Read_TEP70(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.TE10U:
+                    Readers.LocoRead_V55_008.Read_2TE10U(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.M62:
+                    Readers.LocoRead_V55_008.Read_M62(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.ED4M:
+                    Readers.LocoRead_V55_008.Read_ED4M(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.ED9M:
+                    Readers.LocoRead_V55_008.Read_ED9M(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
+
+                case LocoType.TEM18:
+                    Readers.LocoRead_V55_008.Read_TEM18(Loco.sig_pos_pnevm, Loco.sig_pos_elektro);
+                    break;
             }
         }
 
@@ -14974,12 +15168,12 @@ namespace zdsimScanner
         //------------------------------------------------------------------------------------
         private void SendToComPort()
         {
-             //признак буфера
-             Loco.out_buffer[60] = 0xa0;
-             Loco.out_buffer[61] = 0xb0;
-             Loco.out_buffer[62] = 0xc0;
-             Loco.out_buffer[63] = 0xd0;
-            port.Write(Loco.out_buffer, 0, Loco.out_buffer.Length);
+            //признак буфера
+            LocoMemoryHelpers.out_buffer[60] = 0xa0;
+            LocoMemoryHelpers.out_buffer[61] = 0xb0;
+            LocoMemoryHelpers.out_buffer[62] = 0xc0;
+            LocoMemoryHelpers.out_buffer[63] = 0xd0;
+            port.Write(LocoMemoryHelpers.out_buffer, 0, LocoMemoryHelpers.out_buffer.Length);
         }
 
         //------------------------------------------------------------------------------------
@@ -14995,21 +15189,22 @@ namespace zdsimScanner
             {
                 ReadLoco();//Вызываем процедуру получения данных из локомотива 
 
-                Loco.temp_buffer = BitConverter.GetBytes(i_step_steper_motor);
-                Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 57, 2);
+                LocoMemoryHelpers.temp_buffer = BitConverter.GetBytes(i_step_steper_motor);
+                Array.Copy(LocoMemoryHelpers.temp_buffer, 0, LocoMemoryHelpers.out_buffer, 57, 2);
 
                 //лампа бдительности
                 if (Loco.i_bdit_current == 1)
                 {
-                    Loco.temp_buffer = BitConverter.GetBytes(i_bdit_out);
-                    Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 5, 1);
+                    LocoMemoryHelpers.temp_buffer = BitConverter.GetBytes(i_bdit_out);
+                    Array.Copy(LocoMemoryHelpers.temp_buffer, 0, LocoMemoryHelpers.out_buffer, 5, 1);
                 }
                 else
                 {
-                    Loco.temp_buffer = BitConverter.GetBytes(Loco.i_bdit_current);
-                    Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 5, 1);
+                    LocoMemoryHelpers.temp_buffer = BitConverter.GetBytes(Loco.i_bdit_current);
+                    Array.Copy(LocoMemoryHelpers.temp_buffer, 0, LocoMemoryHelpers.out_buffer, 5, 1);
                 }
 
+                
                 // превышение скорости
                 if (i_skor_dop <= (i_skor_tek + 3) &&
                     (Loco.sig_loco == 1 || Loco.sig_loco == 2 || Loco.sig_loco == 3 ||
@@ -15021,26 +15216,30 @@ namespace zdsimScanner
 
                     if (i_skor_dop_out == 1)
                     {
-                        Loco.temp_buffer = BitConverter.GetBytes(i_skor_dop);
-                        Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                        LocoMemoryHelpers.temp_buffer = BitConverter.GetBytes(i_skor_dop);
+                        Array.Copy(LocoMemoryHelpers.temp_buffer, 0, LocoMemoryHelpers.out_buffer, 0, 2);
                         Console.WriteLine($"[DEBUG] В out_buffer записано ограничение: {i_skor_dop}");
                     }
 
                     if (i_skor_dop_out == 0)
                     {
-                        Loco.temp_buffer = new byte[] { 255, 255 };
-                        Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                        LocoMemoryHelpers.temp_buffer = new byte[] { 255, 255 };
+                        Array.Copy(LocoMemoryHelpers.temp_buffer, 0, LocoMemoryHelpers.out_buffer, 0, 2);
                         Console.WriteLine("[DEBUG] В out_buffer записано FF FF (заглушка)");
                     }
                 }
                 else
                 {
-                    Loco.temp_buffer = BitConverter.GetBytes(i_skor_dop);
-                    Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                    LocoMemoryHelpers.temp_buffer = BitConverter.GetBytes(i_skor_dop);
+                    Array.Copy(LocoMemoryHelpers.temp_buffer, 0, LocoMemoryHelpers.out_buffer, 0, 2);
                     Console.WriteLine($"[DEBUG] Превышения нет. В out_buffer записано ограничение: {i_skor_dop}");
                 }
 
+                
 
+
+
+                
                 //задержка контроля дверей
                 if (Loco.sig_loco == 16 || Loco.sig_loco == 17)
                 {
@@ -15060,13 +15259,13 @@ namespace zdsimScanner
                             i_dvery_sec = 0;
                             i_dvery_sec_flag = 1;
                             i_dvery_close_flag = 1;
-                            Loco.temp_buffer = new byte[] { 1 };
-                            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 46, 1);
+                            LocoMemoryHelpers.temp_buffer = new byte[] { 1 };
+                            Array.Copy(LocoMemoryHelpers.temp_buffer, 0, LocoMemoryHelpers.out_buffer, 46, 1);
                         }
                         else
                         {
-                            Loco.temp_buffer = new byte[] { 0 };
-                            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 46, 1);
+                            LocoMemoryHelpers.temp_buffer = new byte[] { 0 };
+                            Array.Copy(LocoMemoryHelpers.temp_buffer, 0, LocoMemoryHelpers.out_buffer, 46, 1);
                         }
                     }
 
@@ -15074,10 +15273,12 @@ namespace zdsimScanner
                     {
                         i_dvery_close_flag = 0;
                         i_dvery_sec_flag = 1;
-                        Loco.temp_buffer = new byte[] { 0 };
-                        Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 46, 1);
+                        LocoMemoryHelpers.temp_buffer = new byte[] { 0 };
+                        Array.Copy(LocoMemoryHelpers.temp_buffer, 0, LocoMemoryHelpers.out_buffer, 46, 1);
                     }
                 }
+                
+
 
                 SendToComPort(); //Отправка данных в COM порт
             }
@@ -15097,6 +15298,7 @@ namespace zdsimScanner
             // Сначала читаем данные по номеру локомотива
             ReadLoco();//Вызываем процедуру получения данных из локомотива 
 
+            
             // превышение скорости
             if (i_skor_dop <= (i_skor_tek + 3) &&
                 (Loco.sig_loco == 1 || Loco.sig_loco == 2 || Loco.sig_loco == 3 ||
@@ -15109,37 +15311,44 @@ namespace zdsimScanner
                 //Мигание значения индикатора при привышении скорости
                 if (i_skor_dop_out == 1)
                 {
-                    Loco.temp_buffer = BitConverter.GetBytes(i_skor_dop);
-                    Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                    LocoMemoryHelpers.temp_buffer = BitConverter.GetBytes(i_skor_dop);
+                    Array.Copy(LocoMemoryHelpers.temp_buffer, 0, LocoMemoryHelpers.out_buffer, 0, 2);
                     Console.WriteLine($"[DEBUG] В out_buffer записано Текущая скорость: {i_skor_tek}");
                     Console.WriteLine($"[DEBUG] В out_buffer записано Ограничение скорости: {i_skor_dop}");
                 }
 
                 if (i_skor_dop_out == 0)
                 {
-                    Loco.temp_buffer = new byte[] { 255, 255 };
-                    Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                    LocoMemoryHelpers.temp_buffer = new byte[] { 255, 255 };
+                    Array.Copy(LocoMemoryHelpers.temp_buffer, 0, LocoMemoryHelpers.out_buffer, 0, 2);
                     Console.WriteLine("[DEBUG] В out_buffer записано FF FF (заглушка)");
                 }
             }
             else
             {
-                Loco.temp_buffer = BitConverter.GetBytes(i_skor_dop);
-                Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 0, 2);
+                LocoMemoryHelpers.temp_buffer = BitConverter.GetBytes(i_skor_dop);
+                Array.Copy(LocoMemoryHelpers.temp_buffer, 0, LocoMemoryHelpers.out_buffer, 0, 2);
                 Console.WriteLine($"[DEBUG] Превышения нет. В out_buffer записано: i_skor_tek ={ i_skor_tek}, i_skor_dop ={ i_skor_dop}");
             }
 
+            
 
-
+            
             // Теперь разбираем буфер и показываем разные отчёты
             console1.Clear();
             switch (Loco.sig_loco)
             {
+                // Вывод отладки для локомотива 2Se5k
+                case 1:
+                    Display2Se5kInfo(LocoMemoryHelpers.out_buffer);
+                    break;
+
+
                 // Вывод отладки для локомотива ed4m
                 case 16:
                    //console1.AppendText($"\r\nСкорость текущая: {Loco.out_buffer[2]}");
                    //console1.AppendText($"\r\nОграничение скорости: {i_skor_dop}");
-                    DisplayEd4mInfo(Loco.out_buffer);
+                    DisplayEd4mInfo(LocoMemoryHelpers.out_buffer);
                     break;
 
                 // Примеры для других типов можно оформить аналогичным образом:
@@ -15168,9 +15377,9 @@ namespace zdsimScanner
                 if (Loco.i_process_name == 6)
                 {
 
-                    LocoWrite.write_controls();
-                    LocoWrite.write_neshtatki();
-
+                    //LocoWrite.write_controls();
+                    //LocoWrite.write_neshtatki();
+                    /*
                     if (Loco.sig_loco == 1) LocoWrite.write_2es5k();
                     if (Loco.sig_loco == 2) LocoWrite.write_ep1m();
                     if (Loco.sig_loco == 3) LocoWrite.write_chs2k();
@@ -15189,6 +15398,7 @@ namespace zdsimScanner
                     if (Loco.sig_loco == 16) LocoWrite.write_ed4m();
                     if (Loco.sig_loco == 17) LocoWrite.write_ed9m();
                     if (Loco.sig_loco == 18) LocoWrite.write_tem18();
+                    */
                 }
             }
             else
@@ -15286,6 +15496,91 @@ namespace zdsimScanner
             {
                (37, "ТЦ"), (38, "ЭПТ-О"), (39, "ЭПТ-П"), (40, "ЭПТ-Т"),
                (43, "EPK_State"), 
+               (54, "РБ Бокс"), (56, "СОТx ZTE")
+            };
+
+
+            foreach (var (idx, lbl) in lampInfo)
+            {
+                console1.AppendText($"\r\n{lbl} = {buffer[idx]}");
+            }
+        }
+
+
+
+        private void Display2Se5kInfo(byte[] buffer)
+        {
+            // Вспомогательная локальная буферная переменная, чтобы не писать повторно
+            byte[] tmp = new byte[2];
+
+            // скорость дополнительная (int16) — байты 0–1
+            Array.Copy(buffer, 0, tmp, 0, 2);
+            console1.AppendText($"\r\nОграничение скорости = {BitConverter.ToInt16(tmp, 0)}");
+
+            // скорость текущая (int16) — байты 2–3
+            Array.Copy(buffer, 2, tmp, 0, 2);
+            console1.AppendText($"\r\nСкорость текущая = {BitConverter.ToInt16(tmp, 0)}");
+
+            // АЛС — байт 4
+            console1.AppendText($"\r\nАЛС = {buffer[4]}");
+
+            // Расстояние до цели в метрах
+            console1.AppendText($"\r\nРасстояние до цели в метрах = {Form1.i_rasstoyanie_do_tseli}");
+
+            // бдительность — байт 5
+            console1.AppendText($"\r\nБдительность = {buffer[5]}");
+
+            // ток ЭПТ — байты 8–9
+            Array.Copy(buffer, 8, tmp, 0, 2);
+            console1.AppendText($"\r\nТок эпт = {BitConverter.ToInt16(tmp, 0)}");
+
+            // часы/мин/сек — байты 10,11,12
+            console1.AppendText($"\r\nВремя: {buffer[10]}:{buffer[11]}:{buffer[12]}");
+
+            // напряжение КС — байты 13–14
+            Array.Copy(buffer, 13, tmp, 0, 2);
+            console1.AppendText($"\r\nНапряжение КС = {BitConverter.ToInt16(tmp, 0)}");
+
+            // напряжение ТД — байты 15–16
+            Array.Copy(buffer, 13, tmp, 0, 2);
+            console1.AppendText($"\r\nНапряжение КС = {BitConverter.ToInt16(tmp, 0)}");
+
+            // Ток1 — байты 17–18
+            Array.Copy(buffer, 13, tmp, 0, 2);
+            console1.AppendText($"\r\nНапряжение КС = {BitConverter.ToInt16(tmp, 0)}");
+
+            // контроллер — байт 19
+            console1.AppendText($"\r\nКонтроллер = {buffer[15]}");
+
+            // манометры НМ, ТМ, УР, ТЦ — байты 29–36
+            int[] offsets = { 29, 31, 33, 35 };
+            string[] names = { "НМ", "ТМ", "УР", "ТЦ" };
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Манометры: ");
+
+            for (int i = 0; i < offsets.Length; i++)
+            {
+                Array.Copy(buffer, offsets[i], tmp, 0, 2);
+                int value = BitConverter.ToInt16(tmp, 0);
+
+                sb.Append($"{names[i]}={value}");
+                if (i < offsets.Length - 1)
+                {
+                    sb.Append(", ");
+                }
+            }
+
+
+            // выводим в console1
+            console1.AppendText("\r\n" + sb.ToString());
+
+            // Лампы прочие — просто выводим байты по индексам
+            console1.AppendText("\r\n\r\nЛампы:");
+            var lampInfo = new (int index, string label)[]
+            {
+               (37, "ТЦ"), (38, "ЭПТ-О"), (39, "ЭПТ-П"), (40, "ЭПТ-Т"),
+               (43, "EPK_State"),
                (54, "РБ Бокс"), (56, "СОТx ZTE")
             };
 

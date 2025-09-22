@@ -5,12 +5,10 @@ using System.Threading;
 using System.Windows.Forms;
 using Microsoft.DirectX.DirectInput;
 
-
 namespace zdsimScanner
 {
     public partial class Form2 : Form
     {
-
         public int i_temp_row_number_f2;
         public int i_temp_row_number_f3;
         public int i_temp_column_number_f2;
@@ -20,8 +18,8 @@ namespace zdsimScanner
         public string[] sb_temp_osi_select;
         public static string s_current_loco_select = "";
         public string[] sb_axis_name = new string[]{
-            "",
-            "ARx ",
+        "",
+        "ARx ",
         "ARy ",
         "ARz ",
         "AX  ",
@@ -161,16 +159,13 @@ namespace zdsimScanner
             timer1.Enabled = false;
         }
 
-
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (device != null)
             {
                 UpdateJoystickState();
             }
-
         }
-
 
         //загрузка отрисовки осей
         private void sbBufferUpdate()
@@ -321,7 +316,6 @@ namespace zdsimScanner
 
              Properties.Settings.Default.Save();
         }
-
 
         //=====================================================================
         //сохранение отрисовки осей
@@ -2581,7 +2575,6 @@ namespace zdsimScanner
             numericUpDown8.Value = 500;              //Время мигания лампы бдительности и ограничения скорости
         }
 
-
         //Кнопка ОК
         private void button1_Click(object sender, EventArgs e)
         {
@@ -2612,7 +2605,6 @@ namespace zdsimScanner
 
             sbBufferSave();
             sbBufferWavPathSave();
-
             Close();
         }
 
@@ -2620,7 +2612,6 @@ namespace zdsimScanner
         {
             Close();
         }
-
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -3803,7 +3794,6 @@ namespace zdsimScanner
                 }
                 Properties.Settings.Default.Save();
             }
-
         }
 
         private void button_zdsim_sbros_tek_Click(object sender, EventArgs e)
@@ -3823,6 +3813,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.controls_buffer_key_settings.Clear();
                     Properties.Settings.Default.controls_buffer_axis_settings.Clear();
                     Properties.Settings.Default.controls_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.controls_wav_path_key_buffer, 0, Form1.controls_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_controls_wav_path_data_settings.Clear();
@@ -3835,6 +3826,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.neshtatki_buffer_key_settings.Clear();
                     Properties.Settings.Default.neshtatki_buffer_axis_settings.Clear();
                     Properties.Settings.Default.neshtatki_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.neshtatki_wav_path_key_buffer, 0, Form1.neshtatki_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_neshtatki_wav_path_data_settings.Clear();
@@ -3847,6 +3839,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.es5k_buffer_key_settings.Clear();
                     Properties.Settings.Default.es5k_buffer_axis_settings.Clear();
                     Properties.Settings.Default.es5k_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.es5k_wav_path_key_buffer, 0, Form1.es5k_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_es5k_wav_path_data_settings.Clear();
@@ -3859,6 +3852,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.ep1m_buffer_key_settings.Clear();
                     Properties.Settings.Default.ep1m_buffer_axis_settings.Clear();
                     Properties.Settings.Default.ep1m_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.ep1m_wav_path_key_buffer, 0, Form1.ep1m_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_ep1m_wav_path_data_settings.Clear();
@@ -3871,6 +3865,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.chs2k_buffer_key_settings.Clear();
                     Properties.Settings.Default.chs2k_buffer_axis_settings.Clear();
                     Properties.Settings.Default.chs2k_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.chs2k_wav_path_key_buffer, 0, Form1.chs2k_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_chs2k_wav_path_data_settings.Clear();
@@ -3883,6 +3878,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.chs4_buffer_key_settings.Clear();
                     Properties.Settings.Default.chs4_buffer_axis_settings.Clear();
                     Properties.Settings.Default.chs4_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.chs4_wav_path_key_buffer, 0, Form1.chs4_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_chs4_wav_path_data_settings.Clear();
@@ -3895,6 +3891,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.chs4kvr_buffer_key_settings.Clear();
                     Properties.Settings.Default.chs4kvr_buffer_axis_settings.Clear();
                     Properties.Settings.Default.chs4kvr_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.chs4kvr_wav_path_key_buffer, 0, Form1.chs4kvr_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_chs4kvr_wav_path_data_settings.Clear();
@@ -3907,6 +3904,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.chs4t_buffer_key_settings.Clear();
                     Properties.Settings.Default.chs4t_buffer_axis_settings.Clear();
                     Properties.Settings.Default.chs4t_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.chs4t_wav_path_key_buffer, 0, Form1.chs4t_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_chs4t_wav_path_data_settings.Clear();
@@ -3919,6 +3917,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.chs7_buffer_key_settings.Clear();
                     Properties.Settings.Default.chs7_buffer_axis_settings.Clear();
                     Properties.Settings.Default.chs7_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.chs7_wav_path_key_buffer, 0, Form1.chs7_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_chs7_wav_path_data_settings.Clear();
@@ -3931,6 +3930,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.chs8_buffer_key_settings.Clear();
                     Properties.Settings.Default.chs8_buffer_axis_settings.Clear();
                     Properties.Settings.Default.chs8_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.chs8_wav_path_key_buffer, 0, Form1.chs8_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_chs8_wav_path_data_settings.Clear();
@@ -3943,6 +3943,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.vl11_buffer_key_settings.Clear();
                     Properties.Settings.Default.vl11_buffer_axis_settings.Clear();
                     Properties.Settings.Default.vl11_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.vl11_wav_path_key_buffer, 0, Form1.vl11_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_vl11_wav_path_data_settings.Clear();
@@ -3955,6 +3956,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.vl82_buffer_key_settings.Clear();
                     Properties.Settings.Default.vl82_buffer_axis_settings.Clear();
                     Properties.Settings.Default.vl82_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.vl82_wav_path_key_buffer, 0, Form1.vl82_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_vl82_wav_path_data_settings.Clear();
@@ -3967,6 +3969,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.vl80t_buffer_key_settings.Clear();
                     Properties.Settings.Default.vl80t_buffer_axis_settings.Clear();
                     Properties.Settings.Default.vl80t_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.vl80t_wav_path_key_buffer, 0, Form1.vl80t_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_vl80t_wav_path_data_settings.Clear();
@@ -3979,6 +3982,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.vl85_buffer_key_settings.Clear();
                     Properties.Settings.Default.vl85_buffer_axis_settings.Clear();
                     Properties.Settings.Default.vl85_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.vl85_wav_path_key_buffer, 0, Form1.vl85_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_vl85_wav_path_data_settings.Clear();
@@ -3991,6 +3995,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.tep70_buffer_key_settings.Clear();
                     Properties.Settings.Default.tep70_buffer_axis_settings.Clear();
                     Properties.Settings.Default.tep70_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.tep70_wav_path_key_buffer, 0, Form1.tep70_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_tep70_wav_path_data_settings.Clear();
@@ -4003,6 +4008,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.te10u_buffer_key_settings.Clear();
                     Properties.Settings.Default.te10u_buffer_axis_settings.Clear();
                     Properties.Settings.Default.te10u_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.te10u_wav_path_key_buffer, 0, Form1.te10u_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_te10u_wav_path_data_settings.Clear();
@@ -4015,6 +4021,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.m62_buffer_key_settings.Clear();
                     Properties.Settings.Default.m62_buffer_axis_settings.Clear();
                     Properties.Settings.Default.m62_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.m62_wav_path_key_buffer, 0, Form1.m62_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_m62_wav_path_data_settings.Clear();
@@ -4027,6 +4034,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.ed4m_buffer_key_settings.Clear();
                     Properties.Settings.Default.ed4m_buffer_axis_settings.Clear();
                     Properties.Settings.Default.ed4m_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.ed4m_wav_path_key_buffer, 0, Form1.ed4m_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_ed4m_wav_path_data_settings.Clear();
@@ -4039,6 +4047,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.ed9m_buffer_key_settings.Clear();
                     Properties.Settings.Default.ed9m_buffer_axis_settings.Clear();
                     Properties.Settings.Default.ed9m_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.ed9m_wav_path_key_buffer, 0, Form1.ed9m_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_ed9m_wav_path_data_settings.Clear();
@@ -4051,6 +4060,7 @@ namespace zdsimScanner
                     Properties.Settings.Default.tem18_buffer_key_settings.Clear();
                     Properties.Settings.Default.tem18_buffer_axis_settings.Clear();
                     Properties.Settings.Default.tem18_buffer_axis_settings2.Clear();
+
                     //звук
                     Array.Clear(Form1.tem18_wav_path_key_buffer, 0, Form1.tem18_wav_path_key_buffer.Length);
                     Properties.Settings.Default.sb_tem18_wav_path_data_settings.Clear();
@@ -4059,9 +4069,7 @@ namespace zdsimScanner
                 Form1.SaveBuffersSettings();
                 Properties.Settings.Default.Save();
                 KeyDataUpdate();
-                
             }
-
         }
 
         private void button_zdsim_sbros_key_Click(object sender, EventArgs e)
@@ -4084,6 +4092,7 @@ namespace zdsimScanner
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
@@ -4104,6 +4113,7 @@ namespace zdsimScanner
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
@@ -4124,10 +4134,10 @@ namespace zdsimScanner
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "EP1M")
                 {
@@ -4144,10 +4154,10 @@ namespace zdsimScanner
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS2K")
                 {
@@ -4164,10 +4174,10 @@ namespace zdsimScanner
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4")
                 {
@@ -4184,10 +4194,10 @@ namespace zdsimScanner
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4 KVR")
                 {
@@ -4199,15 +4209,14 @@ namespace zdsimScanner
                     Properties.Settings.Default.chs4kvr_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.chs4kvr_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.chs4kvr_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
                     sbBufferSave();
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4T")
                 {
@@ -4219,15 +4228,14 @@ namespace zdsimScanner
                     Properties.Settings.Default.chs4t_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.chs4t_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.chs4t_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
                     sbBufferSave();
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS7")
                 {
@@ -4239,15 +4247,14 @@ namespace zdsimScanner
                     Properties.Settings.Default.chs7_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.chs7_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.chs7_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
                     sbBufferSave();
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS8")
                 {
@@ -4259,15 +4266,14 @@ namespace zdsimScanner
                     Properties.Settings.Default.chs8_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.chs8_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.chs8_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
                     sbBufferSave();
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL11M")
                 {
@@ -4279,15 +4285,14 @@ namespace zdsimScanner
                     Properties.Settings.Default.vl11_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.vl11_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.vl11_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
                     sbBufferSave();
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL82M")
                 {
@@ -4299,15 +4304,14 @@ namespace zdsimScanner
                     Properties.Settings.Default.vl82_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.vl82_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.vl82_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
                     sbBufferSave();
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL80T")
                 {
@@ -4319,11 +4323,11 @@ namespace zdsimScanner
                     Properties.Settings.Default.vl80t_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.vl80t_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.vl80t_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
                     sbBufferSave();
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
@@ -4339,15 +4343,14 @@ namespace zdsimScanner
                     Properties.Settings.Default.vl85_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.vl85_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.vl85_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
                     sbBufferSave();
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "TEP70")
                 {
@@ -4364,10 +4367,10 @@ namespace zdsimScanner
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "2TE10U")
                 {
@@ -4379,15 +4382,14 @@ namespace zdsimScanner
                     Properties.Settings.Default.te10u_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.te10u_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.te10u_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
                     sbBufferSave();
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "M62")
                 {
@@ -4399,15 +4401,14 @@ namespace zdsimScanner
                     Properties.Settings.Default.m62_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.m62_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.m62_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
                     sbBufferSave();
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "ED4M")
                 {
@@ -4419,15 +4420,14 @@ namespace zdsimScanner
                     Properties.Settings.Default.ed4m_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.ed4m_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.ed4m_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
                     sbBufferSave();
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "ED9M")
                 {
@@ -4439,15 +4439,14 @@ namespace zdsimScanner
                     Properties.Settings.Default.ed9m_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.ed9m_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.ed9m_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
                     sbBufferSave();
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "tem18")
                 {
@@ -4459,18 +4458,16 @@ namespace zdsimScanner
                     Properties.Settings.Default.tem18_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.tem18_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
                     Properties.Settings.Default.tem18_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
                     sbBufferSave();
                     Form1.SaveBuffersSettings();
                     Properties.Settings.Default.Save();
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
                 }
             }
-
         }
 
         private void button_zdsim_sbros_sound_Click(object sender, EventArgs e)
@@ -4483,84 +4480,77 @@ namespace zdsimScanner
                     i = dataGridView_Zdsimulator.CurrentRow.Index;
                     Form1.controls_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
                     Properties.Settings.Default.sb_controls_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "2ES5K")
                 {
                     i = dataGridView_Zdsimulator.CurrentRow.Index;
                     Form1.es5k_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
                     Properties.Settings.Default.sb_es5k_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "EP1M")
                 {
                     i = dataGridView_Zdsimulator.CurrentRow.Index;
                     Form1.ep1m_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
                     Properties.Settings.Default.sb_ep1m_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS2K")
                 {
                     i = dataGridView_Zdsimulator.CurrentRow.Index;
                     Form1.chs2k_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
                     Properties.Settings.Default.sb_chs2k_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4")
                 {
                     i = dataGridView_Zdsimulator.CurrentRow.Index;
                     Form1.chs4_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
                     Properties.Settings.Default.sb_chs4_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4 KVR")
                 {
                     i = dataGridView_Zdsimulator.CurrentRow.Index;
                     Form1.chs4kvr_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
                     Properties.Settings.Default.sb_chs4kvr_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4T")
                 {
                     i = dataGridView_Zdsimulator.CurrentRow.Index;
                     Form1.chs4t_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
                     Properties.Settings.Default.sb_chs4t_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
                 }
                 if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS7")
                 {
@@ -4711,8 +4701,8 @@ namespace zdsimScanner
                     i = dataGridView_Zdsimulator.CurrentRow.Index;
                     Form1.neshtatki_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
                     Properties.Settings.Default.sb_neshtatki_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
                     KeyDataUpdate();
+
                     //перевод курсора на выделенную позицию
                     dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
                     dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
@@ -4924,10 +4914,10 @@ namespace zdsimScanner
                 Properties.Settings.Default.tem18_buffer_key_settings.Clear();
                 Properties.Settings.Default.tem18_buffer_axis_settings.Clear();
                 Properties.Settings.Default.tem18_buffer_axis_settings2.Clear();
+
                 //звук
                 Array.Clear(Form1.tem18_wav_path_key_buffer, 0, Form1.tem18_wav_path_key_buffer.Length);
                 Properties.Settings.Default.sb_tem18_wav_path_data_settings.Clear();
-
 
                 sbBufferSave();
                 Form1.SaveBuffersSettings();
@@ -4944,6 +4934,7 @@ namespace zdsimScanner
             if (result == DialogResult.OK)
             {
                 this.Cursor = Cursors.WaitCursor;
+
                 //удаляем все буфера кнопок и осей
                 Array.Clear(Form1.Controls_key_buffer, 0, Form1.Controls_key_buffer.Length);
                 Array.Clear(Form1.Controls_axis_buffer, 0, Form1.Controls_axis_buffer.Length);
@@ -5047,7 +5038,6 @@ namespace zdsimScanner
                 Properties.Settings.Default.tem18_buffer_axis_settings.Clear();
                 Properties.Settings.Default.tem18_buffer_axis_settings2.Clear();
 
- 
                 //удаляем точки осей
                 Form1.joystick_ARx_point_buffer = null;
                 Properties.Settings.Default.ARx_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
@@ -5115,7 +5105,6 @@ namespace zdsimScanner
                 Thread.Sleep(3000);
                 this.Cursor = Cursors.Default;
                 Application.Restart();
-                
             }
         }
 
@@ -5143,6 +5132,7 @@ namespace zdsimScanner
                 }
             }
         }
+
         public void DeleteAppDataFiles_local()
         {
             string baseUserFolder, templateAppdata;
@@ -5181,6 +5171,7 @@ namespace zdsimScanner
             templateForAppDataPath = appdataFolder.Substring(
                 appdataFolder.IndexOf("\\", scndBackslash + 1, StringComparison.Ordinal));//start at third \
         }
+
         private void GetAppDataMyFolderPath_local(out string baseUserFolder, out string templateForAppDataPath)
         {
             string appdataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);

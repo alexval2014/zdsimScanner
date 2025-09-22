@@ -1,4 +1,283 @@
 ﻿using System;
+using zdsimScanner.Core;
+using zdsimScanner.Offsets.V54_006;
+using static System.Windows.Forms.AxHost;
+
+namespace zdsimScanner.Readers
+{
+    public static class LocoRead_V54_006
+    {
+        /// <summary>
+        /// Читает параметры локомотива 2ЭС5К для версии V54.006
+        /// Возвращает out_buffer (LocoMemoryHelpers.out_buffer)
+        /// </summary>
+        public static byte[] Read_2ES5K(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            // короткие алиасы
+            //var H = LocoMemoryHelpers;
+
+            // Доп. скорость (в старом коде читалось 2 байта / int16)
+            // тут пример: если нужна именно Int16 читать отдельно
+            // скорость дополнительная (int16) — байты 0–1
+            LocoMemoryHelpers.ReadUInt16ToBuffer(Loco_2ES5K.SpeedDop, outIndex: 0);
+
+            // Текущая скорость с фактором настройки (вытаскивается из глобальной переменной у тебя Loco.i_skor_tek_convert).
+            // Т.к. сейчас у нас Loco.i_skor_tek_convert находился в старом Loco.cs, тебе нужно либо перенести её в отдельный класс,
+            // либо передавать сюда как параметр. Здесь для примера предполагаем, что ты сохранил её глобально (как раньше).
+            // скорость текущая (int16) — байты 2–3
+            LocoMemoryHelpers.ReadScaledFloatToBufferWithFactor(Loco_2ES5K.SpeedTek, outIndex: 2, factor: Loco.i_skor_tek_convert);
+
+            // ALS (1 байт)
+            // АЛС — байт 4
+            LocoMemoryHelpers.ReadByteToBuffer(Loco_2ES5K.ALS, outIndex: 4);
+
+            // Бдительность
+            // бдительность — байт 5
+            LocoMemoryHelpers.ReadByteToBuffer(Loco_2ES5K.Bditelnost, outIndex: 5);
+            // (В старом коде ты ещё присваивал Loco.i_bdit_current = ... — при миграции сохрани логику)
+
+            // Давления
+            // манометры НМ, ТМ, УР, ТЦ — байты 29–36
+
+            //LocoMemoryHelpers.ReadScaledDoubleToBufferWithFactor(Loco_2ES5K.PNM, outIndex: 29, factor: Loco.i_pnevmo_convert);
+            //LocoMemoryHelpers.ReadScaledDoubleToBufferWithFactor(Loco_2ES5K.PTM, outIndex: 31, factor: Loco.i_pnevmo_convert);
+            //LocoMemoryHelpers.ReadScaledDoubleToBufferWithFactor(Loco_2ES5K.PUR, outIndex: 33, factor: Loco.i_pnevmo_convert);
+            //LocoMemoryHelpers.ReadScaledDoubleToBufferWithFactor(Loco_2ES5K.PTC, outIndex: 35, factor: Loco.i_pnevmo_convert);
+
+            // читаем НМ -> out_buffer[29]
+            // LocoMemoryHelpers.ReadScaledDoubleToBufferAbsolute(Loco.sig_pos_pnevm + 0x80, 29, (double)Loco.i_pnevmo_convert, true);
+
+            // читаем ТМ -> out_buffer[31]
+            //LocoMemoryHelpers.ReadScaledDoubleToBufferAbsolute(Loco.sig_pos_pnevm + 0x58, 31, (double)Loco.i_pnevmo_convert, true);
+
+            // читаем УР -> out_buffer[33]
+            // LocoMemoryHelpers.ReadScaledDoubleToBufferAbsolute(Loco.sig_pos_pnevm + 0x30, 33, (double)Loco.i_pnevmo_convert, true);
+
+            // читаем ТЦ -> out_buffer[35]
+            // LocoMemoryHelpers.ReadScaledDoubleToBufferAbsolute(Loco.sig_pos_pnevm + 0xA8, 35, (double)Loco.i_pnevmo_convert, true);
+
+
+            LocoMemoryHelpers.ReadPressureToBuffer(Loco_2ES5K.PNM, 29, (double)Loco.i_pnevmo_convert); // НМ
+            LocoMemoryHelpers.ReadPressureToBuffer(Loco_2ES5K.PTM, 31, (double)Loco.i_pnevmo_convert); // ТМ
+            LocoMemoryHelpers.ReadPressureToBuffer(Loco_2ES5K.PUR, 33, (double)Loco.i_pnevmo_convert); // УР
+            LocoMemoryHelpers.ReadPressureToBuffer(Loco_2ES5K.PTC, 35, (double)Loco.i_pnevmo_convert); // ТЦ
+
+            // LocoMemoryHelpers.ReadScaledFloatToBufferWithFactor(Loco_2ES5K.PNM, outIndex: 29, factor: Loco.i_pnevmo_convert);
+            //LocoMemoryHelpers.ReadScaledFloatToBufferWithFactor(Loco_2ES5K.PTM, outIndex: 31, factor: Loco.i_pnevmo_convert);
+            //LocoMemoryHelpers.ReadScaledFloatToBufferWithFactor(Loco_2ES5K.PUR, outIndex: 33, factor: Loco.i_pnevmo_convert);
+            //LocoMemoryHelpers.ReadScaledFloatToBufferWithFactor(Loco_2ES5K.PTC, outIndex: 35, factor: Loco.i_pnevmo_convert);
+
+            // Электрические
+            //LocoMemoryHelpers.ReadScaledDoubleToBuffer(Loco_2ES5K.NaprugaKS, outIndex: 13, scale: Loco.i_napruga_ks_convert);           // напряжение КС — байты 13–14
+           //LocoMemoryHelpers.ReadScaledFloatToBufferWithFactor(Loco_2ES5K.NaprugaTD, outIndex: 15, factor: Loco.i_napruga_td_convert); // напряжение ТД — байты 15–16
+           // LocoMemoryHelpers.ReadScaledFloatToBufferWithFactor(Loco_2ES5K.Tok1, outIndex: 17, factor: Loco.i_tok_convert);             // Ток1 — байты 17–18
+
+            // Время
+            // часы/мин/сек — байты 10,11,12
+            LocoMemoryHelpers.ReadByteToBuffer(Loco_2ES5K.TimeHour, outIndex: 10);
+            LocoMemoryHelpers.ReadByteToBuffer(Loco_2ES5K.TimeMinute, outIndex: 11);
+            LocoMemoryHelpers.ReadByteToBuffer(Loco_2ES5K.TimeSecond, outIndex: 12);
+
+            // Лампы — сбор в маску (пример: первые 5 ламп)
+            uint lampMask = 0;
+            LocoMemoryHelpers.ReadLampStableToMask(ref lampMask, 0, Loco_2ES5K.Lamp_TMLeak);
+            LocoMemoryHelpers.ReadLampStableToMask(ref lampMask, 1, Loco_2ES5K.Lamp_C1);
+            LocoMemoryHelpers.ReadLampStableToMask(ref lampMask, 2, Loco_2ES5K.Lamp_C2);
+            LocoMemoryHelpers.ReadLampStableToMask(ref lampMask, 3, Loco_2ES5K.Lamp_Vent1);
+            LocoMemoryHelpers.ReadLampStableToMask(ref lampMask, 4, Loco_2ES5K.Lamp_GV_Right);
+
+            // записываем маску в out_buffer (4 байта)
+            Array.Copy(BitConverter.GetBytes(lampMask), 0, LocoMemoryHelpers.out_buffer, 40, 4);
+
+            // Дополнительно: пример чтения ТЦ и установки бита индикатора
+            var buf = ProcessMemory.ReadBytes(sig_pos_pnevm + 0xa8, 8);
+            double d_temp = BitConverter.ToDouble(buf, 0);
+            byte tcb = (d_temp <= 0.3) ? (byte)0 : (byte)1;
+            LocoMemoryHelpers.out_buffer[37] = tcb;
+
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_EP1M(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_CHS2K(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_CHS4(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_CHS4KVR(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_CHS4T(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_CHS7(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_CHS8(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_VL11M(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_VL82M(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_VL80T(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_VL85(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_TEP70(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_2TE10U(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_M62(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_ED4M(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            // Доп. скорость (в старом коде читалось 2 байта / int16)
+            // тут пример: если нужна именно Int16 читать отдельно
+            // скорость дополнительная (int16) — байты 0й–1й
+            LocoMemoryHelpers.ReadUInt16ToBuffer(Loco_ED4M.SpeedDop, outIndex: 0);
+            //Form1.i_skor_dop = 25;
+            LocoMemoryHelpers.ReadUInt16ToVar(Loco_ED4M.SpeedDop);
+
+
+            // Текущая скорость с фактором настройки (вытаскивается из глобальной переменной у тебя Loco.i_skor_tek_convert).
+            // Т.к. сейчас у нас Loco.i_skor_tek_convert находился в старом Loco.cs, тебе нужно либо перенести её в отдельный класс,
+            // либо передавать сюда как параметр. Здесь для примера предполагаем, что ты сохранил её глобально (как раньше).
+            // скорость текущая (int16) — байты 2й–3й
+            //LocoMemoryHelpers.ReadScaledFloatToBufferWithFactor(Loco_ED4M.SpeedTek, outIndex: 2, factor: Loco.i_skor_tek_convert);
+
+            // АЛС (1 байт) — байт 4й
+            LocoMemoryHelpers.ReadByteToBuffer(Loco_ED4M.ALS, outIndex: 4);
+
+            // Бдительность — байт 5й
+            LocoMemoryHelpers.ReadByteToBuffer(Loco_ED4M.Bditelnost, outIndex: 5);
+            // (В старом коде ты ещё присваивал Loco.i_bdit_current = ... — при миграции сохрани логику)
+
+            // Давления манометры НМ, ТМ, УР, ТЦ — байты 29й–36й
+            LocoMemoryHelpers.ReadPressureToBuffer(Loco_ED4M.PNM, 29, Loco.i_pnevmo_convert); // НМ
+            LocoMemoryHelpers.ReadPressureToBuffer(Loco_ED4M.PTM, 31, Loco.i_pnevmo_convert); // ТМ
+            LocoMemoryHelpers.ReadPressureToBuffer(Loco_ED4M.PUR, 33, Loco.i_pnevmo_convert); // УР
+            LocoMemoryHelpers.ReadPressureToBuffer(Loco_ED4M.PTC, 35, Loco.i_pnevmo_convert); // ТЦ
+
+            // Электрические
+            LocoMemoryHelpers.ReadScaledDoubleToBuffer(Loco_ED4M.NaprugaKS, false, outIndex: 13, scale: Loco.i_napruga_ks_convert);       // напряжение КС — байты 13й–14й
+            LocoMemoryHelpers.ReadScaledFloatToBufferWithFactor(Loco_ED4M.NaprugaTD, outIndex: 15, factor: Loco.i_napruga_td_convert); // напряжение ТД — байты 15й–16й
+            LocoMemoryHelpers.ReadScaledFloatToBufferWithFactor(Loco_ED4M.Tok1, outIndex: 17, factor: Loco.i_tok_convert);             // Ток1 — байты 17й–18й
+
+            // Время часы/мин/сек — байты 10й,11й,12й
+            LocoMemoryHelpers.ReadByteToBuffer(Loco_ED4M.TimeHour, outIndex: 10);
+            LocoMemoryHelpers.ReadByteToBuffer(Loco_ED4M.TimeMinute, outIndex: 11);
+            LocoMemoryHelpers.ReadByteToBuffer(Loco_ED4M.TimeSecond, outIndex: 12);
+
+            
+
+
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+
+
+        //LocoMemoryHelpers.ReadScaledDoubleToBufferWithFactor(Loco_2ES5K.PNM, outIndex: 29, factor: Loco.i_pnevmo_convert);
+        //LocoMemoryHelpers.ReadScaledDoubleToBufferWithFactor(Loco_2ES5K.PTM, outIndex: 31, factor: Loco.i_pnevmo_convert);
+        //LocoMemoryHelpers.ReadScaledDoubleToBufferWithFactor(Loco_2ES5K.PUR, outIndex: 33, factor: Loco.i_pnevmo_convert);
+        //LocoMemoryHelpers.ReadScaledDoubleToBufferWithFactor(Loco_2ES5K.PTC, outIndex: 35, factor: Loco.i_pnevmo_convert);
+
+        // читаем НМ -> out_buffer[29]
+        // LocoMemoryHelpers.ReadScaledDoubleToBufferAbsolute(Loco.sig_pos_pnevm + 0x80, 29, (double)Loco.i_pnevmo_convert, true);
+
+        // читаем ТМ -> out_buffer[31]
+        //LocoMemoryHelpers.ReadScaledDoubleToBufferAbsolute(Loco.sig_pos_pnevm + 0x58, 31, (double)Loco.i_pnevmo_convert, true);
+
+        // читаем УР -> out_buffer[33]
+        // LocoMemoryHelpers.ReadScaledDoubleToBufferAbsolute(Loco.sig_pos_pnevm + 0x30, 33, (double)Loco.i_pnevmo_convert, true);
+
+        // читаем ТЦ -> out_buffer[35]
+        // LocoMemoryHelpers.ReadScaledDoubleToBufferAbsolute(Loco.sig_pos_pnevm + 0xA8, 35, (double)Loco.i_pnevmo_convert, true);
+
+        // Лампы — сбор в маску (пример: первые 5 ламп)
+        // uint lampMask = 0;
+        // LocoMemoryHelpers.ReadLampStableToMask(ref lampMask, 0, Loco_ED4M.Lamp_TMLeak);
+        // LocoMemoryHelpers.ReadLampStableToMask(ref lampMask, 1, Loco_ED4M.Lamp_C1);
+        //  LocoMemoryHelpers.ReadLampStableToMask(ref lampMask, 2, Loco_ED4M.Lamp_C2);
+        // LocoMemoryHelpers.ReadLampStableToMask(ref lampMask, 3, Loco_ED4M.Lamp_Vent1);
+        // LocoMemoryHelpers.ReadLampStableToMask(ref lampMask, 4, Loco_ED4M.Lamp_GV_Right);
+
+        // записываем маску в out_buffer (4 байта)
+        //Array.Copy(BitConverter.GetBytes(lampMask), 0, LocoMemoryHelpers.out_buffer, 40, 4);
+
+        // Дополнительно: пример чтения ТЦ и установки бита индикатора
+        //var buf = ProcessMemory.ReadBytes(sig_pos_pnevm + 0xa8, 8);
+        //double d_temp = BitConverter.ToDouble(buf, 0);
+        //byte tcb = (d_temp <= 0.3) ? (byte)0 : (byte)1;
+        //LocoMemoryHelpers.out_buffer[37] = tcb;
+
+        // попробовать как абсолютный адрес:
+        // LocoMemoryHelpers.DebugReadDoubleAt(0x08DB92B4, true);
+
+        // попробовать как offset (BA + offset):
+        //LocoMemoryHelpers.DebugReadDoubleAt(0x08DB92B4, false);
+
+        // byte[] raw = ProcessMemory.ReadBytes(0x08CF3F30, 8);
+        // Console.WriteLine("[DUMP] " + BitConverter.ToString(raw));
+
+        // byte[] buf3 = ProcessMemory.ReadBytes(0x08CF3F30, 4);
+        // float f = BitConverter.ToSingle(buf3, 0);
+        // Console.WriteLine("[DEBUG] napruga KS float = " + f);
+
+        public static byte[] Read_ED9M(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+
+        public static byte[] Read_TEM18(int sig_pos_pnevm, int sig_pos_elektro)
+        {
+            return LocoMemoryHelpers.out_buffer;
+        }
+    }
+}
+
+
+/*
+
+using System;
 using System.Text;
 using System.Threading;
 using zdsimScanner.Offsets.V54_006; //Подключаю папку с офсетами
@@ -87,7 +366,7 @@ namespace zdsimScanner
         //-----------------------------------------------------------------------------------
         public static byte[] read_2se5k_V54_006(int sig_pos_pnevm = 0, int sig_pos_elektro = 0)
         {
-            double d_temp = 0;
+            double d_temp;
 
             // -----------------------------
             // Скорости
@@ -105,11 +384,14 @@ namespace zdsimScanner
             Loco.ReadScaledFloatToBufferWithFactor(Loco_2ES5K.SpeedTek, outIndex: 4, factor: 1f);
 
             // -----------------------------
-            // Сигналы безопасности
+            // Сигналы АЛС (Светофор)
             // -----------------------------
             byte als = Loco.ReadByteValue(Loco_2ES5K.ALS);
             Loco.out_buffer[6] = als;
 
+            // -----------------------------
+            // Сигнал Бдительности
+            // -----------------------------
             //byte bdit = Loco.ReadByteValue(Loco_2ES5K.Bditelnost);
             //Loco.out_buffer[7] = bdit;
 
@@ -118,17 +400,17 @@ namespace zdsimScanner
             // -----------------------------
             // Давления (float → UInt16 → 2 байта)
             // -----------------------------
-            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.PNM, outIndex: 8, scale: Loco.i_pnevmo_convert);  // НМ
-            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.PTM, outIndex: 10, scale: Loco.i_pnevmo_convert); // ТМ
-            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.PUR, outIndex: 12, scale: Loco.i_pnevmo_convert); // УР
-            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.PTC, outIndex: 14, scale: Loco.i_pnevmo_convert); // ТЦ
+            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.PNM, outIndex: 8, scale: Loco.i_pnevmo_convert);  // НМ (Кг/См2)
+            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.PTM, outIndex: 10, scale: Loco.i_pnevmo_convert); // ТМ (Кг/См2)
+            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.PUR, outIndex: 12, scale: Loco.i_pnevmo_convert); // УР (Кг/См2)
+            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.PTC, outIndex: 14, scale: Loco.i_pnevmo_convert); // ТЦ (Кг/См2)
 
             // -----------------------------
             // Электрические параметры
             // -----------------------------
-            Loco.ReadScaledDoubleToBuffer(Loco_2ES5K.NaprugaKS, outIndex: 16, scale: Loco.i_napruga_ks_convert); // В кВ   (0.1)
-            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.NaprugaTD, outIndex: 18, scale: Loco.i_napruga_td_convert);  // Вольты ТД
-            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.Tok1, outIndex: 20, scale: Loco.i_tok_convert);              // Амперы
+            Loco.ReadScaledDoubleToBuffer(Loco_2ES5K.NaprugaKS, outIndex: 16, scale: Loco.i_napruga_ks_convert); // Напряжение контактной сети КС (кВ)
+            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.NaprugaTD, outIndex: 18, scale: Loco.i_napruga_td_convert);  // Напряжение тяговых двигателей ТД (кВ)
+            Loco.ReadScaledFloatToBuffer(Loco_2ES5K.Tok1, outIndex: 20, scale: Loco.i_tok_convert);              // Ток (А)
 
             // -----------------------------
             // Время (часы, минуты, секунды)
@@ -245,7 +527,7 @@ namespace zdsimScanner
             Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB8B4, 1);
             Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 12, 1);
 
-            //напруга float
+            //напруга КС
             Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08CF3F30, 4);
             f_temp = BitConverter.ToSingle(Loco.temp_buffer, 0);
             f_temp = Math.Abs(f_temp);
@@ -5236,12 +5518,18 @@ namespace zdsimScanner
            UInt16 i_temp = Convert.ToUInt16(f_temp * Loco.i_skor_tek_convert);
            Loco.temp_buffer = BitConverter.GetBytes(i_temp);
            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 2, 2);
+
+
            //АЛС
            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB744, 1);
            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 4, 1);
+
+
            //бдительность
            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x0032CBC0, 1);
            Loco.i_bdit_current = Loco.temp_buffer[0];
+
+
            //скор тек 2
            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x04F6FCE0, 4);
            f_temp = BitConverter.ToSingle(Loco.temp_buffer, 0);
@@ -5250,9 +5538,13 @@ namespace zdsimScanner
            Form1.i_skor_tek = i_temp;
            Loco.temp_buffer = BitConverter.GetBytes(i_temp);
            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 6, 2);
+
+
            //ток эпт
            Loco.temp_buffer = new byte[] { 0, 0 };
            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 8, 2);
+
+
            //час
            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB8AC, 1);
            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 10, 1);
@@ -5262,9 +5554,13 @@ namespace zdsimScanner
            //секунда
            Loco.temp_buffer = Loco.read_bytes((Int32)Loco.BA + 0x08BEB8B4, 1);
            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 12, 1);
+
+
            //напруга float
            Loco.temp_buffer = new byte[] { 0, 0 };
            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 13, 2);
+
+
            //контроллер поз.
            Loco.temp_buffer = new byte[] { 0, 0 };
            Array.Copy(Loco.temp_buffer, 0, Loco.out_buffer, 15, 2);
@@ -6068,3 +6364,4 @@ namespace zdsimScanner
         //-----------------------------------------------------------------------------------
     }
 }
+*/
