@@ -18,6 +18,7 @@ namespace zdsimScanner
         int[] b_temp;
         Device device;
         
+        /*
         public string sig_ARx = "ARx ";
         public string sig_ARy = "ARy ";
         public string sig_ARz = "ARz ";
@@ -47,7 +48,311 @@ namespace zdsimScanner
         public string sig_ASld = "ASld";
         public string sig_FSld = "FSld";
         public string sig_VSld = "VSld";
+        */
 
+        //============================================================================
+        // Окно "Кнопки и оси джойстика"  (фрагмент внутри класса Form_joystick_control)
+        //============================================================================
+
+        #region Helpers: LocoMap + AxisDefs
+
+        private sealed class LocoBuffers
+        {
+            public int[] Key;
+            public int[,] Axis;
+        }
+
+        // ВАЖНО: это static readonly. Нормально, т.к. массивы Form1 — тоже static и уже созданы при старте.
+        // Если у тебя бывают сценарии, когда Form1.*_buffer ещё не инициализированы к моменту открытия формы,
+        // тогда надо будет сделать карту НЕ static (но в твоём коде это выглядит стабильным).
+        private static readonly System.Collections.Generic.Dictionary<string, LocoBuffers> LocoMap =
+            new System.Collections.Generic.Dictionary<string, LocoBuffers>(StringComparer.Ordinal)
+            {
+                ["Controls"] = new LocoBuffers { Key = Form1.Controls_key_buffer, Axis = Form1.Controls_axis_buffer },
+                ["Neshtatki"] = new LocoBuffers { Key = Form1.Neshtatki_key_buffer, Axis = Form1.Neshtatki_axis_buffer },
+                ["2ES5K"] = new LocoBuffers { Key = Form1.ES5K_key_buffer, Axis = Form1.ES5K_axis_buffer },
+                ["EP1M"] = new LocoBuffers { Key = Form1.EP1M_key_buffer, Axis = Form1.EP1M_axis_buffer },
+                ["CHS2K"] = new LocoBuffers { Key = Form1.CHS2K_key_buffer, Axis = Form1.CHS2K_axis_buffer },
+                ["CHS4"] = new LocoBuffers { Key = Form1.CHS4_key_buffer, Axis = Form1.CHS4_axis_buffer },
+                ["CHS4 KVR"] = new LocoBuffers { Key = Form1.CHS4KVR_key_buffer, Axis = Form1.CHS4KVR_axis_buffer },
+                ["CHS4T"] = new LocoBuffers { Key = Form1.CHS4T_key_buffer, Axis = Form1.CHS4T_axis_buffer },
+                ["CHS7"] = new LocoBuffers { Key = Form1.CHS7_key_buffer, Axis = Form1.CHS7_axis_buffer },
+                ["CHS8"] = new LocoBuffers { Key = Form1.CHS8_key_buffer, Axis = Form1.CHS8_axis_buffer },
+                ["VL11M"] = new LocoBuffers { Key = Form1.VL11M_key_buffer, Axis = Form1.VL11M_axis_buffer },
+                ["VL82M"] = new LocoBuffers { Key = Form1.VL82M_key_buffer, Axis = Form1.VL82M_axis_buffer },
+                ["VL80T"] = new LocoBuffers { Key = Form1.VL80T_key_buffer, Axis = Form1.VL80T_axis_buffer },
+                ["VL85"] = new LocoBuffers { Key = Form1.VL85_key_buffer, Axis = Form1.VL85_axis_buffer },
+                ["TEP70"] = new LocoBuffers { Key = Form1.TEP70_key_buffer, Axis = Form1.TEP70_axis_buffer },
+                ["2TE10U"] = new LocoBuffers { Key = Form1.TE10U_key_buffer, Axis = Form1.TE10U_axis_buffer },
+                ["M62"] = new LocoBuffers { Key = Form1.M62_key_buffer, Axis = Form1.M62_axis_buffer },
+                ["ED4M"] = new LocoBuffers { Key = Form1.ED4M_key_buffer, Axis = Form1.ED4M_axis_buffer },
+                ["ED9M"] = new LocoBuffers { Key = Form1.ED9M_key_buffer, Axis = Form1.ED9M_axis_buffer },
+                ["tem18"] = new LocoBuffers { Key = Form1.tem18_key_buffer, Axis = Form1.tem18_axis_buffer },
+            };
+
+        private static bool TryGetCurrentLocoBuffers(out LocoBuffers b)
+        {
+            b = null;
+            string loco = Convert.ToString(Form2.s_current_loco_select);
+            if (string.IsNullOrEmpty(loco)) return false;
+            return LocoMap.TryGetValue(loco, out b);
+        }
+
+        private static bool SetKeyAndClearAxis(LocoBuffers b, int row, int key1Based)
+        {
+            if (b == null || b.Key == null || b.Axis == null) return false;
+
+            if ((uint)row >= (uint)b.Key.Length) return false;
+            if ((uint)row >= (uint)b.Axis.GetLength(0)) return false;
+
+            b.Key[row] = key1Based;
+            b.Axis[row, 0] = 0;
+            b.Axis[row, 1] = 0;
+            return true;
+        }
+
+        private sealed class AxisDef
+        {
+            public int AxisId;                 // то, что пишем в *_axis_buffer[row,0]
+            public string Sig4;                // "ARx ", "AX  ", ...
+            public Func<int[]> GetPoints;      // Form1.joystick_*_point_buffer
+            public Func<int> GetCurrent;       // текущее значение оси
+        }
+
+        private System.Collections.Generic.List<AxisDef> _axesOrdered;
+        private System.Collections.Generic.Dictionary<string, AxisDef> _axisBySig4;
+
+        private void EnsureAxisDefs()
+        {
+            if (_axesOrdered != null) return;
+
+            _axesOrdered = new System.Collections.Generic.List<AxisDef>
+    {
+        new AxisDef { AxisId =  1, Sig4 = "ARx ", GetPoints = () => Form1.joystick_ARx_point_buffer, GetCurrent = () => device.CurrentJoystickState.ARx },
+        new AxisDef { AxisId =  2, Sig4 = "ARy ", GetPoints = () => Form1.joystick_ARy_point_buffer, GetCurrent = () => device.CurrentJoystickState.ARy },
+        new AxisDef { AxisId =  3, Sig4 = "ARz ", GetPoints = () => Form1.joystick_ARz_point_buffer, GetCurrent = () => device.CurrentJoystickState.ARz },
+        new AxisDef { AxisId =  4, Sig4 = "AX  ", GetPoints = () => Form1.joystick_AX_point_buffer,  GetCurrent = () => device.CurrentJoystickState.AX  },
+        new AxisDef { AxisId =  5, Sig4 = "AY  ", GetPoints = () => Form1.joystick_AY_point_buffer,  GetCurrent = () => device.CurrentJoystickState.AY  },
+        new AxisDef { AxisId =  6, Sig4 = "AZ  ", GetPoints = () => Form1.joystick_AZ_point_buffer,  GetCurrent = () => device.CurrentJoystickState.AZ  },
+
+        new AxisDef { AxisId =  7, Sig4 = "FRx ", GetPoints = () => Form1.joystick_FRx_point_buffer, GetCurrent = () => device.CurrentJoystickState.FRx },
+        new AxisDef { AxisId =  8, Sig4 = "FRy ", GetPoints = () => Form1.joystick_FRy_point_buffer, GetCurrent = () => device.CurrentJoystickState.FRy },
+        new AxisDef { AxisId =  9, Sig4 = "FRz ", GetPoints = () => Form1.joystick_FRz_point_buffer, GetCurrent = () => device.CurrentJoystickState.FRz },
+
+        new AxisDef { AxisId = 10, Sig4 = "FX  ", GetPoints = () => Form1.joystick_FX_point_buffer,  GetCurrent = () => device.CurrentJoystickState.FX  },
+        new AxisDef { AxisId = 11, Sig4 = "FY  ", GetPoints = () => Form1.joystick_FY_point_buffer,  GetCurrent = () => device.CurrentJoystickState.FY  },
+        new AxisDef { AxisId = 12, Sig4 = "FZ  ", GetPoints = () => Form1.joystick_FZ_point_buffer,  GetCurrent = () => device.CurrentJoystickState.FZ  },
+
+        new AxisDef { AxisId = 13, Sig4 = "Rx  ", GetPoints = () => Form1.joystick_Rx_point_buffer,  GetCurrent = () => device.CurrentJoystickState.Rx  },
+        new AxisDef { AxisId = 14, Sig4 = "Ry  ", GetPoints = () => Form1.joystick_Ry_point_buffer,  GetCurrent = () => device.CurrentJoystickState.Ry  },
+        new AxisDef { AxisId = 15, Sig4 = "Rz  ", GetPoints = () => Form1.joystick_Rz_point_buffer,  GetCurrent = () => device.CurrentJoystickState.Rz  },
+
+        new AxisDef { AxisId = 16, Sig4 = "VRx ", GetPoints = () => Form1.joystick_VRx_point_buffer, GetCurrent = () => device.CurrentJoystickState.VRx },
+        new AxisDef { AxisId = 17, Sig4 = "VRy ", GetPoints = () => Form1.joystick_VRy_point_buffer, GetCurrent = () => device.CurrentJoystickState.VRy },
+        new AxisDef { AxisId = 18, Sig4 = "VRz ", GetPoints = () => Form1.joystick_VRz_point_buffer, GetCurrent = () => device.CurrentJoystickState.VRz },
+
+        new AxisDef { AxisId = 19, Sig4 = "VX  ", GetPoints = () => Form1.joystick_VX_point_buffer,  GetCurrent = () => device.CurrentJoystickState.VX  },
+        new AxisDef { AxisId = 20, Sig4 = "VY  ", GetPoints = () => Form1.joystick_VY_point_buffer,  GetCurrent = () => device.CurrentJoystickState.VY  },
+        new AxisDef { AxisId = 21, Sig4 = "VZ  ", GetPoints = () => Form1.joystick_VZ_point_buffer,  GetCurrent = () => device.CurrentJoystickState.VZ  },
+
+        new AxisDef { AxisId = 22, Sig4 = "X   ", GetPoints = () => Form1.joystick_X_point_buffer,   GetCurrent = () => device.CurrentJoystickState.X   },
+        new AxisDef { AxisId = 23, Sig4 = "Y   ", GetPoints = () => Form1.joystick_Y_point_buffer,   GetCurrent = () => device.CurrentJoystickState.Y   },
+        new AxisDef { AxisId = 24, Sig4 = "Z   ", GetPoints = () => Form1.joystick_Z_point_buffer,   GetCurrent = () => device.CurrentJoystickState.Z   },
+
+        new AxisDef { AxisId = 25, Sig4 = "POV ", GetPoints = () => Form1.joystick_POV_point_buffer,     GetCurrent = () => device.CurrentJoystickState.GetPointOfView()[0] },
+
+        new AxisDef { AxisId = 26, Sig4 = "Sld ", GetPoints = () => Form1.joystick_Slider_point_buffer,  GetCurrent = () => device.CurrentJoystickState.GetSlider()[0] },
+        new AxisDef { AxisId = 27, Sig4 = "ASld", GetPoints = () => Form1.joystick_ASlider_point_buffer, GetCurrent = () => device.CurrentJoystickState.GetASlider()[0] },
+        new AxisDef { AxisId = 28, Sig4 = "FSld", GetPoints = () => Form1.joystick_FSlider_point_buffer, GetCurrent = () => device.CurrentJoystickState.GetFSlider()[0] },
+        new AxisDef { AxisId = 29, Sig4 = "VSld", GetPoints = () => Form1.joystick_VSlider_point_buffer, GetCurrent = () => device.CurrentJoystickState.GetVSlider()[0] },
+    };
+
+            _axisBySig4 = new System.Collections.Generic.Dictionary<string, AxisDef>(StringComparer.Ordinal);
+            foreach (var a in _axesOrdered)
+                _axisBySig4[a.Sig4] = a;
+        }
+
+        private static bool TryExtractPointIndex0(string text, out int idx0)
+        {
+            idx0 = -1;
+            int n = 0;
+            bool has = false;
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                char c = text[i];
+                if (c >= '0' && c <= '9')
+                {
+                    has = true;
+                    n = (n * 10) + (c - '0');
+                }
+            }
+
+            if (!has) return false;
+
+            idx0 = n - 1;
+            return idx0 >= 0;
+        }
+
+        #endregion
+
+        //-----------------------------------------------------------------------------
+        // ЗАМЕНА 1: UpdateKey()
+        //-----------------------------------------------------------------------------
+        private void UpdateKey()
+        {
+            Form2 f2 = this.Owner as Form2;
+            if (f2 == null) return;
+
+            if (f2.i_temp_datagird_select_f2 != 1) return;
+
+            if (!TryGetCurrentLocoBuffers(out var lb))
+                return;
+
+            if (dataGridView_but.CurrentRow == null) return;
+
+            int row = f2.i_temp_row_number_f2;
+            int key = dataGridView_but.CurrentRow.Index + 1;
+
+            SetKeyAndClearAxis(lb, row, key);
+        }
+
+        //-----------------------------------------------------------------------------
+        // ЗАМЕНА 2: UpdateAxis()
+        //-----------------------------------------------------------------------------
+        private void UpdateAxis()
+        {
+            Form2 f2 = this.Owner as Form2;
+            if (f2 == null) return;
+
+            if (f2.i_temp_datagird_select_f2 != 1) return;
+
+            if (dataGridView_osi.CurrentCell == null) return;
+
+            string text = Convert.ToString(dataGridView_osi.CurrentCell.Value);
+            if (string.IsNullOrEmpty(text) || text.Length < 4) return;
+
+            if (device == null) return;
+            EnsureAxisDefs();
+
+            // 1) Ось по сигнатуре первых 4 символов
+            string sig4 = text.Substring(0, 4);
+            if (_axisBySig4 == null || !_axisBySig4.TryGetValue(sig4, out var axis))
+                return;
+
+            // 2) Индекс точки
+            if (!TryExtractPointIndex0(text, out int pointIdx0))
+                return;
+
+            int[] points = axis.GetPoints();
+            if (points == null) return;
+            if ((uint)pointIdx0 >= (uint)points.Length) return;
+
+            // 3) Буфер локомотива
+            if (!TryGetCurrentLocoBuffers(out var lb))
+                return;
+
+            int row = f2.i_temp_row_number_f2;
+
+            // 4) Сброс кнопки и запись оси
+            if (lb.Key != null && (uint)row < (uint)lb.Key.Length)
+                lb.Key[row] = 0;
+
+            if (lb.Axis == null) return;
+            if ((uint)row >= (uint)lb.Axis.GetLength(0)) return;
+
+            lb.Axis[row, 0] = axis.AxisId;         // 1..29
+            lb.Axis[row, 1] = points[pointIdx0];   // значение точки
+        }
+
+        //-----------------------------------------------------------------------------
+        // ЗАМЕНА 3: Form_joystick_control_Load
+        //-----------------------------------------------------------------------------
+        private void Form_joystick_control_Load(object sender, EventArgs e)
+        {
+            Joystick_init();
+            if (device == null) return;
+
+            EnsureAxisDefs();
+
+            // Кнопки
+            int buttons = device.Caps.NumberButtons;
+
+            dataGridView_but.Rows.Clear();
+            dataGridView_but.Columns.Clear();
+            dataGridView_but.Columns.Add(null, null);
+            if (buttons > 0) dataGridView_but.Rows.Add(buttons);
+
+            // Оси = сумма длин всех point_buffer
+            int axisRows = 0;
+            foreach (var a in _axesOrdered)
+            {
+                int[] p = a.GetPoints();
+                if (p != null) axisRows += p.Length;
+            }
+
+            dataGridView_osi.Rows.Clear();
+            dataGridView_osi.Columns.Clear();
+            dataGridView_osi.Columns.Add(null, null);
+            if (axisRows > 0) dataGridView_osi.Rows.Add(axisRows);
+
+            timer1.Enabled = true;
+        }
+
+        //-----------------------------------------------------------------------------
+        // ЗАМЕНА 4: timer1_Tick
+        //-----------------------------------------------------------------------------
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (device == null) return;
+
+            EnsureAxisDefs();
+            UpdateJoystickState();
+
+            // Кнопки
+            for (int i = 0; i < dataGridView_but.Rows.Count; i++)
+            {
+                var cell = dataGridView_but.Rows[i].Cells[0];
+                cell.Value = "Button " + (i + 1);
+
+                bool pressed =
+                    Form1.joystick_buttons_buffer != null &&
+                    i < Form1.joystick_buttons_buffer.Length &&
+                    Form1.joystick_buttons_buffer[i] != 0;
+
+                cell.Selected = false;
+                cell.Style.BackColor = pressed ? Color.Red : Color.Black;
+            }
+
+            // Оси (таблично)
+            int row = 0;
+            int noise = Form1.i_shum_joystick;
+
+            foreach (var a in _axesOrdered)
+            {
+                int[] points = a.GetPoints();
+                if (points == null) continue;
+
+                int cur = a.GetCurrent();
+
+                for (int i = 0; i < points.Length; i++)
+                {
+                    var cell = dataGridView_osi.Rows[row].Cells[0];
+
+                    // подпись как в старом коде
+                    cell.Value = a.Sig4 + (i + 1);
+
+                    bool hit = (points[i] > cur - noise) && (points[i] < cur + noise);
+
+                    cell.Selected = false;
+                    cell.Style.BackColor = hit ? Color.Red : Color.Black;
+
+                    row++;
+                }
+            }
+        }
+
+        //==============================================================================
         public void Joystick_init()
         {
             foreach (DeviceInstance instance in Manager.GetDevices(DeviceClass.GameControl, EnumDevicesFlags.AttachedOnly))
@@ -116,6 +421,128 @@ namespace zdsimScanner
 
         }
 
+        private void dataGridView_but_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Form2 f2 = this.Owner as Form2;
+
+           // f2.i_temp_row_number_f3 = Convert.ToInt16(dataGridView_but.CurrentRow.Index);
+
+            //zdsim
+            if (f2.i_temp_datagird_select_f2 == 1)
+            {
+                f2.dataGridView_Zdsimulator.Rows[f2.i_temp_row_number_f2].Cells[1].Value = Convert.ToString(dataGridView_but.CurrentCell.Value.ToString());
+            }
+
+            UpdateKey();
+            timer1.Enabled = false;
+            this.Close();
+        }
+
+        private void dataGridView_osi_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Form2 f2 = this.Owner as Form2;
+
+            //f2.i_temp_row_number_f3 = Convert.ToInt16(dataGridView_but.CurrentRow.Index);
+
+            //zdsim
+            if (f2.i_temp_datagird_select_f2 == 1)
+            {
+                f2.dataGridView_Zdsimulator.Rows[f2.i_temp_row_number_f2].Cells[1].Value = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                if (f2.i_temp_loco_select == 0)
+                {
+                    f2.sb_controls_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 19)
+                {
+                    f2.sb_neshtatki_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 1)
+                {
+                    f2.sb_es5k_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 2)
+                {
+                    f2.sb_ep1m_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 3)
+                {
+                    f2.sb_chs2k_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 4)
+                {
+                    f2.sb_chs4_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 5)
+                {
+                    f2.sb_chs4kvr_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 6)
+                {
+                    f2.sb_chs4t_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 7)
+                {
+                    f2.sb_chs7_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 8)
+                {
+                    f2.sb_chs8_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 9)
+                {
+                    f2.sb_vl11_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 10)
+                {
+                    f2.sb_vl82_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 11)
+                {
+                    f2.sb_vl80t_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 12)
+                {
+                    f2.sb_vl85_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 13)
+                {
+                    f2.sb_tep70_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 14)
+                {
+                    f2.sb_te10u_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 15)
+                {
+                    f2.sb_m62_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 16)
+                {
+                    f2.sb_ed4m_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 17)
+                {
+                    f2.sb_ed9m_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+                if (f2.i_temp_loco_select == 18)
+                {
+                    f2.sb_tem18_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
+                }
+            }
+
+            UpdateAxis();
+            timer1.Enabled = false;
+            this.Close();
+        }
+
+        private void Form_joystick_control_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            timer1.Enabled = false;
+        }
+    }
+}
+//==============================================================================
+/*
         private void UpdateKey()
         {
             Form2 f2 = this.Owner as Form2;
@@ -3761,120 +4188,4 @@ namespace zdsimScanner
             }
 
         }
-
-        private void dataGridView_but_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            Form2 f2 = this.Owner as Form2;
-            f2.i_temp_row_number_f3 = Convert.ToInt16(dataGridView_but.CurrentRow.Index);
-            //zdsim
-            if (f2.i_temp_datagird_select_f2 == 1)
-            {
-                f2.dataGridView_Zdsimulator.Rows[f2.i_temp_row_number_f2].Cells[1].Value = Convert.ToString(dataGridView_but.CurrentCell.Value.ToString());
-            }
-
-            UpdateKey();
-            timer1.Enabled = false;
-            this.Close();
-        }
-
-        private void dataGridView_osi_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            Form2 f2 = this.Owner as Form2;
-            f2.i_temp_row_number_f3 = Convert.ToInt16(dataGridView_but.CurrentRow.Index);
-            //zdsim
-            if (f2.i_temp_datagird_select_f2 == 1)
-            {
-                f2.dataGridView_Zdsimulator.Rows[f2.i_temp_row_number_f2].Cells[1].Value = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                if (f2.i_temp_loco_select == 0)
-                {
-                    f2.sb_controls_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 19)
-                {
-                    f2.sb_neshtatki_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 1)
-                {
-                    f2.sb_es5k_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 2)
-                {
-                    f2.sb_ep1m_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 3)
-                {
-                    f2.sb_chs2k_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 4)
-                {
-                    f2.sb_chs4_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 5)
-                {
-                    f2.sb_chs4kvr_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 6)
-                {
-                    f2.sb_chs4t_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 7)
-                {
-                    f2.sb_chs7_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 8)
-                {
-                    f2.sb_chs8_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 9)
-                {
-                    f2.sb_vl11_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 10)
-                {
-                    f2.sb_vl82_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 11)
-                {
-                    f2.sb_vl80t_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 12)
-                {
-                    f2.sb_vl85_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 13)
-                {
-                    f2.sb_tep70_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 14)
-                {
-                    f2.sb_te10u_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 15)
-                {
-                    f2.sb_m62_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 16)
-                {
-                    f2.sb_ed4m_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 17)
-                {
-                    f2.sb_ed9m_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-                if (f2.i_temp_loco_select == 18)
-                {
-                    f2.sb_tem18_axis_data[f2.i_temp_row_number_f2] = Convert.ToString(dataGridView_osi.CurrentCell.Value.ToString());
-                }
-            }
-
-            UpdateAxis();
-            timer1.Enabled = false;
-            this.Close();
-        }
-
-        private void Form_joystick_control_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            timer1.Enabled = false;
-        }
-    }
-}
+ */

@@ -4564,7 +4564,7 @@ namespace zdsimScanner
         //------------------------------------------------------------------------------------
         public void UpdateLocoButtons()
         {
-            int i_temp = 0;
+            //int i_temp = 0;
 
             if (Loco.i_process_name == 6)
             {
@@ -15695,7 +15695,7 @@ namespace zdsimScanner
         {
             string[] files_xml = Directory.GetFiles(i_path_zdsimscanner, @"*.xml");
             string[] files_bin = Directory.GetFiles(i_path_zdsimscanner, @"*.bin");
-            string[] files_bin_railworks = null;
+            //string[] files_bin_railworks = null;
 
             foreach (string fl in files_xml)
             {

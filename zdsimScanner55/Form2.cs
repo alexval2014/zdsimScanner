@@ -4,13 +4,17 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.DirectX.DirectInput;
+using SysAction = System.Action;
+// если вдруг тебе понадобится DirectInput.Action, можно так:
+// using DiAction = Microsoft.DirectX.DirectInput.Action;
+
+using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace zdsimScanner
 {    public partial class Form2 : Form
-
     {
         public int i_temp_row_number_f2;
-        public int i_temp_row_number_f3;
         public int i_temp_column_number_f2;
         public int i_temp_loco_select;
         public int i_temp_datagird_select_f2;
@@ -73,6 +77,101 @@ namespace zdsimScanner
 
         Device device;
 
+        //============================================================================
+        private sealed class AxisUiDef
+        {
+            public Func<int> Get;          // получить текущее значение (как int)
+            public Func<ushort> GetU16;    // значение для progressBar (ushort)
+        }
+
+        private Dictionary<string, AxisUiDef> _uiAxis;
+
+        //=====================================================================
+        // Сохранение отрисовки осей
+        //=====================================================================
+        private void EnsureUiAxis()
+        {
+            if (_uiAxis != null) return;
+
+            _uiAxis = new Dictionary<string, AxisUiDef>(StringComparer.Ordinal)
+            {
+                // Обычные оси
+                ["ARx"] = new AxisUiDef { Get = () => device.CurrentJoystickState.ARx, GetU16 = () => (ushort)device.CurrentJoystickState.ARx },
+                ["ARy"] = new AxisUiDef { Get = () => device.CurrentJoystickState.ARy, GetU16 = () => (ushort)device.CurrentJoystickState.ARy },
+                ["ARz"] = new AxisUiDef { Get = () => device.CurrentJoystickState.ARz, GetU16 = () => (ushort)device.CurrentJoystickState.ARz },
+
+                ["AX"] = new AxisUiDef { Get = () => device.CurrentJoystickState.AX, GetU16 = () => (ushort)device.CurrentJoystickState.AX },
+                ["AY"] = new AxisUiDef { Get = () => device.CurrentJoystickState.AY, GetU16 = () => (ushort)device.CurrentJoystickState.AY },
+                ["AZ"] = new AxisUiDef { Get = () => device.CurrentJoystickState.AZ, GetU16 = () => (ushort)device.CurrentJoystickState.AZ },
+
+                ["FRx"] = new AxisUiDef { Get = () => device.CurrentJoystickState.FRx, GetU16 = () => (ushort)device.CurrentJoystickState.FRx },
+                ["FRy"] = new AxisUiDef { Get = () => device.CurrentJoystickState.FRy, GetU16 = () => (ushort)device.CurrentJoystickState.FRy },
+                ["FRz"] = new AxisUiDef { Get = () => device.CurrentJoystickState.FRz, GetU16 = () => (ushort)device.CurrentJoystickState.FRz },
+
+                ["FX"] = new AxisUiDef { Get = () => device.CurrentJoystickState.FX, GetU16 = () => (ushort)device.CurrentJoystickState.FX },
+                ["FY"] = new AxisUiDef { Get = () => device.CurrentJoystickState.FY, GetU16 = () => (ushort)device.CurrentJoystickState.FY },
+                ["FZ"] = new AxisUiDef { Get = () => device.CurrentJoystickState.FZ, GetU16 = () => (ushort)device.CurrentJoystickState.FZ },
+
+                ["Rx"] = new AxisUiDef { Get = () => device.CurrentJoystickState.Rx, GetU16 = () => (ushort)device.CurrentJoystickState.Rx },
+                ["Ry"] = new AxisUiDef { Get = () => device.CurrentJoystickState.Ry, GetU16 = () => (ushort)device.CurrentJoystickState.Ry },
+                ["Rz"] = new AxisUiDef { Get = () => device.CurrentJoystickState.Rz, GetU16 = () => (ushort)device.CurrentJoystickState.Rz },
+
+                ["VRx"] = new AxisUiDef { Get = () => device.CurrentJoystickState.VRx, GetU16 = () => (ushort)device.CurrentJoystickState.VRx },
+                ["VRy"] = new AxisUiDef { Get = () => device.CurrentJoystickState.VRy, GetU16 = () => (ushort)device.CurrentJoystickState.VRy },
+                ["VRz"] = new AxisUiDef { Get = () => device.CurrentJoystickState.VRz, GetU16 = () => (ushort)device.CurrentJoystickState.VRz },
+
+                ["VX"] = new AxisUiDef { Get = () => device.CurrentJoystickState.VX, GetU16 = () => (ushort)device.CurrentJoystickState.VX },
+                ["VY"] = new AxisUiDef { Get = () => device.CurrentJoystickState.VY, GetU16 = () => (ushort)device.CurrentJoystickState.VY },
+                ["VZ"] = new AxisUiDef { Get = () => device.CurrentJoystickState.VZ, GetU16 = () => (ushort)device.CurrentJoystickState.VZ },
+
+                ["X"] = new AxisUiDef { Get = () => device.CurrentJoystickState.X, GetU16 = () => (ushort)device.CurrentJoystickState.X },
+                ["Y"] = new AxisUiDef { Get = () => device.CurrentJoystickState.Y, GetU16 = () => (ushort)device.CurrentJoystickState.Y },
+                ["Z"] = new AxisUiDef { Get = () => device.CurrentJoystickState.Z, GetU16 = () => (ushort)device.CurrentJoystickState.Z },
+
+                // POV — с сохранением твоей “нормализации”
+                ["POV"] = new AxisUiDef
+                {
+                    Get = () =>
+                    {
+                        int v = device.CurrentJoystickState.GetPointOfView()[0];
+                        if (v == -1) v = 65535;
+                        if (v == 0) v = 1;
+                        return v;
+                    },
+                    GetU16 = () =>
+                    {
+                        int v = device.CurrentJoystickState.GetPointOfView()[0];
+                        if (v == -1) v = 65535;
+                        if (v == 0) v = 1;
+                        return (ushort)v;
+                    }
+                },
+
+                // Слайдеры
+                ["Slider"] = new AxisUiDef
+                {
+                    Get = () => device.CurrentJoystickState.GetSlider()[0],
+                    GetU16 = () => (ushort)device.CurrentJoystickState.GetSlider()[0]
+                },
+                ["ASlider"] = new AxisUiDef
+                {
+                    Get = () => device.CurrentJoystickState.GetASlider()[0],
+                    GetU16 = () => (ushort)device.CurrentJoystickState.GetASlider()[0]
+                },
+                ["FSlider"] = new AxisUiDef
+                {
+                    Get = () => device.CurrentJoystickState.GetFSlider()[0],
+                    GetU16 = () => (ushort)device.CurrentJoystickState.GetFSlider()[0]
+                },
+                ["VSlider"] = new AxisUiDef
+                {
+                    Get = () => device.CurrentJoystickState.GetVSlider()[0],
+                    GetU16 = () => (ushort)device.CurrentJoystickState.GetVSlider()[0]
+                },
+            };
+        }
+
+        //============================================================================
         public Form2()
         {
             InitializeComponent();
@@ -80,6 +179,11 @@ namespace zdsimScanner
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            progressBar_osi.Minimum = 0;
+            progressBar_osi.Maximum = 65535;
+            // если нужно — чтобы не было “шага” крупными блоками
+            // progressBar_osi.Step = 1;
+
             comboBox_zdsimLoco.Text = comboBox_zdsimLoco.Items[0].ToString();           
             comboBox_osi_select.SelectedIndex = 0;
 
@@ -167,154 +271,80 @@ namespace zdsimScanner
             }
         }
 
-        //загрузка отрисовки осей
+        //=====================================================================
+        // Для работы sbBufferUpdate()
+        //=====================================================================
+        private sealed class SbMap
+        {
+            public string[] Runtime;           // sb_controls_axis_data
+            public StringCollection Settings;  // Properties.Settings.Default.sb_controls_axis_data_settings
+        }
+
+        private static void LoadSbIfNotStart(string[] runtime, StringCollection settings)
+        {
+            if (runtime == null || settings == null) return;
+            if (settings.Count == 0) return;
+
+            // твой маркер "start"
+            if (settings[0] == "start") return;
+
+            // безопасно: берём минимум, чтобы не улететь по индексу
+            int n = Math.Min(runtime.Length, settings.Count);
+            for (int i = 0; i < n; i++)
+                runtime[i] = settings[i];
+
+            // если settings короче массива — остальное можно оставить как есть
+            // если наоборот длиннее — лишнее игнорируем
+        }
+
+        //=====================================================================
+        // загрузка отрисовки осей
+        //=====================================================================
         private void sbBufferUpdate()
         {
-            //загрузка буфера отрисовки zdsim
-            if (Properties.Settings.Default.sb_controls_axis_data_settings[0] != "start")
+            // Таблица соответствий "runtime массив" <-> "настройки"
+            var map = new Dictionary<string, SbMap>(StringComparer.Ordinal)
             {
-                for (int i = 0; i < sb_controls_axis_data.Length; i++)
-                {
-                    sb_controls_axis_data[i] = Properties.Settings.Default.sb_controls_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_neshtatki_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_neshtatki_axis_data.Length; i++)
-                {
-                    sb_neshtatki_axis_data[i] = Properties.Settings.Default.sb_neshtatki_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_es5k_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_es5k_axis_data.Length; i++)
-                {
-                    sb_es5k_axis_data[i] = Properties.Settings.Default.sb_es5k_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_ep1m_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_ep1m_axis_data.Length; i++)
-                {
-                    sb_ep1m_axis_data[i] = Properties.Settings.Default.sb_ep1m_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_chs2k_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_chs2k_axis_data.Length; i++)
-                {
-                    sb_chs2k_axis_data[i] = Properties.Settings.Default.sb_chs2k_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_chs4_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_chs4_axis_data.Length; i++)
-                {
-                    sb_chs4_axis_data[i] = Properties.Settings.Default.sb_chs4_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_chs4kvr_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_chs4kvr_axis_data.Length; i++)
-                {
-                    sb_chs4kvr_axis_data[i] = Properties.Settings.Default.sb_chs4kvr_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_chs4t_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_chs4t_axis_data.Length; i++)
-                {
-                    sb_chs4t_axis_data[i] = Properties.Settings.Default.sb_chs4t_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_chs7_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_chs7_axis_data.Length; i++)
-                {
-                    sb_chs7_axis_data[i] = Properties.Settings.Default.sb_chs7_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_chs8_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_chs8_axis_data.Length; i++)
-                {
-                    sb_chs8_axis_data[i] = Properties.Settings.Default.sb_chs8_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_vl11_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_vl11_axis_data.Length; i++)
-                {
-                    sb_vl11_axis_data[i] = Properties.Settings.Default.sb_vl11_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_vl82_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_vl82_axis_data.Length; i++)
-                {
-                    sb_vl82_axis_data[i] = Properties.Settings.Default.sb_vl82_axis_data_settings[i];
-                }
-            }
+                ["Controls"] = new SbMap { Runtime = sb_controls_axis_data, Settings = Properties.Settings.Default.sb_controls_axis_data_settings },
+                ["Neshtatki"] = new SbMap { Runtime = sb_neshtatki_axis_data, Settings = Properties.Settings.Default.sb_neshtatki_axis_data_settings },
+                ["2ES5K"] = new SbMap { Runtime = sb_es5k_axis_data, Settings = Properties.Settings.Default.sb_es5k_axis_data_settings },
+                ["EP1M"] = new SbMap { Runtime = sb_ep1m_axis_data, Settings = Properties.Settings.Default.sb_ep1m_axis_data_settings },
+                ["CHS2K"] = new SbMap { Runtime = sb_chs2k_axis_data, Settings = Properties.Settings.Default.sb_chs2k_axis_data_settings },
+                ["CHS4"] = new SbMap { Runtime = sb_chs4_axis_data, Settings = Properties.Settings.Default.sb_chs4_axis_data_settings },
+                ["CHS4KVR"] = new SbMap { Runtime = sb_chs4kvr_axis_data, Settings = Properties.Settings.Default.sb_chs4kvr_axis_data_settings },
+                ["CHS4T"] = new SbMap { Runtime = sb_chs4t_axis_data, Settings = Properties.Settings.Default.sb_chs4t_axis_data_settings },
+                ["CHS7"] = new SbMap { Runtime = sb_chs7_axis_data, Settings = Properties.Settings.Default.sb_chs7_axis_data_settings },
+                ["CHS8"] = new SbMap { Runtime = sb_chs8_axis_data, Settings = Properties.Settings.Default.sb_chs8_axis_data_settings },
+                ["VL11M"] = new SbMap { Runtime = sb_vl11_axis_data, Settings = Properties.Settings.Default.sb_vl11_axis_data_settings },
+                ["VL82M"] = new SbMap { Runtime = sb_vl82_axis_data, Settings = Properties.Settings.Default.sb_vl82_axis_data_settings },
+                ["VL80T"] = new SbMap { Runtime = sb_vl80t_axis_data, Settings = Properties.Settings.Default.sb_vl80t_axis_data_settings },
+                ["VL85"] = new SbMap { Runtime = sb_vl85_axis_data, Settings = Properties.Settings.Default.sb_vl85_axis_data_settings },
+                ["TEP70"] = new SbMap { Runtime = sb_tep70_axis_data, Settings = Properties.Settings.Default.sb_tep70_axis_data_settings },
+                ["2TE10U"] = new SbMap { Runtime = sb_te10u_axis_data, Settings = Properties.Settings.Default.sb_te10u_axis_data_settings },
+                ["M62"] = new SbMap { Runtime = sb_m62_axis_data, Settings = Properties.Settings.Default.sb_m62_axis_data_settings },
+                ["ED4M"] = new SbMap { Runtime = sb_ed4m_axis_data, Settings = Properties.Settings.Default.sb_ed4m_axis_data_settings },
+                ["ED9M"] = new SbMap { Runtime = sb_ed9m_axis_data, Settings = Properties.Settings.Default.sb_ed9m_axis_data_settings },
+                ["tem18"] = new SbMap { Runtime = sb_tem18_axis_data, Settings = Properties.Settings.Default.sb_tem18_axis_data_settings },
+            };
 
-            if (Properties.Settings.Default.sb_vl80t_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_vl80t_axis_data.Length; i++)
-                {
-                    sb_vl80t_axis_data[i] = Properties.Settings.Default.sb_vl80t_axis_data_settings[i];
-                }
-            }
+            foreach (var kv in map)
+                LoadSbIfNotStart(kv.Value.Runtime, kv.Value.Settings);
 
-            if (Properties.Settings.Default.sb_vl85_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_vl85_axis_data.Length; i++)
-                {
-                    sb_vl85_axis_data[i] = Properties.Settings.Default.sb_vl85_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_tep70_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_tep70_axis_data.Length; i++)
-                {
-                    sb_tep70_axis_data[i] = Properties.Settings.Default.sb_tep70_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_te10u_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_te10u_axis_data.Length; i++)
-                {
-                    sb_te10u_axis_data[i] = Properties.Settings.Default.sb_te10u_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_m62_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_m62_axis_data.Length; i++)
-                {
-                    sb_m62_axis_data[i] = Properties.Settings.Default.sb_m62_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_ed4m_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_ed4m_axis_data.Length; i++)
-                {
-                    sb_ed4m_axis_data[i] = Properties.Settings.Default.sb_ed4m_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_ed9m_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_ed9m_axis_data.Length; i++)
-                {
-                    sb_ed9m_axis_data[i] = Properties.Settings.Default.sb_ed9m_axis_data_settings[i];
-                }
-            }
-            if (Properties.Settings.Default.sb_tem18_axis_data_settings[0] != "start")
-            {
-                for (int i = 0; i < sb_tem18_axis_data.Length; i++)
-                {
-                    sb_tem18_axis_data[i] = Properties.Settings.Default.sb_tem18_axis_data_settings[i];
-                }
-            }
+            Properties.Settings.Default.Save();
+        }
 
-             Properties.Settings.Default.Save();
+        //=====================================================================
+        // Для работы sbBufferSave()
+        //=====================================================================
+        private static void SaveSb(string[] runtime, StringCollection settings)
+        {
+            if (settings == null) return;
+
+            settings.Clear();
+            if (runtime == null) return;
+
+            for (int i = 0; i < runtime.Length; i++)
+                settings.Add(runtime[i] ?? "");
         }
 
         //=====================================================================
@@ -322,432 +352,148 @@ namespace zdsimScanner
         //=====================================================================
         private void sbBufferSave()
         {
-            //сохраняем буфер отрисовки datagridzdsim
-            Properties.Settings.Default.sb_controls_axis_data_settings.Clear();
-            for (int i = 0; i < sb_controls_axis_data.Length; i++)
+            var map = new System.Collections.Generic.Dictionary<string, SbMap>(StringComparer.Ordinal)
             {
-                Properties.Settings.Default.sb_controls_axis_data_settings.Add(Convert.ToString(sb_controls_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_neshtatki_axis_data_settings.Clear();
-            for (int i = 0; i < sb_neshtatki_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_neshtatki_axis_data_settings.Add(Convert.ToString(sb_neshtatki_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_es5k_axis_data_settings.Clear();
-            for (int i = 0; i < sb_es5k_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_es5k_axis_data_settings.Add(Convert.ToString(sb_es5k_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_ep1m_axis_data_settings.Clear();
-            for (int i = 0; i < sb_ep1m_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_ep1m_axis_data_settings.Add(Convert.ToString(sb_ep1m_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_chs2k_axis_data_settings.Clear();
-            for (int i = 0; i < sb_chs2k_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_chs2k_axis_data_settings.Add(Convert.ToString(sb_chs2k_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_chs4_axis_data_settings.Clear();
-            for (int i = 0; i < sb_chs4_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_chs4_axis_data_settings.Add(Convert.ToString(sb_chs4_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_chs4kvr_axis_data_settings.Clear();
-            for (int i = 0; i < sb_chs4kvr_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_chs4kvr_axis_data_settings.Add(Convert.ToString(sb_chs4kvr_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_chs4t_axis_data_settings.Clear();
-            for (int i = 0; i < sb_chs4t_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_chs4t_axis_data_settings.Add(Convert.ToString(sb_chs4t_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_chs7_axis_data_settings.Clear();
-            for (int i = 0; i < sb_chs7_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_chs7_axis_data_settings.Add(Convert.ToString(sb_chs7_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_chs8_axis_data_settings.Clear();
-            for (int i = 0; i < sb_chs8_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_chs8_axis_data_settings.Add(Convert.ToString(sb_chs8_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_vl11_axis_data_settings.Clear();
-            for (int i = 0; i < sb_vl11_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_vl11_axis_data_settings.Add(Convert.ToString(sb_vl11_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_vl82_axis_data_settings.Clear();
-            for (int i = 0; i < sb_vl82_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_vl82_axis_data_settings.Add(Convert.ToString(sb_vl82_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_vl80t_axis_data_settings.Clear();
-            for (int i = 0; i < sb_vl80t_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_vl80t_axis_data_settings.Add(Convert.ToString(sb_vl80t_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_vl85_axis_data_settings.Clear();
-            for (int i = 0; i < sb_vl85_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_vl85_axis_data_settings.Add(Convert.ToString(sb_vl85_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_tep70_axis_data_settings.Clear();
-            for (int i = 0; i < sb_tep70_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_tep70_axis_data_settings.Add(Convert.ToString(sb_tep70_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_te10u_axis_data_settings.Clear();
-            for (int i = 0; i < sb_te10u_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_te10u_axis_data_settings.Add(Convert.ToString(sb_te10u_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_m62_axis_data_settings.Clear();
-            for (int i = 0; i < sb_m62_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_m62_axis_data_settings.Add(Convert.ToString(sb_m62_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_ed4m_axis_data_settings.Clear();
-            for (int i = 0; i < sb_ed4m_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_ed4m_axis_data_settings.Add(Convert.ToString(sb_ed4m_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_ed9m_axis_data_settings.Clear();
-            for (int i = 0; i < sb_ed9m_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_ed9m_axis_data_settings.Add(Convert.ToString(sb_ed9m_axis_data[i]));
-            }
-            Properties.Settings.Default.sb_tem18_axis_data_settings.Clear();
-            for (int i = 0; i < sb_tem18_axis_data.Length; i++)
-            {
-                Properties.Settings.Default.sb_tem18_axis_data_settings.Add(Convert.ToString(sb_tem18_axis_data[i]));
-            }
-         }
+                ["Controls"] = new SbMap { Runtime = sb_controls_axis_data, Settings = Properties.Settings.Default.sb_controls_axis_data_settings },
+                ["Neshtatki"] = new SbMap { Runtime = sb_neshtatki_axis_data, Settings = Properties.Settings.Default.sb_neshtatki_axis_data_settings },
+                ["2ES5K"] = new SbMap { Runtime = sb_es5k_axis_data, Settings = Properties.Settings.Default.sb_es5k_axis_data_settings },
+                ["EP1M"] = new SbMap { Runtime = sb_ep1m_axis_data, Settings = Properties.Settings.Default.sb_ep1m_axis_data_settings },
+                ["CHS2K"] = new SbMap { Runtime = sb_chs2k_axis_data, Settings = Properties.Settings.Default.sb_chs2k_axis_data_settings },
+                ["CHS4"] = new SbMap { Runtime = sb_chs4_axis_data, Settings = Properties.Settings.Default.sb_chs4_axis_data_settings },
+                ["CHS4KVR"] = new SbMap { Runtime = sb_chs4kvr_axis_data, Settings = Properties.Settings.Default.sb_chs4kvr_axis_data_settings },
+                ["CHS4T"] = new SbMap { Runtime = sb_chs4t_axis_data, Settings = Properties.Settings.Default.sb_chs4t_axis_data_settings },
+                ["CHS7"] = new SbMap { Runtime = sb_chs7_axis_data, Settings = Properties.Settings.Default.sb_chs7_axis_data_settings },
+                ["CHS8"] = new SbMap { Runtime = sb_chs8_axis_data, Settings = Properties.Settings.Default.sb_chs8_axis_data_settings },
+                ["VL11M"] = new SbMap { Runtime = sb_vl11_axis_data, Settings = Properties.Settings.Default.sb_vl11_axis_data_settings },
+                ["VL82M"] = new SbMap { Runtime = sb_vl82_axis_data, Settings = Properties.Settings.Default.sb_vl82_axis_data_settings },
+                ["VL80T"] = new SbMap { Runtime = sb_vl80t_axis_data, Settings = Properties.Settings.Default.sb_vl80t_axis_data_settings },
+                ["VL85"] = new SbMap { Runtime = sb_vl85_axis_data, Settings = Properties.Settings.Default.sb_vl85_axis_data_settings },
+                ["TEP70"] = new SbMap { Runtime = sb_tep70_axis_data, Settings = Properties.Settings.Default.sb_tep70_axis_data_settings },
+                ["2TE10U"] = new SbMap { Runtime = sb_te10u_axis_data, Settings = Properties.Settings.Default.sb_te10u_axis_data_settings },
+                ["M62"] = new SbMap { Runtime = sb_m62_axis_data, Settings = Properties.Settings.Default.sb_m62_axis_data_settings },
+                ["ED4M"] = new SbMap { Runtime = sb_ed4m_axis_data, Settings = Properties.Settings.Default.sb_ed4m_axis_data_settings },
+                ["ED9M"] = new SbMap { Runtime = sb_ed9m_axis_data, Settings = Properties.Settings.Default.sb_ed9m_axis_data_settings },
+                ["tem18"] = new SbMap { Runtime = sb_tem18_axis_data, Settings = Properties.Settings.Default.sb_tem18_axis_data_settings },
+            };
+
+            foreach (var kv in map)
+                SaveSb(kv.Value.Runtime, kv.Value.Settings);
+
+            Properties.Settings.Default.Save();
+        }
 
         //=====================================================================
-        // Сохранение отрисовки звуков
+        // Инициализация джойстика
         //=====================================================================
-        private void sbBufferWavPathSave()
-        {
-            //сохраняем буфер отрисовки звуков zdsim
-            Properties.Settings.Default.sb_controls_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.controls_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_controls_wav_path_data_settings.Add(Form1.controls_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_neshtatki_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.neshtatki_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_neshtatki_wav_path_data_settings.Add(Form1.neshtatki_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_es5k_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.es5k_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_es5k_wav_path_data_settings.Add(Form1.es5k_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_ep1m_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.ep1m_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_ep1m_wav_path_data_settings.Add(Form1.ep1m_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_chs2k_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.chs2k_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_chs2k_wav_path_data_settings.Add(Form1.chs2k_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_chs4_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.chs4_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_chs4_wav_path_data_settings.Add(Form1.chs4_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_chs4kvr_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.chs4kvr_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_chs4kvr_wav_path_data_settings.Add(Form1.chs4kvr_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_chs4t_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.chs4t_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_chs4t_wav_path_data_settings.Add(Form1.chs4t_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_chs7_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.chs7_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_chs7_wav_path_data_settings.Add(Form1.chs7_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_chs8_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.chs8_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_chs8_wav_path_data_settings.Add(Form1.chs8_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_vl11_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.vl11_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_vl11_wav_path_data_settings.Add(Form1.vl11_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_vl82_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.vl82_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_vl82_wav_path_data_settings.Add(Form1.vl82_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_vl80t_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.vl80t_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_vl80t_wav_path_data_settings.Add(Form1.vl80t_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_vl85_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.vl85_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_vl85_wav_path_data_settings.Add(Form1.vl85_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_tep70_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.tep70_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_tep70_wav_path_data_settings.Add(Form1.tep70_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_te10u_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.te10u_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_te10u_wav_path_data_settings.Add(Form1.te10u_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_m62_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.m62_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_m62_wav_path_data_settings.Add(Form1.m62_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_ed4m_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.ed4m_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_ed4m_wav_path_data_settings.Add(Form1.ed4m_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_ed9m_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.ed9m_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_ed9m_wav_path_data_settings.Add(Form1.ed9m_wav_path_key_buffer[i]);
-            }
-            Properties.Settings.Default.sb_tem18_wav_path_data_settings.Clear();
-            for (int i = 0; i < Form1.tem18_wav_path_key_buffer.Length; i++)
-            {
-                Properties.Settings.Default.sb_tem18_wav_path_data_settings.Add(Form1.tem18_wav_path_key_buffer[i]);
-            }
-         }
-
         public string Joystick_init()
         {
+            // если вызывается повторно
+            try { device?.Unacquire(); } catch { }
+            try { device?.Dispose(); } catch { }
+            device = null;
+
+            Form1.i_joy_name = "";
+
             foreach (DeviceInstance instance in Manager.GetDevices(DeviceClass.GameControl, EnumDevicesFlags.AttachedOnly))
             {
-                device = new Device(instance.ProductGuid);
-                device.SetCooperativeLevel(null, CooperativeLevelFlags.Background | CooperativeLevelFlags.NonExclusive);
-
-                foreach (DeviceObjectInstance doi in device.Objects)
+                try
                 {
-                    if ((doi.ObjectId & (int)DeviceObjectTypeFlags.Axis) != 0)
-                    {
-                        device.Properties.SetRange(ParameterHow.ById,doi.ObjectId,new InputRange(0,65535));
-                    }
-                }
+                    device = new Device(instance.ProductGuid);
+                    device.SetCooperativeLevel(this, CooperativeLevelFlags.Background | CooperativeLevelFlags.NonExclusive);
 
-                device.Acquire();
-                Form1.i_joy_name = Convert.ToString(device.DeviceInformation.InstanceName);
+                    foreach (DeviceObjectInstance doi in device.Objects)
+                    {
+                        if ((doi.ObjectId & (int)DeviceObjectTypeFlags.Axis) != 0)
+                        {
+                            device.Properties.SetRange(ParameterHow.ById, doi.ObjectId, new InputRange(0, 65535));
+                        }
+                    }
+
+                    device.Acquire();
+                    Form1.i_joy_name = Convert.ToString(device.DeviceInformation.InstanceName);
+                    break; // берём первое устройство
+                }
+                catch
+                {
+                    try { device?.Dispose(); } catch { }
+                    device = null;
+                    Form1.i_joy_name = "";
+                }
             }
-            if (device == null) Form1.i_joy_name = "";
+
             return Form1.i_joy_name;
         }
 
+        //=====================================================================
+        // Обновление состояния джойстика
+        //=====================================================================
         public void UpdateJoystickState()
         {
+            if (device == null) return;
+
             int[] b_temp;
             JoystickState j = device.CurrentJoystickState;
 
-            Form1.joystick_axis_buffer[0] = j.ARx;//обычные оси
-            Form1.joystick_axis_buffer[1] = j.ARy;//обычные оси
-            Form1.joystick_axis_buffer[2] = j.ARz;//обычные оси
-            Form1.joystick_axis_buffer[3] = j.AX;//обычные оси
-            Form1.joystick_axis_buffer[4] = j.AY;//обычные оси
-            Form1.joystick_axis_buffer[5] = j.AZ;//обычные оси
-            Form1.joystick_axis_buffer[6] = j.FRx;//обычные оси
-            Form1.joystick_axis_buffer[7] = j.FRy;//обычные оси
-            Form1.joystick_axis_buffer[8] = j.FRz;//обычные оси
-            Form1.joystick_axis_buffer[9] = j.FX;//обычные оси
-            Form1.joystick_axis_buffer[10] = j.FY;//обычные оси
-            Form1.joystick_axis_buffer[11] = j.FZ;//обычные оси
-            Form1.joystick_axis_buffer[12] = j.Rx;//обычные оси
-            Form1.joystick_axis_buffer[13] = j.Ry;//обычные оси
-            Form1.joystick_axis_buffer[14] = j.Rz;//обычные оси
-            Form1.joystick_axis_buffer[15] = j.VRx;//обычные оси
-            Form1.joystick_axis_buffer[16] = j.VRy;//обычные оси
-            Form1.joystick_axis_buffer[17] = j.VRz;//обычные оси
-            Form1.joystick_axis_buffer[18] = j.VX;//обычные оси
-            Form1.joystick_axis_buffer[19] = j.VY;//обычные оси
-            Form1.joystick_axis_buffer[20] = j.VZ;//обычные оси
-            Form1.joystick_axis_buffer[21] = j.X;//обычные оси
-            Form1.joystick_axis_buffer[22] = j.Y;//обычные оси
-            Form1.joystick_axis_buffer[23] = j.Z;//обычные оси
-            b_temp = j.GetPointOfView();//хатка
+            // --- буфер осей ---
+            Form1.joystick_axis_buffer[0] = j.ARx;
+            Form1.joystick_axis_buffer[1] = j.ARy;
+            Form1.joystick_axis_buffer[2] = j.ARz;
+            Form1.joystick_axis_buffer[3] = j.AX;
+            Form1.joystick_axis_buffer[4] = j.AY;
+            Form1.joystick_axis_buffer[5] = j.AZ;
+            Form1.joystick_axis_buffer[6] = j.FRx;
+            Form1.joystick_axis_buffer[7] = j.FRy;
+            Form1.joystick_axis_buffer[8] = j.FRz;
+            Form1.joystick_axis_buffer[9] = j.FX;
+            Form1.joystick_axis_buffer[10] = j.FY;
+            Form1.joystick_axis_buffer[11] = j.FZ;
+            Form1.joystick_axis_buffer[12] = j.Rx;
+            Form1.joystick_axis_buffer[13] = j.Ry;
+            Form1.joystick_axis_buffer[14] = j.Rz;
+            Form1.joystick_axis_buffer[15] = j.VRx;
+            Form1.joystick_axis_buffer[16] = j.VRy;
+            Form1.joystick_axis_buffer[17] = j.VRz;
+            Form1.joystick_axis_buffer[18] = j.VX;
+            Form1.joystick_axis_buffer[19] = j.VY;
+            Form1.joystick_axis_buffer[20] = j.VZ;
+            Form1.joystick_axis_buffer[21] = j.X;
+            Form1.joystick_axis_buffer[22] = j.Y;
+            Form1.joystick_axis_buffer[23] = j.Z;
+
+            b_temp = j.GetPointOfView();
             Form1.joystick_axis_buffer[24] = b_temp[0];
-            b_temp = j.GetSlider();//газ
+
+            b_temp = j.GetSlider();
             Form1.joystick_axis_buffer[25] = b_temp[0];
-            b_temp = j.GetASlider();//...
+
+            b_temp = j.GetASlider();
             Form1.joystick_axis_buffer[26] = b_temp[0];
-            b_temp = j.GetFSlider();//...
+
+            b_temp = j.GetFSlider();
             Form1.joystick_axis_buffer[27] = b_temp[0];
-            b_temp = j.GetVSlider();//...
+
+            b_temp = j.GetVSlider();
             Form1.joystick_axis_buffer[28] = b_temp[0];
 
-            Form1.joystick_buttons_buffer = j.GetButtons();//кнопки
+            Form1.joystick_buttons_buffer = j.GetButtons();
 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "ARx")
+            // --- UI часть ---
+            EnsureUiAxis();
+
+            string sel = Convert.ToString(comboBox_osi_select.SelectedItem);
+            if (!string.IsNullOrEmpty(sel) && _uiAxis.TryGetValue(sel, out var d))
             {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.ARx);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.ARx);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "ARy")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.ARy);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.ARy);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "ARz")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.ARz);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.ARz);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "AX")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.AX);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.AX);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "AY")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.AY);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.AY);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "AZ")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.AZ);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.AZ);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FRx")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.FRx);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.FRx);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FRy")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.FRy);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.FRy);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FRz")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.FRz);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.FRz);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FX")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.FX);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.FX);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FY")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.FY);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.FY);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FZ")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.FZ);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.FZ);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Rx")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.Rx);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.Rx);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Ry")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.Ry);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.Ry);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Rz")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.Rz);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.Rz);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VRx")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.VRx);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.VRx);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VRy")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.VRy);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.VRy);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VRz")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.VRz);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.VRz);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VX")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.VX);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.VX);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VY")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.VY);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.VY);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VZ")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.VZ);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.VZ);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "X")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.X);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.X);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Y")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.Y);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.Y);
-            } 
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Z")
-            {
-                progressBar_osi.Value = Convert.ToUInt16(device.CurrentJoystickState.Z);
-                label_progressbar_osi.Text = Convert.ToString(device.CurrentJoystickState.Z);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "POV")
-            {
-                b_temp = device.CurrentJoystickState.GetPointOfView();
-                if (b_temp[0] == -1) b_temp[0] = 65535;
-                if (b_temp[0] == 0) b_temp[0] = 1;
-                progressBar_osi.Value = Convert.ToUInt16(b_temp[0]);
-                label_progressbar_osi.Text = Convert.ToString(b_temp[0]);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Slider")
-            {
-                b_temp = device.CurrentJoystickState.GetSlider();
-                progressBar_osi.Value = Convert.ToUInt16(b_temp[0]);
-                label_progressbar_osi.Text = Convert.ToString(b_temp[0]);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "ASlider")
-            {
-                b_temp = device.CurrentJoystickState.GetASlider();
-                progressBar_osi.Value = Convert.ToUInt16(b_temp[0]);
-                label_progressbar_osi.Text = Convert.ToString(b_temp[0]);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FSlider")
-            {
-                b_temp = device.CurrentJoystickState.GetFSlider();
-                progressBar_osi.Value = Convert.ToUInt16(b_temp[0]);
-                label_progressbar_osi.Text = Convert.ToString(b_temp[0]);
-            }
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VSlider")
-            {
-                b_temp = device.CurrentJoystickState.GetVSlider();
-                progressBar_osi.Value = Convert.ToUInt16(b_temp[0]);
-                label_progressbar_osi.Text = Convert.ToString(b_temp[0]);
+                ushort pv = d.GetU16();
+
+                // защита от выхода за пределы ProgressBar
+                int min = progressBar_osi.Minimum;
+                int max = progressBar_osi.Maximum;
+
+                if (pv < min) pv = (ushort)min;
+                if (pv > max) pv = (ushort)max;
+
+                progressBar_osi.Value = pv;
+                label_progressbar_osi.Text = d.Get().ToString();
             }
         }
 
@@ -1977,587 +1723,306 @@ namespace zdsimScanner
             "Нештатка 100"
         };
 
+        //=====================================================================
+        // Для работы KeyDataUpdate()
+        //=====================================================================
+        private sealed class LocoUiDef
+        {
+            public int LocoId;                // i_temp_loco_select
+            public int LocoKeyStart;          // j start in LocoKeyData
+            public int RowCount;              // сколько строк рисовать
+
+            public string[] SbAxisData;       // sb_*_axis_data (строковые подписи осей/меток)
+            public int[] KeyBuffer;           // Form1.*_key_buffer
+            public string[] WavPathBuffer;    // Form1.*_wav_path_key_buffer
+        }
+
+        // безопасное имя файла (чтобы не падать на null/пустых/без '\')
+        private static string SafeFileName(string fullPath)
+        {
+            if (string.IsNullOrEmpty(fullPath)) return "";
+            try { return System.IO.Path.GetFileName(fullPath); }
+            catch { return ""; }
+        }
+
+        private static void EnsureGridColumns(DataGridView g)
+        {
+            // делаем один раз: 3 колонки (имя / кнопка-ось / звук)
+            if (g.Columns.Count == 3) return;
+
+            g.Rows.Clear();
+            g.Columns.Clear();
+            g.Columns.Add(null, null); // имя
+            g.Columns.Add(null, null); // кнопка или ось
+            g.Columns.Add(null, null); // звук
+        }
+
+        private Dictionary<string, LocoUiDef> _locoUi;
+
+        //=====================================================================
+        // Таблица соответствий локомотивов для работы KeyDataUpdate()
+        //=====================================================================
+        private void EnsureLocoUi()
+        {
+            if (_locoUi != null) return;
+
+            _locoUi = new System.Collections.Generic.Dictionary<string, LocoUiDef>(StringComparer.Ordinal)
+            {
+                ["Controls"] = new LocoUiDef
+                {
+                    LocoId = 0,
+                    LocoKeyStart = 0,
+                    RowCount = 34,
+                    SbAxisData = sb_controls_axis_data,
+                    KeyBuffer = Form1.Controls_key_buffer,
+                    WavPathBuffer = Form1.controls_wav_path_key_buffer
+                },
+
+                ["2ES5K"] = new LocoUiDef
+                {
+                    LocoId = 1,
+                    LocoKeyStart = 34,
+                    RowCount = 109,
+                    SbAxisData = sb_es5k_axis_data,
+                    KeyBuffer = Form1.ES5K_key_buffer,
+                    WavPathBuffer = Form1.es5k_wav_path_key_buffer
+                },
+
+                ["EP1M"] = new LocoUiDef
+                {
+                    LocoId = 2,
+                    LocoKeyStart = 143,
+                    RowCount = 112,
+                    SbAxisData = sb_ep1m_axis_data,
+                    KeyBuffer = Form1.EP1M_key_buffer,
+                    WavPathBuffer = Form1.ep1m_wav_path_key_buffer
+                },
+
+                ["CHS2K"] = new LocoUiDef
+                {
+                    LocoId = 3,
+                    LocoKeyStart = 255,
+                    RowCount = 32,
+                    SbAxisData = sb_chs2k_axis_data,
+                    KeyBuffer = Form1.CHS2K_key_buffer,
+                    WavPathBuffer = Form1.chs2k_wav_path_key_buffer
+                },
+
+                ["CHS4"] = new LocoUiDef
+                {
+                    LocoId = 4,
+                    LocoKeyStart = 287,
+                    RowCount = 55,
+                    SbAxisData = sb_chs4_axis_data,
+                    KeyBuffer = Form1.CHS4_key_buffer,
+                    WavPathBuffer = Form1.chs4_wav_path_key_buffer
+                },
+
+                ["CHS4 KVR"] = new LocoUiDef
+                {
+                    LocoId = 5,
+                    LocoKeyStart = 342,
+                    RowCount = 55,
+                    SbAxisData = sb_chs4kvr_axis_data,
+                    KeyBuffer = Form1.CHS4KVR_key_buffer,
+                    WavPathBuffer = Form1.chs4kvr_wav_path_key_buffer
+                },
+
+                ["CHS4T"] = new LocoUiDef
+                {
+                    LocoId = 6,
+                    LocoKeyStart = 397,
+                    RowCount = 52,
+                    SbAxisData = sb_chs4t_axis_data,
+                    KeyBuffer = Form1.CHS4T_key_buffer,
+                    WavPathBuffer = Form1.chs4t_wav_path_key_buffer
+                },
+
+                ["CHS7"] = new LocoUiDef
+                {
+                    LocoId = 7,
+                    LocoKeyStart = 451,
+                    RowCount = 46,
+                    SbAxisData = sb_chs7_axis_data,
+                    KeyBuffer = Form1.CHS7_key_buffer,
+                    WavPathBuffer = Form1.chs7_wav_path_key_buffer
+                },
+
+                ["CHS8"] = new LocoUiDef
+                {
+                    LocoId = 8,
+                    LocoKeyStart = 497,
+                    RowCount = 63,
+                    SbAxisData = sb_chs8_axis_data,
+                    KeyBuffer = Form1.CHS8_key_buffer,
+                    WavPathBuffer = Form1.chs8_wav_path_key_buffer
+                },
+
+                ["VL11M"] = new LocoUiDef
+                {
+                    LocoId = 9,
+                    LocoKeyStart = 560,
+                    RowCount = 83,
+                    SbAxisData = sb_vl11_axis_data,
+                    KeyBuffer = Form1.VL11M_key_buffer,
+                    WavPathBuffer = Form1.vl11_wav_path_key_buffer
+                },
+
+                ["VL82M"] = new LocoUiDef
+                {
+                    LocoId = 10,
+                    LocoKeyStart = 643,
+                    RowCount = 83,
+                    SbAxisData = sb_vl82_axis_data,
+                    KeyBuffer = Form1.VL82M_key_buffer,
+                    WavPathBuffer = Form1.vl82_wav_path_key_buffer
+                },
+
+                ["VL80T"] = new LocoUiDef
+                {
+                    LocoId = 11,
+                    LocoKeyStart = 726,
+                    RowCount = 49,
+                    SbAxisData = sb_vl80t_axis_data,
+                    KeyBuffer = Form1.VL80T_key_buffer,
+                    WavPathBuffer = Form1.vl80t_wav_path_key_buffer
+                },
+
+                ["VL85"] = new LocoUiDef
+                {
+                    LocoId = 12,
+                    LocoKeyStart = 775,
+                    RowCount = 77,
+                    SbAxisData = sb_vl85_axis_data,
+                    KeyBuffer = Form1.VL85_key_buffer,
+                    WavPathBuffer = Form1.vl85_wav_path_key_buffer
+                },
+
+                ["TEP70"] = new LocoUiDef
+                {
+                    LocoId = 13,
+                    LocoKeyStart = 852,
+                    RowCount = 36,
+                    SbAxisData = sb_tep70_axis_data,
+                    KeyBuffer = Form1.TEP70_key_buffer,
+                    WavPathBuffer = Form1.tep70_wav_path_key_buffer
+                },
+
+                ["2TE10U"] = new LocoUiDef
+                {
+                    LocoId = 14,
+                    LocoKeyStart = 888,
+                    RowCount = 47,
+                    SbAxisData = sb_te10u_axis_data,
+                    KeyBuffer = Form1.TE10U_key_buffer,
+                    WavPathBuffer = Form1.te10u_wav_path_key_buffer
+                },
+
+                ["M62"] = new LocoUiDef
+                {
+                    LocoId = 15,
+                    LocoKeyStart = 935,
+                    RowCount = 36,
+                    SbAxisData = sb_m62_axis_data,
+                    KeyBuffer = Form1.M62_key_buffer,
+                    WavPathBuffer = Form1.m62_wav_path_key_buffer
+                },
+
+                ["ED4M"] = new LocoUiDef
+                {
+                    LocoId = 16,
+                    LocoKeyStart = 1001,
+                    RowCount = 33,
+                    SbAxisData = sb_ed4m_axis_data,
+                    KeyBuffer = Form1.ED4M_key_buffer,
+                    WavPathBuffer = Form1.ed4m_wav_path_key_buffer
+                },
+
+                ["ED9M"] = new LocoUiDef
+                {
+                    LocoId = 17,
+                    LocoKeyStart = 971,
+                    RowCount = 30,
+                    SbAxisData = sb_ed9m_axis_data,
+                    KeyBuffer = Form1.ED9M_key_buffer,
+                    WavPathBuffer = Form1.ed9m_wav_path_key_buffer
+                },
+
+                ["tem18"] = new LocoUiDef
+                {
+                    LocoId = 18,
+                    LocoKeyStart = 1034,
+                    RowCount = 32,
+                    SbAxisData = sb_tem18_axis_data,
+                    KeyBuffer = Form1.tem18_key_buffer,
+                    WavPathBuffer = Form1.tem18_wav_path_key_buffer
+                },
+
+                ["Neshtatki"] = new LocoUiDef
+                {
+                    LocoId = 19,
+                    LocoKeyStart = 1066,
+                    RowCount = 100,
+                    SbAxisData = sb_neshtatki_axis_data,
+                    KeyBuffer = Form1.Neshtatki_key_buffer,
+                    WavPathBuffer = Form1.neshtatki_wav_path_key_buffer
+                },
+            };
+        }
+
+        //=====================================================================
+        // Обновление состояния кнопок
+        //=====================================================================
         public void KeyDataUpdate()
         {
             s_current_loco_select = comboBox_zdsimLoco.Text;
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "Controls")
-            {
-                i_temp_loco_select = 0;
-                int j = 0;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);//имя
-                dataGridView_Zdsimulator.Columns.Add(null, null);//кнопка или ось
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 34; i++)
-                {                   
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_controls_axis_data != null && sb_controls_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_controls_axis_data[i];
-                    }
-                    if (Form1.Controls_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.Controls_key_buffer[i]);
-                    }
-                    if (Form1.controls_wav_path_key_buffer != null && Form1.controls_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.controls_wav_path_key_buffer[i].Substring(Form1.controls_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
-            
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "2ES5K")
-            {
-                i_temp_loco_select = 1;
-                int j = 34;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 109; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_es5k_axis_data != null && sb_es5k_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_es5k_axis_data[i];
-                    }
-                    if (Form1.ES5K_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.ES5K_key_buffer[i]);
-                    }
-                    if (Form1.es5k_wav_path_key_buffer != null && Form1.es5k_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.es5k_wav_path_key_buffer[i].Substring(Form1.es5k_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "EP1M")
-            {
-                i_temp_loco_select = 2;
-                int j = 143;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 112; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_ep1m_axis_data != null && sb_ep1m_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_ep1m_axis_data[i];
-                    }
-                    if (Form1.EP1M_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.EP1M_key_buffer[i]);
-                    }
-                    if (Form1.ep1m_wav_path_key_buffer != null && Form1.ep1m_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.ep1m_wav_path_key_buffer[i].Substring(Form1.ep1m_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
+            EnsureLocoUi();
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "CHS2K")
-            {
-                i_temp_loco_select = 3;
-                int j = 255;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 32; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_chs2k_axis_data != null && sb_chs2k_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_chs2k_axis_data[i];
-                    }
-                    if (Form1.CHS2K_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.CHS2K_key_buffer[i]);
-                    }
-                    if (Form1.chs2k_wav_path_key_buffer != null && Form1.chs2k_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.chs2k_wav_path_key_buffer[i].Substring(Form1.chs2k_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
+            if (string.IsNullOrEmpty(s_current_loco_select))
+                return;
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "CHS4")
-            {
-                i_temp_loco_select = 4;
-                int j = 287;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 55; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_chs4_axis_data != null && sb_chs4_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_chs4_axis_data[i];
-                    }
-                    if (Form1.CHS4_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.CHS4_key_buffer[i]);
-                    }
-                    if (Form1.chs4_wav_path_key_buffer != null && Form1.chs4_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.chs4_wav_path_key_buffer[i].Substring(Form1.chs4_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
+            if (_locoUi == null || !_locoUi.TryGetValue(s_current_loco_select, out var def))
+                return;
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "CHS4 KVR")
-            {
-                i_temp_loco_select = 5;
-                int j = 342;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 55; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_chs4kvr_axis_data != null && sb_chs4kvr_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_chs4kvr_axis_data[i];
-                    }
-                    if (Form1.CHS4KVR_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.CHS4KVR_key_buffer[i]);
-                    }
-                    if (Form1.chs4kvr_wav_path_key_buffer != null && Form1.chs4kvr_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.chs4kvr_wav_path_key_buffer[i].Substring(Form1.chs4kvr_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
+            i_temp_loco_select = def.LocoId;
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "CHS4T")
-            {
-                i_temp_loco_select = 6;
-                int j = 397;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 52; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_chs4t_axis_data != null && sb_chs4t_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_chs4t_axis_data[i];
-                    }
-                    if (Form1.CHS4T_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.CHS4T_key_buffer[i]);
-                    }
-                    if (Form1.chs4t_wav_path_key_buffer != null && Form1.chs4t_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.chs4t_wav_path_key_buffer[i].Substring(Form1.chs4t_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
+            EnsureGridColumns(dataGridView_Zdsimulator);
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "CHS7")
-            {
-                i_temp_loco_select = 7;
-                int j = 451;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 46; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_chs7_axis_data != null && sb_chs7_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_chs7_axis_data[i];
-                    }
-                    if (Form1.CHS7_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.CHS7_key_buffer[i]);
-                    }
-                    if (Form1.chs7_wav_path_key_buffer != null && Form1.chs7_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.chs7_wav_path_key_buffer[i].Substring(Form1.chs7_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
+            dataGridView_Zdsimulator.Rows.Clear();
+            if (def.RowCount > 0)
+                dataGridView_Zdsimulator.Rows.Add(def.RowCount);
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "CHS8")
-            {
-                i_temp_loco_select = 8;
-                int j = 497;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 63; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_chs8_axis_data != null && sb_chs8_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_chs8_axis_data[i];
-                    }
-                    if (Form1.CHS8_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.CHS8_key_buffer[i]);
-                    }
-                    if (Form1.chs8_wav_path_key_buffer != null && Form1.chs8_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.chs8_wav_path_key_buffer[i].Substring(Form1.chs8_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
+            // локальные ссылки + защита
+            var sb = def.SbAxisData;
+            var keys = def.KeyBuffer;
+            var wav = def.WavPathBuffer;
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "VL11M")
-            {
-                i_temp_loco_select = 9;
-                int j = 560;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 83; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_vl11_axis_data != null && sb_vl11_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_vl11_axis_data[i];
-                    }
-                    if (Form1.VL11M_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.VL11M_key_buffer[i]);
-                    }
-                    if (Form1.vl11_wav_path_key_buffer != null && Form1.vl11_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.vl11_wav_path_key_buffer[i].Substring(Form1.vl11_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
+            int j = def.LocoKeyStart;
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "VL82M")
+            for (int i = 0; i < def.RowCount; i++)
             {
-                i_temp_loco_select = 10;
-                int j = 643;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 83; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_vl82_axis_data != null && sb_vl82_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_vl82_axis_data[i];
-                    }
-                    if (Form1.VL82M_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.VL82M_key_buffer[i]);
-                    }
-                    if (Form1.vl82_wav_path_key_buffer != null && Form1.vl82_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.vl82_wav_path_key_buffer[i].Substring(Form1.vl82_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
+                var row = dataGridView_Zdsimulator.Rows[i];
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "VL80T")
-            {
-                i_temp_loco_select = 11;
-                int j = 726;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 49; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_vl80t_axis_data != null && sb_vl80t_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_vl80t_axis_data[i];
-                    }
-                    if (Form1.VL80T_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.VL80T_key_buffer[i]);
-                    }
-                    if (Form1.vl80t_wav_path_key_buffer != null && Form1.vl80t_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.vl80t_wav_path_key_buffer[i].Substring(Form1.vl80t_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
+                // 0) Имя действия (LocoKeyData[j])
+                if (LocoKeyData != null && (uint)j < (uint)LocoKeyData.Length)
+                    row.Cells[0].Value = Convert.ToString(LocoKeyData[j]);
+                else
+                    row.Cells[0].Value = "";
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "VL85")
-            {
-                i_temp_loco_select = 12;
-                int j = 775;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 77; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_vl85_axis_data != null && sb_vl85_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_vl85_axis_data[i];
-                    }
-                    if (Form1.VL85_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.VL85_key_buffer[i]);
-                    }
-                    if (Form1.vl85_wav_path_key_buffer != null && Form1.vl85_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.vl85_wav_path_key_buffer[i].Substring(Form1.vl85_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
+                // 1) Сначала ось/метка (sb_*_axis_data[i]) — как в твоём коде
+                if (sb != null && (uint)i < (uint)sb.Length && sb[i] != null)
+                    row.Cells[1].Value = sb[i];
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "TEP70")
-            {
-                i_temp_loco_select = 13;
-                int j = 852;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 36; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_tep70_axis_data != null && sb_tep70_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_tep70_axis_data[i];
-                    }
-                    if (Form1.TEP70_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.TEP70_key_buffer[i]);
-                    }
-                    if (Form1.tep70_wav_path_key_buffer != null && Form1.tep70_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.tep70_wav_path_key_buffer[i].Substring(Form1.tep70_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
+                // 2) Если назначена кнопка — она ПЕРЕЗАТИРАЕТ ось (твой приоритет)
+                if (keys != null && (uint)i < (uint)keys.Length && keys[i] != 0)
+                    row.Cells[1].Value = "Button " + keys[i];
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "2TE10U")
-            {
-                i_temp_loco_select = 14;
-                int j = 888;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 47; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_te10u_axis_data != null && sb_te10u_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_te10u_axis_data[i];
-                    }
-                    if (Form1.TE10U_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.TE10U_key_buffer[i]);
-                    }
-                    if (Form1.te10u_wav_path_key_buffer != null && Form1.te10u_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.te10u_wav_path_key_buffer[i].Substring(Form1.te10u_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
+                // 3) Звук (только имя файла)
+                if (wav != null && (uint)i < (uint)wav.Length && wav[i] != null)
+                    row.Cells[2].Value = SafeFileName(wav[i]);
 
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "M62")
-            {
-                i_temp_loco_select = 15;
-                int j = 935;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 36; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_m62_axis_data != null && sb_m62_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_m62_axis_data[i];
-                    }
-                    if (Form1.M62_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.M62_key_buffer[i]);
-                    }
-                    if (Form1.m62_wav_path_key_buffer != null && Form1.m62_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.m62_wav_path_key_buffer[i].Substring(Form1.m62_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
-
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "ED9M")
-            {
-                i_temp_loco_select = 17;
-                int j = 971;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 30; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_ed9m_axis_data != null && sb_ed9m_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_ed9m_axis_data[i];
-                    }
-                    if (Form1.ED9M_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.ED9M_key_buffer[i]);
-                    }
-                    if (Form1.ed9m_wav_path_key_buffer != null && Form1.ed9m_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.ed9m_wav_path_key_buffer[i].Substring(Form1.ed9m_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
-
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "ED4M")
-            {
-                i_temp_loco_select = 16;
-                int j = 1001;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 33; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_ed4m_axis_data != null && sb_ed4m_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_ed4m_axis_data[i];
-                    }
-                    if (Form1.ED4M_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.ED4M_key_buffer[i]);
-                    }
-                    if (Form1.ed4m_wav_path_key_buffer != null && Form1.ed4m_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.ed4m_wav_path_key_buffer[i].Substring(Form1.ed4m_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
-
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "tem18")
-            {
-                i_temp_loco_select = 18;
-                int j = 1034;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 32; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_tem18_axis_data != null && sb_tem18_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_tem18_axis_data[i];
-                    }
-                    if (Form1.tem18_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.tem18_key_buffer[i]);
-                    }
-                    if (Form1.tem18_wav_path_key_buffer != null && Form1.tem18_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.tem18_wav_path_key_buffer[i].Substring(Form1.tem18_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
-            }
-
-            if (Convert.ToString(comboBox_zdsimLoco.Text) == "Neshtatki")
-            {
-                i_temp_loco_select = 19;
-                int j = 1066;
-                dataGridView_Zdsimulator.Rows.Clear();
-                dataGridView_Zdsimulator.Columns.Clear();
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);
-                dataGridView_Zdsimulator.Columns.Add(null, null);//звук
-                for (int i = 0; i < 100; i++)
-                {
-                    dataGridView_Zdsimulator.Rows.Add();
-                    dataGridView_Zdsimulator.Rows[i].Cells[0].Value = Convert.ToString(LocoKeyData[j]);
-                    if (sb_neshtatki_axis_data != null && sb_neshtatki_axis_data[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = sb_neshtatki_axis_data[i];
-                    }
-                    if (Form1.Neshtatki_key_buffer[i] != 0)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[1].Value = Convert.ToString("Button " + Form1.Neshtatki_key_buffer[i]);
-                    }
-                    if (Form1.neshtatki_wav_path_key_buffer != null && Form1.neshtatki_wav_path_key_buffer[i] != null)
-                    {
-                        dataGridView_Zdsimulator.Rows[i].Cells[2].Value = Form1.neshtatki_wav_path_key_buffer[i].Substring(Form1.neshtatki_wav_path_key_buffer[i].LastIndexOf("\\") + 1);
-                    }
-                    j++;
-                }
+                j++;
             }
         }
 
@@ -2913,500 +2378,245 @@ namespace zdsimScanner
         }
 
         //============================================================================
+        // Для button_metka_osi_Click() Установка меток на быбранной оси джойстика
+        //============================================================================
+        private sealed class AxisPointDef
+        {
+            public Func<int> GetValue;          // текущее значение оси/слайдера/POV
+            public Func<int[]> GetPoints;       // текущий массив меток
+            public Action<int[]> SetPoints;     // присвоить новый массив меток
+        }
+
+        private Dictionary<string, AxisPointDef> _axisPoints;
+
+        private static void AppendPoint(ref int[] arr, int value)
+        {
+            if (arr == null)
+            {
+                arr = new int[1];
+                arr[0] = value;
+                return;
+            }
+
+            int n = arr.Length;
+            int[] next = new int[n + 1];
+            Array.Copy(arr, next, n);
+            next[n] = value;
+            arr = next;
+        }
+
+        private void EnsureAxisPoints()
+        {
+            if (_axisPoints != null) return;
+
+            _axisPoints = new System.Collections.Generic.Dictionary<string, AxisPointDef>(StringComparer.Ordinal)
+            {
+                ["ARx"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.ARx,
+                    GetPoints = () => Form1.joystick_ARx_point_buffer,
+                    SetPoints = a => Form1.joystick_ARx_point_buffer = a
+                },
+                ["ARy"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.ARy,
+                    GetPoints = () => Form1.joystick_ARy_point_buffer,
+                    SetPoints = a => Form1.joystick_ARy_point_buffer = a
+                },
+                ["ARz"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.ARz,
+                    GetPoints = () => Form1.joystick_ARz_point_buffer,
+                    SetPoints = a => Form1.joystick_ARz_point_buffer = a
+                },
+
+                ["AX"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.AX,
+                    GetPoints = () => Form1.joystick_AX_point_buffer,
+                    SetPoints = a => Form1.joystick_AX_point_buffer = a
+                },
+                ["AY"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.AY,
+                    GetPoints = () => Form1.joystick_AY_point_buffer,
+                    SetPoints = a => Form1.joystick_AY_point_buffer = a
+                },
+                ["AZ"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.AZ,
+                    GetPoints = () => Form1.joystick_AZ_point_buffer,
+                    SetPoints = a => Form1.joystick_AZ_point_buffer = a
+                },
+
+                ["FRx"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.FRx,
+                    GetPoints = () => Form1.joystick_FRx_point_buffer,
+                    SetPoints = a => Form1.joystick_FRx_point_buffer = a
+                },
+                ["FRy"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.FRy,
+                    GetPoints = () => Form1.joystick_FRy_point_buffer,
+                    SetPoints = a => Form1.joystick_FRy_point_buffer = a
+                },
+                ["FRz"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.FRz,
+                    GetPoints = () => Form1.joystick_FRz_point_buffer,
+                    SetPoints = a => Form1.joystick_FRz_point_buffer = a
+                },
+
+                ["FX"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.FX,
+                    GetPoints = () => Form1.joystick_FX_point_buffer,
+                    SetPoints = a => Form1.joystick_FX_point_buffer = a
+                },
+                ["FY"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.FY,
+                    GetPoints = () => Form1.joystick_FY_point_buffer,
+                    SetPoints = a => Form1.joystick_FY_point_buffer = a
+                },
+                ["FZ"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.FZ,
+                    GetPoints = () => Form1.joystick_FZ_point_buffer,
+                    SetPoints = a => Form1.joystick_FZ_point_buffer = a
+                },
+
+                ["Rx"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.Rx,
+                    GetPoints = () => Form1.joystick_Rx_point_buffer,
+                    SetPoints = a => Form1.joystick_Rx_point_buffer = a
+                },
+                ["Ry"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.Ry,
+                    GetPoints = () => Form1.joystick_Ry_point_buffer,
+                    SetPoints = a => Form1.joystick_Ry_point_buffer = a
+                },
+                ["Rz"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.Rz,
+                    GetPoints = () => Form1.joystick_Rz_point_buffer,
+                    SetPoints = a => Form1.joystick_Rz_point_buffer = a
+                },
+
+                ["VRx"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.VRx,
+                    GetPoints = () => Form1.joystick_VRx_point_buffer,
+                    SetPoints = a => Form1.joystick_VRx_point_buffer = a
+                },
+                ["VRy"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.VRy,
+                    GetPoints = () => Form1.joystick_VRy_point_buffer,
+                    SetPoints = a => Form1.joystick_VRy_point_buffer = a
+                },
+                ["VRz"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.VRz,
+                    GetPoints = () => Form1.joystick_VRz_point_buffer,
+                    SetPoints = a => Form1.joystick_VRz_point_buffer = a
+                },
+
+                ["VX"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.VX,
+                    GetPoints = () => Form1.joystick_VX_point_buffer,
+                    SetPoints = a => Form1.joystick_VX_point_buffer = a
+                },
+                ["VY"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.VY,
+                    GetPoints = () => Form1.joystick_VY_point_buffer,
+                    SetPoints = a => Form1.joystick_VY_point_buffer = a
+                },
+                ["VZ"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.VZ,
+                    GetPoints = () => Form1.joystick_VZ_point_buffer,
+                    SetPoints = a => Form1.joystick_VZ_point_buffer = a
+                },
+
+                ["X"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.X,
+                    GetPoints = () => Form1.joystick_X_point_buffer,
+                    SetPoints = a => Form1.joystick_X_point_buffer = a
+                },
+                ["Y"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.Y,
+                    GetPoints = () => Form1.joystick_Y_point_buffer,
+                    SetPoints = a => Form1.joystick_Y_point_buffer = a
+                },
+                ["Z"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.Z,
+                    GetPoints = () => Form1.joystick_Z_point_buffer,
+                    SetPoints = a => Form1.joystick_Z_point_buffer = a
+                },
+
+                ["POV"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.GetPointOfView()[0],
+                    GetPoints = () => Form1.joystick_POV_point_buffer,
+                    SetPoints = a => Form1.joystick_POV_point_buffer = a
+                },
+
+                ["Slider"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.GetSlider()[0],
+                    GetPoints = () => Form1.joystick_Slider_point_buffer,
+                    SetPoints = a => Form1.joystick_Slider_point_buffer = a
+                },
+                ["ASlider"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.GetASlider()[0],
+                    GetPoints = () => Form1.joystick_ASlider_point_buffer,
+                    SetPoints = a => Form1.joystick_ASlider_point_buffer = a
+                },
+                ["FSlider"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.GetFSlider()[0],
+                    GetPoints = () => Form1.joystick_FSlider_point_buffer,
+                    SetPoints = a => Form1.joystick_FSlider_point_buffer = a
+                },
+                ["VSlider"] = new AxisPointDef
+                {
+                    GetValue = () => device.CurrentJoystickState.GetVSlider()[0],
+                    GetPoints = () => Form1.joystick_VSlider_point_buffer,
+                    SetPoints = a => Form1.joystick_VSlider_point_buffer = a
+                },
+            };
+        }
+
+        //============================================================================
         // Установка меток на быбранной оси джойстика
         //============================================================================
         private void button_metka_osi_Click(object sender, EventArgs e)
         {
-            // Временный буфер, чтобы сохранить старый массив при расширении.
-            int[] b_temp;
+            if (device == null) return;
 
-            // Проверка, ось "ARx" выбрана в ComboBox
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "ARx")
-            {
-                // Если буфер ещё не создан (первый раз ставим метку)
-                if (Form1.joystick_ARx_point_buffer == null)
-                {
-                    // Создадим массив на 1 элемент.
-                    Form1.joystick_ARx_point_buffer = new int[1];
+            EnsureAxisPoints();
 
-                    // В единственный элемент (индекс Length - 1, то есть 0) записывают текущее положение оси:
-                    // device.CurrentJoystickState.ARx — текущее сырое значение оси ARx. 
-                    // (обычно 0..65535 или -32768..32767, зависит от API/драйвера).
-                    Form1.joystick_ARx_point_buffer[Form1.joystick_ARx_point_buffer.Length - 1] = device.CurrentJoystickState.ARx;
-                }
-                else // Иначе: буфер уже есть, нужно “добавить ещё одну метку”
-                {
-                    // Сохраняем ссылку на старый массив (со всеми ранее поставленными метками).
-                    b_temp = Form1.joystick_ARx_point_buffer;
+            string sel = Convert.ToString(comboBox_osi_select.SelectedItem);
+            if (string.IsNullOrEmpty(sel)) return;
 
-                    // Создаём новый массив на 1 элемент больше.
-                    Form1.joystick_ARx_point_buffer = new int[Form1.joystick_ARx_point_buffer.Length + 1];
+            if (_axisPoints == null || !_axisPoints.TryGetValue(sel, out var def))
+                return;
 
-                    // Копируем все старые метки в новый массив.
-                    Array.Copy(b_temp, Form1.joystick_ARx_point_buffer, b_temp.Length);
+            int val = def.GetValue();
 
-                    // В последний элемент нового массива записываем текущее значение ARx.
-                    Form1.joystick_ARx_point_buffer[Form1.joystick_ARx_point_buffer.Length - 1] = device.CurrentJoystickState.ARx;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "ARy")
-            {
-                if (Form1.joystick_ARy_point_buffer == null)
-                {
-                    Form1.joystick_ARy_point_buffer = new int[1];
-                    Form1.joystick_ARy_point_buffer[Form1.joystick_ARy_point_buffer.Length - 1] = device.CurrentJoystickState.ARy;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_ARy_point_buffer;
-                    Form1.joystick_ARy_point_buffer = new int[Form1.joystick_ARy_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_ARy_point_buffer, b_temp.Length);
-                    Form1.joystick_ARy_point_buffer[Form1.joystick_ARy_point_buffer.Length - 1] = device.CurrentJoystickState.ARy;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "ARz")
-            {
-                if (Form1.joystick_ARz_point_buffer == null)
-                {
-                    Form1.joystick_ARz_point_buffer = new int[1];
-                    Form1.joystick_ARz_point_buffer[Form1.joystick_ARz_point_buffer.Length - 1] = device.CurrentJoystickState.ARz;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_ARz_point_buffer;
-                    Form1.joystick_ARz_point_buffer = new int[Form1.joystick_ARz_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_ARz_point_buffer, b_temp.Length);
-                    Form1.joystick_ARz_point_buffer[Form1.joystick_ARz_point_buffer.Length - 1] = device.CurrentJoystickState.ARz;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "AX")
-            {
-                if (Form1.joystick_AX_point_buffer == null)
-                {
-                    Form1.joystick_AX_point_buffer = new int[1];
-                    Form1.joystick_AX_point_buffer[Form1.joystick_AX_point_buffer.Length - 1] = device.CurrentJoystickState.AX;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_AX_point_buffer;
-                    Form1.joystick_AX_point_buffer = new int[Form1.joystick_AX_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_AX_point_buffer, b_temp.Length);
-                    Form1.joystick_AX_point_buffer[Form1.joystick_AX_point_buffer.Length - 1] = device.CurrentJoystickState.AX;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "AY")
-            {
-                if (Form1.joystick_AY_point_buffer == null)
-                {
-                    Form1.joystick_AY_point_buffer = new int[1];
-                    Form1.joystick_AY_point_buffer[Form1.joystick_AY_point_buffer.Length - 1] = device.CurrentJoystickState.AY;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_AY_point_buffer;
-                    Form1.joystick_AY_point_buffer = new int[Form1.joystick_AY_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_AY_point_buffer, b_temp.Length);
-                    Form1.joystick_AY_point_buffer[Form1.joystick_AY_point_buffer.Length - 1] = device.CurrentJoystickState.AY;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "AZ")
-            {
-                if (Form1.joystick_AZ_point_buffer == null)
-                {
-                    Form1.joystick_AZ_point_buffer = new int[1];
-                    Form1.joystick_AZ_point_buffer[Form1.joystick_AZ_point_buffer.Length - 1] = device.CurrentJoystickState.AZ;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_AZ_point_buffer;
-                    Form1.joystick_AZ_point_buffer = new int[Form1.joystick_AZ_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_AZ_point_buffer, b_temp.Length);
-                    Form1.joystick_AZ_point_buffer[Form1.joystick_AZ_point_buffer.Length - 1] = device.CurrentJoystickState.AZ;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FRx")
-            {
-                if (Form1.joystick_FRx_point_buffer == null)
-                {
-                    Form1.joystick_FRx_point_buffer = new int[1];
-                    Form1.joystick_FRx_point_buffer[Form1.joystick_FRx_point_buffer.Length - 1] = device.CurrentJoystickState.FRx;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_FRx_point_buffer;
-                    Form1.joystick_FRx_point_buffer = new int[Form1.joystick_FRx_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_FRx_point_buffer, b_temp.Length);
-                    Form1.joystick_FRx_point_buffer[Form1.joystick_FRx_point_buffer.Length - 1] = device.CurrentJoystickState.FRx;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FRy")
-            {
-                if (Form1.joystick_FRy_point_buffer == null)
-                {
-                    Form1.joystick_FRy_point_buffer = new int[1];
-                    Form1.joystick_FRy_point_buffer[Form1.joystick_FRy_point_buffer.Length - 1] = device.CurrentJoystickState.FRy;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_FRy_point_buffer;
-                    Form1.joystick_FRy_point_buffer = new int[Form1.joystick_FRy_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_FRy_point_buffer, b_temp.Length);
-                    Form1.joystick_FRy_point_buffer[Form1.joystick_FRy_point_buffer.Length - 1] = device.CurrentJoystickState.FRy;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FRz")
-            {
-                if (Form1.joystick_FRz_point_buffer == null)
-                {
-                    Form1.joystick_FRz_point_buffer = new int[1];
-                    Form1.joystick_FRz_point_buffer[Form1.joystick_FRz_point_buffer.Length - 1] = device.CurrentJoystickState.FRz;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_FRz_point_buffer;
-                    Form1.joystick_FRz_point_buffer = new int[Form1.joystick_FRz_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_FRz_point_buffer, b_temp.Length);
-                    Form1.joystick_FRz_point_buffer[Form1.joystick_FRz_point_buffer.Length - 1] = device.CurrentJoystickState.FRz;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FX")
-            {
-                if (Form1.joystick_FX_point_buffer == null)
-                {
-                    Form1.joystick_FX_point_buffer = new int[1];
-                    Form1.joystick_FX_point_buffer[Form1.joystick_FX_point_buffer.Length - 1] = device.CurrentJoystickState.FX;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_FX_point_buffer;
-                    Form1.joystick_FX_point_buffer = new int[Form1.joystick_FX_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_FX_point_buffer, b_temp.Length);
-                    Form1.joystick_FX_point_buffer[Form1.joystick_FX_point_buffer.Length - 1] = device.CurrentJoystickState.FX;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FY")
-            {
-                if (Form1.joystick_FY_point_buffer == null)
-                {
-                    Form1.joystick_FY_point_buffer = new int[1];
-                    Form1.joystick_FY_point_buffer[Form1.joystick_FY_point_buffer.Length - 1] = device.CurrentJoystickState.FY;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_FY_point_buffer;
-                    Form1.joystick_FY_point_buffer = new int[Form1.joystick_FY_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_FY_point_buffer, b_temp.Length);
-                    Form1.joystick_FY_point_buffer[Form1.joystick_FY_point_buffer.Length - 1] = device.CurrentJoystickState.FY;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FZ")
-            {
-                if (Form1.joystick_FZ_point_buffer == null)
-                {
-                    Form1.joystick_FZ_point_buffer = new int[1];
-                    Form1.joystick_FZ_point_buffer[Form1.joystick_FZ_point_buffer.Length - 1] = device.CurrentJoystickState.FZ;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_FZ_point_buffer;
-                    Form1.joystick_FZ_point_buffer = new int[Form1.joystick_FZ_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_FZ_point_buffer, b_temp.Length);
-                    Form1.joystick_FZ_point_buffer[Form1.joystick_FZ_point_buffer.Length - 1] = device.CurrentJoystickState.FZ;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Rx")
-            {
-                if (Form1.joystick_Rx_point_buffer == null)
-                {
-                    Form1.joystick_Rx_point_buffer = new int[1];
-                    Form1.joystick_Rx_point_buffer[Form1.joystick_Rx_point_buffer.Length - 1] = device.CurrentJoystickState.Rx;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_Rx_point_buffer;
-                    Form1.joystick_Rx_point_buffer = new int[Form1.joystick_Rx_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_Rx_point_buffer, b_temp.Length);
-                    Form1.joystick_Rx_point_buffer[Form1.joystick_Rx_point_buffer.Length - 1] = device.CurrentJoystickState.Rx;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Ry")
-            {
-                if (Form1.joystick_Ry_point_buffer == null)
-                {
-                    Form1.joystick_Ry_point_buffer = new int[1];
-                    Form1.joystick_Ry_point_buffer[Form1.joystick_Ry_point_buffer.Length - 1] = device.CurrentJoystickState.Ry;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_Ry_point_buffer;
-                    Form1.joystick_Ry_point_buffer = new int[Form1.joystick_Ry_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_Ry_point_buffer, b_temp.Length);
-                    Form1.joystick_Ry_point_buffer[Form1.joystick_Ry_point_buffer.Length - 1] = device.CurrentJoystickState.Ry;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Rz")
-            {
-                if (Form1.joystick_Rz_point_buffer == null)
-                {
-                    Form1.joystick_Rz_point_buffer = new int[1];
-                    Form1.joystick_Rz_point_buffer[Form1.joystick_Rz_point_buffer.Length - 1] = device.CurrentJoystickState.Rz;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_Rz_point_buffer;
-                    Form1.joystick_Rz_point_buffer = new int[Form1.joystick_Rz_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_Rz_point_buffer, b_temp.Length);
-                    Form1.joystick_Rz_point_buffer[Form1.joystick_Rz_point_buffer.Length - 1] = device.CurrentJoystickState.Rz;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VRx")
-            {
-                if (Form1.joystick_VRx_point_buffer == null)
-                {
-                    Form1.joystick_VRx_point_buffer = new int[1];
-                    Form1.joystick_VRx_point_buffer[Form1.joystick_VRx_point_buffer.Length - 1] = device.CurrentJoystickState.VRx;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_VRx_point_buffer;
-                    Form1.joystick_VRx_point_buffer = new int[Form1.joystick_VRx_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_VRx_point_buffer, b_temp.Length);
-                    Form1.joystick_VRx_point_buffer[Form1.joystick_VRx_point_buffer.Length - 1] = device.CurrentJoystickState.VRx;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VRy")
-            {
-                if (Form1.joystick_VRy_point_buffer == null)
-                {
-                    Form1.joystick_VRy_point_buffer = new int[1];
-                    Form1.joystick_VRy_point_buffer[Form1.joystick_VRy_point_buffer.Length - 1] = device.CurrentJoystickState.VRy;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_VRy_point_buffer;
-                    Form1.joystick_VRy_point_buffer = new int[Form1.joystick_VRy_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_VRy_point_buffer, b_temp.Length);
-                    Form1.joystick_VRy_point_buffer[Form1.joystick_VRy_point_buffer.Length - 1] = device.CurrentJoystickState.VRy;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VRz")
-            {
-                if (Form1.joystick_VRz_point_buffer == null)
-                {
-                    Form1.joystick_VRz_point_buffer = new int[1];
-                    Form1.joystick_VRz_point_buffer[Form1.joystick_VRz_point_buffer.Length - 1] = device.CurrentJoystickState.VRz;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_VRz_point_buffer;
-                    Form1.joystick_VRz_point_buffer = new int[Form1.joystick_VRz_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_VRz_point_buffer, b_temp.Length);
-                    Form1.joystick_VRz_point_buffer[Form1.joystick_VRz_point_buffer.Length - 1] = device.CurrentJoystickState.VRz;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VX")
-            {
-                if (Form1.joystick_VX_point_buffer == null)
-                {
-                    Form1.joystick_VX_point_buffer = new int[1];
-                    Form1.joystick_VX_point_buffer[Form1.joystick_VX_point_buffer.Length - 1] = device.CurrentJoystickState.VX;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_VX_point_buffer;
-                    Form1.joystick_VX_point_buffer = new int[Form1.joystick_VX_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_VX_point_buffer, b_temp.Length);
-                    Form1.joystick_VX_point_buffer[Form1.joystick_VX_point_buffer.Length - 1] = device.CurrentJoystickState.VX;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VY")
-            {
-                if (Form1.joystick_VY_point_buffer == null)
-                {
-                    Form1.joystick_VY_point_buffer = new int[1];
-                    Form1.joystick_VY_point_buffer[Form1.joystick_VY_point_buffer.Length - 1] = device.CurrentJoystickState.VY;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_VY_point_buffer;
-                    Form1.joystick_VY_point_buffer = new int[Form1.joystick_VY_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_VY_point_buffer, b_temp.Length);
-                    Form1.joystick_VY_point_buffer[Form1.joystick_VY_point_buffer.Length - 1] = device.CurrentJoystickState.VY;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VZ")
-            {
-                if (Form1.joystick_VZ_point_buffer == null)
-                {
-                    Form1.joystick_VZ_point_buffer = new int[1];
-                    Form1.joystick_VZ_point_buffer[Form1.joystick_VZ_point_buffer.Length - 1] = device.CurrentJoystickState.VZ;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_VZ_point_buffer;
-                    Form1.joystick_VZ_point_buffer = new int[Form1.joystick_VZ_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_VZ_point_buffer, b_temp.Length);
-                    Form1.joystick_VZ_point_buffer[Form1.joystick_VZ_point_buffer.Length - 1] = device.CurrentJoystickState.VZ;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "X")
-            {
-                if (Form1.joystick_X_point_buffer == null)
-                {
-                    Form1.joystick_X_point_buffer = new int[1];
-                    Form1.joystick_X_point_buffer[Form1.joystick_X_point_buffer.Length - 1] = device.CurrentJoystickState.X;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_X_point_buffer;
-                    Form1.joystick_X_point_buffer = new int[Form1.joystick_X_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_X_point_buffer, b_temp.Length);
-                    Form1.joystick_X_point_buffer[Form1.joystick_X_point_buffer.Length - 1] = device.CurrentJoystickState.X;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Y")
-            {
-                if (Form1.joystick_Y_point_buffer == null)
-                {
-                    Form1.joystick_Y_point_buffer = new int[1];
-                    Form1.joystick_Y_point_buffer[Form1.joystick_Y_point_buffer.Length - 1] = device.CurrentJoystickState.Y;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_Y_point_buffer;
-                    Form1.joystick_Y_point_buffer = new int[Form1.joystick_Y_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_Y_point_buffer, b_temp.Length);
-                    Form1.joystick_Y_point_buffer[Form1.joystick_Y_point_buffer.Length - 1] = device.CurrentJoystickState.Y;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Z")
-            {
-                if (Form1.joystick_Z_point_buffer == null)
-                {
-                    Form1.joystick_Z_point_buffer = new int[1];
-                    Form1.joystick_Z_point_buffer[Form1.joystick_Z_point_buffer.Length - 1] = device.CurrentJoystickState.Z;
-                }
-                else
-                {
-                    b_temp = Form1.joystick_Z_point_buffer;
-                    Form1.joystick_Z_point_buffer = new int[Form1.joystick_Z_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_Z_point_buffer, b_temp.Length);
-                    Form1.joystick_Z_point_buffer[Form1.joystick_Z_point_buffer.Length - 1] = device.CurrentJoystickState.Z;
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "POV")
-            {
-                if (Form1.joystick_POV_point_buffer == null)
-                {
-                    Form1.joystick_POV_point_buffer = new int[1];
-                    b_temp = device.CurrentJoystickState.GetPointOfView();
-                    Form1.joystick_POV_point_buffer[Form1.joystick_POV_point_buffer.Length - 1] = b_temp[0];
-                }
-                else
-                {
-                    b_temp = Form1.joystick_POV_point_buffer;
-                    Form1.joystick_POV_point_buffer = new int[Form1.joystick_POV_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_POV_point_buffer, b_temp.Length);
-                    b_temp = device.CurrentJoystickState.GetPointOfView();
-                    Form1.joystick_POV_point_buffer[Form1.joystick_POV_point_buffer.Length - 1] = b_temp[0];
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "Slider")
-            {
-                if (Form1.joystick_Slider_point_buffer == null)
-                {
-                    Form1.joystick_Slider_point_buffer = new int[1];
-                    b_temp = device.CurrentJoystickState.GetSlider();
-                    Form1.joystick_Slider_point_buffer[Form1.joystick_Slider_point_buffer.Length - 1] = b_temp[0];
-                }
-                else
-                {
-                    b_temp = Form1.joystick_Slider_point_buffer;
-                    Form1.joystick_Slider_point_buffer = new int[Form1.joystick_Slider_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_Slider_point_buffer, b_temp.Length);
-                    b_temp = device.CurrentJoystickState.GetSlider();
-                    Form1.joystick_Slider_point_buffer[Form1.joystick_Slider_point_buffer.Length - 1] = b_temp[0];
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "ASlider")
-            {
-                if (Form1.joystick_ASlider_point_buffer == null)
-                {
-                    Form1.joystick_ASlider_point_buffer = new int[1];
-                    b_temp = device.CurrentJoystickState.GetASlider();
-                    Form1.joystick_ASlider_point_buffer[Form1.joystick_ASlider_point_buffer.Length - 1] = b_temp[0];
-                }
-                else
-                {
-                    b_temp = Form1.joystick_ASlider_point_buffer;
-                    Form1.joystick_ASlider_point_buffer = new int[Form1.joystick_ASlider_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_ASlider_point_buffer, b_temp.Length);
-                    b_temp = device.CurrentJoystickState.GetASlider();
-                    Form1.joystick_ASlider_point_buffer[Form1.joystick_ASlider_point_buffer.Length - 1] = b_temp[0];
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "FSlider")
-            {
-                if (Form1.joystick_FSlider_point_buffer == null)
-                {
-                    Form1.joystick_FSlider_point_buffer = new int[1];
-                    b_temp = device.CurrentJoystickState.GetFSlider();
-                    Form1.joystick_FSlider_point_buffer[Form1.joystick_FSlider_point_buffer.Length - 1] = b_temp[0];
-                }
-                else
-                {
-                    b_temp = Form1.joystick_FSlider_point_buffer;
-                    Form1.joystick_FSlider_point_buffer = new int[Form1.joystick_FSlider_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_FSlider_point_buffer, b_temp.Length);
-                    b_temp = device.CurrentJoystickState.GetFSlider();
-                    Form1.joystick_FSlider_point_buffer[Form1.joystick_FSlider_point_buffer.Length - 1] = b_temp[0];
-                }
-            }
-
-            if (Convert.ToString(comboBox_osi_select.SelectedItem) == "VSlider")
-            {
-                if (Form1.joystick_VSlider_point_buffer == null)
-                {
-                    Form1.joystick_VSlider_point_buffer = new int[1];
-                    b_temp = device.CurrentJoystickState.GetVSlider();
-                    Form1.joystick_VSlider_point_buffer[Form1.joystick_VSlider_point_buffer.Length - 1] = b_temp[0];
-                }
-                else
-                {
-                    b_temp = Form1.joystick_VSlider_point_buffer;
-                    Form1.joystick_VSlider_point_buffer = new int[Form1.joystick_VSlider_point_buffer.Length + 1];
-                    Array.Copy(b_temp, Form1.joystick_VSlider_point_buffer, b_temp.Length);
-                    b_temp = device.CurrentJoystickState.GetVSlider();
-                    Form1.joystick_VSlider_point_buffer[Form1.joystick_VSlider_point_buffer.Length - 1] = b_temp[0];
-                }
-            }
+            int[] points = def.GetPoints();
+            AppendPoint(ref points, val);
+            def.SetPoints(points);
         }
 
         private void button_metka_osi_MouseDown(object sender, MouseEventArgs e)
@@ -3434,172 +2644,332 @@ namespace zdsimScanner
         }
 
         //============================================================================
-        // Сброс меток на быбранной оси джойстика
+        // Для работы sbros_metok_clear_buffer()
         //============================================================================
-        private void sbros_metok_clear_buffer(int i_sbros_metok_axis_number)
+        private sealed class LocoAxisBinding
         {
-            for (int i = 0; i < Form1.Controls_axis_buffer.Length / 2; i++)
+            public int[,] Axis;      // Form1.*_axis_buffer
+            public string[] SbAxis;  // sb_*_axis_data
+        }
+
+        private List<LocoAxisBinding> _locoAxisBindings;
+
+        private void EnsureLocoAxisBindings()
+        {
+            if (_locoAxisBindings != null) return;
+
+            _locoAxisBindings = new System.Collections.Generic.List<LocoAxisBinding>
+    {
+        new LocoAxisBinding { Axis = Form1.Controls_axis_buffer,  SbAxis = sb_controls_axis_data  },
+        new LocoAxisBinding { Axis = Form1.Neshtatki_axis_buffer, SbAxis = sb_neshtatki_axis_data },
+        new LocoAxisBinding { Axis = Form1.ES5K_axis_buffer,      SbAxis = sb_es5k_axis_data      },
+        new LocoAxisBinding { Axis = Form1.EP1M_axis_buffer,      SbAxis = sb_ep1m_axis_data      },
+        new LocoAxisBinding { Axis = Form1.CHS2K_axis_buffer,     SbAxis = sb_chs2k_axis_data     },
+        new LocoAxisBinding { Axis = Form1.CHS4_axis_buffer,      SbAxis = sb_chs4_axis_data      },
+        new LocoAxisBinding { Axis = Form1.CHS4KVR_axis_buffer,   SbAxis = sb_chs4kvr_axis_data   },
+        new LocoAxisBinding { Axis = Form1.CHS4T_axis_buffer,     SbAxis = sb_chs4t_axis_data     },
+        new LocoAxisBinding { Axis = Form1.CHS7_axis_buffer,      SbAxis = sb_chs7_axis_data      },
+        new LocoAxisBinding { Axis = Form1.CHS8_axis_buffer,      SbAxis = sb_chs8_axis_data      },
+        new LocoAxisBinding { Axis = Form1.VL11M_axis_buffer,     SbAxis = sb_vl11_axis_data      },
+        new LocoAxisBinding { Axis = Form1.VL82M_axis_buffer,     SbAxis = sb_vl82_axis_data      },
+        new LocoAxisBinding { Axis = Form1.VL80T_axis_buffer,     SbAxis = sb_vl80t_axis_data     },
+        new LocoAxisBinding { Axis = Form1.VL85_axis_buffer,      SbAxis = sb_vl85_axis_data      },
+        new LocoAxisBinding { Axis = Form1.TEP70_axis_buffer,     SbAxis = sb_tep70_axis_data     },
+        new LocoAxisBinding { Axis = Form1.TE10U_axis_buffer,     SbAxis = sb_te10u_axis_data     },
+        new LocoAxisBinding { Axis = Form1.M62_axis_buffer,       SbAxis = sb_m62_axis_data       },
+        new LocoAxisBinding { Axis = Form1.ED4M_axis_buffer,      SbAxis = sb_ed4m_axis_data      },
+        new LocoAxisBinding { Axis = Form1.ED9M_axis_buffer,      SbAxis = sb_ed9m_axis_data      },
+        new LocoAxisBinding { Axis = Form1.tem18_axis_buffer,     SbAxis = sb_tem18_axis_data     }, // если есть
+    };
+        }
+
+        private static void ClearAxisMarksInBinding(LocoAxisBinding b, int axisId)
+        {
+            if (b == null || b.Axis == null) return;
+
+            int rows = b.Axis.GetLength(0);
+            int cols = b.Axis.GetLength(1);
+            if (cols < 2) return; // ожидаем [row,0]=axisId, [row,1]=point
+
+            for (int i = 0; i < rows; i++)
             {
-                if (Form1.Controls_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                if (b.Axis[i, 0] == axisId)
                 {
-                    Form1.Controls_axis_buffer[i, 0] = 0;
-                    Form1.Controls_axis_buffer[i, 1] = 0;
-                    sb_controls_axis_data[i] = null;
+                    b.Axis[i, 0] = 0;
+                    b.Axis[i, 1] = 0;
+
+                    if (b.SbAxis != null && (uint)i < (uint)b.SbAxis.Length)
+                        b.SbAxis[i] = null;
                 }
             }
-            for (int i = 0; i < Form1.ES5K_axis_buffer.Length / 2; i++)
+        }
+
+        //============================================================================
+        // Сброс меток на быбранной оси джойстика
+        // axisId = то же, что ты пишешь в *_axis_buffer[row,0] (1..29)
+        //============================================================================
+        private void sbros_metok_clear_buffer(int axisId)
+        {
+            EnsureLocoAxisBindings();
+            if (_locoAxisBindings == null) return;
+
+            foreach (var b in _locoAxisBindings)
+                ClearAxisMarksInBinding(b, axisId);
+        }
+
+        //============================================================================
+        // Для работы с button_sbros_metok_Click()
+        //============================================================================
+        private sealed class AxisResetDef
+        {
+            public int AxisId;                                   // 1..29 (то, что хранится в *_axis_buffer[row,0])
+            public string UiName;                                // то, что в comboBox_osi_select.SelectedItem.ToString()
+            public SysAction ClearPointBuffer;                   // Form1.joystick_*_point_buffer = null;
+            public SysAction ResetSettingToStart;                // Properties.Settings.Default.* = temp_string_buffer_start
+        }
+
+        private Dictionary<string, AxisResetDef> _axisResetByUiName;
+
+        private void EnsureAxisResetDefs()
+        {
+            if (_axisResetByUiName != null) return;
+
+            _axisResetByUiName = new System.Collections.Generic.Dictionary<string, AxisResetDef>(StringComparer.Ordinal)
             {
-                if (Form1.ES5K_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                ["ARx"] = new AxisResetDef
                 {
-                    Form1.ES5K_axis_buffer[i, 0] = 0;
-                    Form1.ES5K_axis_buffer[i, 1] = 0;
-                    sb_es5k_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.EP1M_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.EP1M_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 1,
+                    UiName = "ARx",
+                    ClearPointBuffer = () => Form1.joystick_ARx_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.ARx_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["ARy"] = new AxisResetDef
                 {
-                    Form1.EP1M_axis_buffer[i, 0] = 0;
-                    Form1.EP1M_axis_buffer[i, 1] = 0;
-                    sb_ep1m_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.CHS2K_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.CHS2K_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 2,
+                    UiName = "ARy",
+                    ClearPointBuffer = () => Form1.joystick_ARy_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.ARy_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["ARz"] = new AxisResetDef
                 {
-                    Form1.CHS2K_axis_buffer[i, 0] = 0;
-                    Form1.CHS2K_axis_buffer[i, 1] = 0;
-                    sb_chs2k_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.CHS4_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.CHS4_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 3,
+                    UiName = "ARz",
+                    ClearPointBuffer = () => Form1.joystick_ARz_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.ARz_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["AX"] = new AxisResetDef
                 {
-                    Form1.CHS4_axis_buffer[i, 0] = 0;
-                    Form1.CHS4_axis_buffer[i, 1] = 0;
-                    sb_chs4_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.CHS4KVR_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.CHS4KVR_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 4,
+                    UiName = "AX",
+                    ClearPointBuffer = () => Form1.joystick_AX_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.AX_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["AY"] = new AxisResetDef
                 {
-                    Form1.CHS4KVR_axis_buffer[i, 0] = 0;
-                    Form1.CHS4KVR_axis_buffer[i, 1] = 0;
-                    sb_chs4kvr_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.CHS4T_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.CHS4T_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 5,
+                    UiName = "AY",
+                    ClearPointBuffer = () => Form1.joystick_AY_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.AY_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["AZ"] = new AxisResetDef
                 {
-                    Form1.CHS4T_axis_buffer[i, 0] = 0;
-                    Form1.CHS4T_axis_buffer[i, 1] = 0;
-                    sb_chs4t_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.CHS7_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.CHS7_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 6,
+                    UiName = "AZ",
+                    ClearPointBuffer = () => Form1.joystick_AZ_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.AZ_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["FRx"] = new AxisResetDef
                 {
-                    Form1.CHS7_axis_buffer[i, 0] = 0;
-                    Form1.CHS7_axis_buffer[i, 1] = 0;
-                    sb_chs7_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.CHS8_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.CHS8_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 7,
+                    UiName = "FRx",
+                    ClearPointBuffer = () => Form1.joystick_FRx_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.FRx_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["FRy"] = new AxisResetDef
                 {
-                    Form1.CHS8_axis_buffer[i, 0] = 0;
-                    Form1.CHS8_axis_buffer[i, 1] = 0;
-                    sb_chs8_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.VL11M_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.VL11M_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 8,
+                    UiName = "FRy",
+                    ClearPointBuffer = () => Form1.joystick_FRy_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.FRy_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["FRz"] = new AxisResetDef
                 {
-                    Form1.VL11M_axis_buffer[i, 0] = 0;
-                    Form1.VL11M_axis_buffer[i, 1] = 0;
-                    sb_vl11_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.VL82M_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.VL82M_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 9,
+                    UiName = "FRz",
+                    ClearPointBuffer = () => Form1.joystick_FRz_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.FRz_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["FX"] = new AxisResetDef
                 {
-                    Form1.VL82M_axis_buffer[i, 0] = 0;
-                    Form1.VL82M_axis_buffer[i, 1] = 0;
-                    sb_vl82_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.VL80T_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.VL80T_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 10,
+                    UiName = "FX",
+                    ClearPointBuffer = () => Form1.joystick_FX_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.FX_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["FY"] = new AxisResetDef
                 {
-                    Form1.VL80T_axis_buffer[i, 0] = 0;
-                    Form1.VL80T_axis_buffer[i, 1] = 0;
-                    sb_vl80t_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.VL85_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.VL85_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 11,
+                    UiName = "FY",
+                    ClearPointBuffer = () => Form1.joystick_FY_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.FY_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["FZ"] = new AxisResetDef
                 {
-                    Form1.VL85_axis_buffer[i, 0] = 0;
-                    Form1.VL85_axis_buffer[i, 1] = 0;
-                    sb_vl85_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.TEP70_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.TEP70_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 12,
+                    UiName = "FZ",
+                    ClearPointBuffer = () => Form1.joystick_FZ_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.FZ_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["Rx"] = new AxisResetDef
                 {
-                    Form1.TEP70_axis_buffer[i, 0] = 0;
-                    Form1.TEP70_axis_buffer[i, 1] = 0;
-                    sb_tep70_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.TE10U_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.TE10U_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 13,
+                    UiName = "Rx",
+                    ClearPointBuffer = () => Form1.joystick_Rx_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.Rx_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["Ry"] = new AxisResetDef
                 {
-                    Form1.TE10U_axis_buffer[i, 0] = 0;
-                    Form1.TE10U_axis_buffer[i, 1] = 0;
-                    sb_te10u_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.M62_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.M62_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 14,
+                    UiName = "Ry",
+                    ClearPointBuffer = () => Form1.joystick_Ry_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.Ry_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["Rz"] = new AxisResetDef
                 {
-                    Form1.M62_axis_buffer[i, 0] = 0;
-                    Form1.M62_axis_buffer[i, 1] = 0;
-                    sb_m62_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.ED4M_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.ED4M_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 15,
+                    UiName = "Rz",
+                    ClearPointBuffer = () => Form1.joystick_Rz_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.Rz_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["VRx"] = new AxisResetDef
                 {
-                    Form1.ED4M_axis_buffer[i, 0] = 0;
-                    Form1.ED4M_axis_buffer[i, 1] = 0;
-                    sb_ed4m_axis_data[i] = null;
-                }
-            }
-            for (int i = 0; i < Form1.ED9M_axis_buffer.Length / 2; i++)
-            {
-                if (Form1.ED9M_axis_buffer[i, 0] == i_sbros_metok_axis_number)
+                    AxisId = 16,
+                    UiName = "VRx",
+                    ClearPointBuffer = () => Form1.joystick_VRx_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.VRx_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["VRy"] = new AxisResetDef
                 {
-                    Form1.ED9M_axis_buffer[i, 0] = 0;
-                    Form1.ED9M_axis_buffer[i, 1] = 0;
-                    sb_ed9m_axis_data[i] = null;
-                }
-            }
+                    AxisId = 17,
+                    UiName = "VRy",
+                    ClearPointBuffer = () => Form1.joystick_VRy_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.VRy_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["VRz"] = new AxisResetDef
+                {
+                    AxisId = 18,
+                    UiName = "VRz",
+                    ClearPointBuffer = () => Form1.joystick_VRz_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.VRz_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["VX"] = new AxisResetDef
+                {
+                    AxisId = 19,
+                    UiName = "VX",
+                    ClearPointBuffer = () => Form1.joystick_VX_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.VX_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["VY"] = new AxisResetDef
+                {
+                    AxisId = 20,
+                    UiName = "VY",
+                    ClearPointBuffer = () => Form1.joystick_VY_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.VY_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["VZ"] = new AxisResetDef
+                {
+                    AxisId = 21,
+                    UiName = "VZ",
+                    ClearPointBuffer = () => Form1.joystick_VZ_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.VZ_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["X"] = new AxisResetDef
+                {
+                    AxisId = 22,
+                    UiName = "X",
+                    ClearPointBuffer = () => Form1.joystick_X_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.X_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["Y"] = new AxisResetDef
+                {
+                    AxisId = 23,
+                    UiName = "Y",
+                    ClearPointBuffer = () => Form1.joystick_Y_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.Y_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["Z"] = new AxisResetDef
+                {
+                    AxisId = 24,
+                    UiName = "Z",
+                    ClearPointBuffer = () => Form1.joystick_Z_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.Z_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["POV"] = new AxisResetDef
+                {
+                    AxisId = 25,
+                    UiName = "POV",
+                    ClearPointBuffer = () => Form1.joystick_POV_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.POV_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["Slider"] = new AxisResetDef
+                {
+                    AxisId = 26,
+                    UiName = "Slider",
+                    ClearPointBuffer = () => Form1.joystick_Slider_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.Slider_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                // ВАЖНО: у тебя в UpdateJoystickState имена "ASlider/FSlider/VSlider",
+                // а здесь в if-ах "SliderAS/SliderFS/SliderVS". Приведи к одному!
+                ["ASlider"] = new AxisResetDef
+                {
+                    AxisId = 27,
+                    UiName = "ASlider",
+                    ClearPointBuffer = () => Form1.joystick_ASlider_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.ASlider_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["FSlider"] = new AxisResetDef
+                {
+                    AxisId = 28,
+                    UiName = "FSlider",
+                    ClearPointBuffer = () => Form1.joystick_FSlider_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.FSlider_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+
+                ["VSlider"] = new AxisResetDef
+                {
+                    AxisId = 29,
+                    UiName = "VSlider",
+                    ClearPointBuffer = () => Form1.joystick_VSlider_point_buffer = null,
+                    ResetSettingToStart = () => Properties.Settings.Default.VSlider_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start
+                },
+            };
         }
 
         //============================================================================
@@ -3608,274 +2978,342 @@ namespace zdsimScanner
         //============================================================================
         private void button_sbros_metok_Click(object sender, EventArgs e)
         {
-            string s_name = "Удаление точек оси";
-            string s1 = "Точки текущей оси будут удалены, уверены?";
-            DialogResult result = MessageBox.Show(s1, s_name, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-            if (result == DialogResult.OK)
+            const string title = "Удаление точек оси";
+            const string msg = "Точки текущей оси будут удалены, уверены?";
+
+            var result = MessageBox.Show(msg, title,
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Warning,
+                MessageBoxDefaultButton.Button2);
+
+            if (result != DialogResult.OK)
+                return;
+
+            EnsureAxisResetDefs();
+
+            string sel = Convert.ToString(comboBox_osi_select.SelectedItem);
+            if (string.IsNullOrEmpty(sel))
+                return;
+
+            // Если в ComboBox у тебя реально "SliderAS/SliderFS/SliderVS" — можно сделать алиасы:
+            if (sel == "SliderAS") sel = "ASlider";
+            else if (sel == "SliderFS") sel = "FSlider";
+            else if (sel == "SliderVS") sel = "VSlider";
+
+            if (!_axisResetByUiName.TryGetValue(sel, out var def))
+                return;
+
+            // 1) стерли point_buffer
+            def.ClearPointBuffer?.Invoke();
+
+            // 2) сбросили settings на "start"
+            def.ResetSettingToStart?.Invoke();
+
+            // 3) вычистили привязки в *_axis_buffer и sb_*_axis_data
+            sbros_metok_clear_buffer(def.AxisId);
+
+            // 4) сохранения/перерисовка (оставляем единым блоком)
+            sbBufferSave();
+            Form1.SaveBuffersSettings();
+            KeyDataUpdate();
+
+            Properties.Settings.Default.Save();
+        }
+
+        //============================================================================
+        // Для работы с button_zdsim_sbros_tek_Click()
+        //============================================================================
+        private SysAction _resetCurrentLoco;
+        private Dictionary<string, SysAction> _locoResetByName;
+
+        private void EnsureLocoResetDefs()
+        {
+            if (_locoResetByName != null) return;
+
+            _locoResetByName = new System.Collections.Generic.Dictionary<string, SysAction>(System.StringComparer.Ordinal)
             {
-                if (comboBox_osi_select.SelectedItem.ToString() == "ARx")
+                ["Controls"] = () =>
                 {
-                    Form1.joystick_ARx_point_buffer = null;
-                    Properties.Settings.Default.ARx_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(1);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "ARy")
+                    // кнопки/оси
+                    if (Form1.Controls_key_buffer != null) System.Array.Clear(Form1.Controls_key_buffer, 0, Form1.Controls_key_buffer.Length);
+                    if (Form1.Controls_axis_buffer != null) System.Array.Clear(Form1.Controls_axis_buffer, 0, Form1.Controls_axis_buffer.Length);
+                    if (sb_controls_axis_data != null) System.Array.Clear(sb_controls_axis_data, 0, sb_controls_axis_data.Length);
+
+                    Properties.Settings.Default.controls_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.controls_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.controls_buffer_axis_settings2?.Clear();
+
+                    // звук
+                    if (Form1.controls_wav_path_key_buffer != null) System.Array.Clear(Form1.controls_wav_path_key_buffer, 0, Form1.controls_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_controls_wav_path_data_settings?.Clear();
+                },
+
+                ["Neshtatki"] = () =>
                 {
-                    Form1.joystick_ARy_point_buffer = null;
-                    Properties.Settings.Default.ARy_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(2);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "ARz")
+                    if (Form1.Neshtatki_key_buffer != null) System.Array.Clear(Form1.Neshtatki_key_buffer, 0, Form1.Neshtatki_key_buffer.Length);
+                    if (Form1.Neshtatki_axis_buffer != null) System.Array.Clear(Form1.Neshtatki_axis_buffer, 0, Form1.Neshtatki_axis_buffer.Length);
+                    if (sb_neshtatki_axis_data != null) System.Array.Clear(sb_neshtatki_axis_data, 0, sb_neshtatki_axis_data.Length);
+
+                    Properties.Settings.Default.neshtatki_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.neshtatki_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.neshtatki_buffer_axis_settings2?.Clear();
+
+                    if (Form1.neshtatki_wav_path_key_buffer != null) System.Array.Clear(Form1.neshtatki_wav_path_key_buffer, 0, Form1.neshtatki_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_neshtatki_wav_path_data_settings?.Clear();
+                },
+
+                ["2ES5K"] = () =>
                 {
-                    Form1.joystick_ARz_point_buffer = null;
-                    Properties.Settings.Default.ARz_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(3);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "AX")
+                    if (Form1.ES5K_key_buffer != null) System.Array.Clear(Form1.ES5K_key_buffer, 0, Form1.ES5K_key_buffer.Length);
+                    if (Form1.ES5K_axis_buffer != null) System.Array.Clear(Form1.ES5K_axis_buffer, 0, Form1.ES5K_axis_buffer.Length);
+                    if (sb_es5k_axis_data != null) System.Array.Clear(sb_es5k_axis_data, 0, sb_es5k_axis_data.Length);
+
+                    Properties.Settings.Default.es5k_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.es5k_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.es5k_buffer_axis_settings2?.Clear();
+
+                    if (Form1.es5k_wav_path_key_buffer != null) System.Array.Clear(Form1.es5k_wav_path_key_buffer, 0, Form1.es5k_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_es5k_wav_path_data_settings?.Clear();
+                },
+
+                ["EP1M"] = () =>
                 {
-                    Form1.joystick_AX_point_buffer = null;
-                    Properties.Settings.Default.AX_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(4);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "AY")
+                    if (Form1.EP1M_key_buffer != null) System.Array.Clear(Form1.EP1M_key_buffer, 0, Form1.EP1M_key_buffer.Length);
+                    if (Form1.EP1M_axis_buffer != null) System.Array.Clear(Form1.EP1M_axis_buffer, 0, Form1.EP1M_axis_buffer.Length);
+                    if (sb_ep1m_axis_data != null) System.Array.Clear(sb_ep1m_axis_data, 0, sb_ep1m_axis_data.Length);
+
+                    Properties.Settings.Default.ep1m_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.ep1m_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.ep1m_buffer_axis_settings2?.Clear();
+
+                    if (Form1.ep1m_wav_path_key_buffer != null) System.Array.Clear(Form1.ep1m_wav_path_key_buffer, 0, Form1.ep1m_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_ep1m_wav_path_data_settings?.Clear();
+                },
+
+                ["CHS2K"] = () =>
                 {
-                    Form1.joystick_AY_point_buffer = null;
-                    Properties.Settings.Default.AY_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(5);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "AZ")
+                    if (Form1.CHS2K_key_buffer != null) System.Array.Clear(Form1.CHS2K_key_buffer, 0, Form1.CHS2K_key_buffer.Length);
+                    if (Form1.CHS2K_axis_buffer != null) System.Array.Clear(Form1.CHS2K_axis_buffer, 0, Form1.CHS2K_axis_buffer.Length);
+                    if (sb_chs2k_axis_data != null) System.Array.Clear(sb_chs2k_axis_data, 0, sb_chs2k_axis_data.Length);
+
+                    Properties.Settings.Default.chs2k_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.chs2k_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.chs2k_buffer_axis_settings2?.Clear();
+
+                    if (Form1.chs2k_wav_path_key_buffer != null) System.Array.Clear(Form1.chs2k_wav_path_key_buffer, 0, Form1.chs2k_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_chs2k_wav_path_data_settings?.Clear();
+                },
+
+                ["CHS4"] = () =>
                 {
-                    Form1.joystick_AZ_point_buffer = null;
-                    Properties.Settings.Default.AZ_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(6);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "FRx")
+                    if (Form1.CHS4_key_buffer != null) System.Array.Clear(Form1.CHS4_key_buffer, 0, Form1.CHS4_key_buffer.Length);
+                    if (Form1.CHS4_axis_buffer != null) System.Array.Clear(Form1.CHS4_axis_buffer, 0, Form1.CHS4_axis_buffer.Length);
+                    if (sb_chs4_axis_data != null) System.Array.Clear(sb_chs4_axis_data, 0, sb_chs4_axis_data.Length);
+
+                    Properties.Settings.Default.chs4_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.chs4_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.chs4_buffer_axis_settings2?.Clear();
+
+                    if (Form1.chs4_wav_path_key_buffer != null) System.Array.Clear(Form1.chs4_wav_path_key_buffer, 0, Form1.chs4_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_chs4_wav_path_data_settings?.Clear();
+                },
+
+                ["CHS4 KVR"] = () =>
                 {
-                    Form1.joystick_FRx_point_buffer = null;
-                    Properties.Settings.Default.FRx_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(7);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "FRy")
+                    if (Form1.CHS4KVR_key_buffer != null) System.Array.Clear(Form1.CHS4KVR_key_buffer, 0, Form1.CHS4KVR_key_buffer.Length);
+                    if (Form1.CHS4KVR_axis_buffer != null) System.Array.Clear(Form1.CHS4KVR_axis_buffer, 0, Form1.CHS4KVR_axis_buffer.Length);
+                    if (sb_chs4kvr_axis_data != null) System.Array.Clear(sb_chs4kvr_axis_data, 0, sb_chs4kvr_axis_data.Length);
+
+                    Properties.Settings.Default.chs4kvr_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.chs4kvr_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.chs4kvr_buffer_axis_settings2?.Clear();
+
+                    if (Form1.chs4kvr_wav_path_key_buffer != null) System.Array.Clear(Form1.chs4kvr_wav_path_key_buffer, 0, Form1.chs4kvr_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_chs4kvr_wav_path_data_settings?.Clear();
+                },
+
+                ["CHS4T"] = () =>
                 {
-                    Form1.joystick_FRy_point_buffer = null;
-                    Properties.Settings.Default.FRy_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(8);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "FRz")
+                    if (Form1.CHS4T_key_buffer != null) System.Array.Clear(Form1.CHS4T_key_buffer, 0, Form1.CHS4T_key_buffer.Length);
+                    if (Form1.CHS4T_axis_buffer != null) System.Array.Clear(Form1.CHS4T_axis_buffer, 0, Form1.CHS4T_axis_buffer.Length);
+                    if (sb_chs4t_axis_data != null) System.Array.Clear(sb_chs4t_axis_data, 0, sb_chs4t_axis_data.Length);
+
+                    Properties.Settings.Default.chs4t_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.chs4t_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.chs4t_buffer_axis_settings2?.Clear();
+
+                    if (Form1.chs4t_wav_path_key_buffer != null) System.Array.Clear(Form1.chs4t_wav_path_key_buffer, 0, Form1.chs4t_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_chs4t_wav_path_data_settings?.Clear();
+                },
+
+                ["CHS7"] = () =>
                 {
-                    Form1.joystick_FRz_point_buffer = null;
-                    Properties.Settings.Default.FRz_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(9);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "FX")
+                    if (Form1.CHS7_key_buffer != null) System.Array.Clear(Form1.CHS7_key_buffer, 0, Form1.CHS7_key_buffer.Length);
+                    if (Form1.CHS7_axis_buffer != null) System.Array.Clear(Form1.CHS7_axis_buffer, 0, Form1.CHS7_axis_buffer.Length);
+                    if (sb_chs7_axis_data != null) System.Array.Clear(sb_chs7_axis_data, 0, sb_chs7_axis_data.Length);
+
+                    Properties.Settings.Default.chs7_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.chs7_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.chs7_buffer_axis_settings2?.Clear();
+
+                    if (Form1.chs7_wav_path_key_buffer != null) System.Array.Clear(Form1.chs7_wav_path_key_buffer, 0, Form1.chs7_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_chs7_wav_path_data_settings?.Clear();
+                },
+
+                ["CHS8"] = () =>
                 {
-                    Form1.joystick_FX_point_buffer = null;
-                    Properties.Settings.Default.FX_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(10);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "FY")
+                    if (Form1.CHS8_key_buffer != null) System.Array.Clear(Form1.CHS8_key_buffer, 0, Form1.CHS8_key_buffer.Length);
+                    if (Form1.CHS8_axis_buffer != null) System.Array.Clear(Form1.CHS8_axis_buffer, 0, Form1.CHS8_axis_buffer.Length);
+                    if (sb_chs8_axis_data != null) System.Array.Clear(sb_chs8_axis_data, 0, sb_chs8_axis_data.Length);
+
+                    Properties.Settings.Default.chs8_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.chs8_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.chs8_buffer_axis_settings2?.Clear();
+
+                    if (Form1.chs8_wav_path_key_buffer != null) System.Array.Clear(Form1.chs8_wav_path_key_buffer, 0, Form1.chs8_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_chs8_wav_path_data_settings?.Clear();
+                },
+
+                ["VL11M"] = () =>
                 {
-                    Form1.joystick_FY_point_buffer = null;
-                    Properties.Settings.Default.FY_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(11);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "FZ")
+                    if (Form1.VL11M_key_buffer != null) System.Array.Clear(Form1.VL11M_key_buffer, 0, Form1.VL11M_key_buffer.Length);
+                    if (Form1.VL11M_axis_buffer != null) System.Array.Clear(Form1.VL11M_axis_buffer, 0, Form1.VL11M_axis_buffer.Length);
+                    if (sb_vl11_axis_data != null) System.Array.Clear(sb_vl11_axis_data, 0, sb_vl11_axis_data.Length);
+
+                    Properties.Settings.Default.vl11_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.vl11_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.vl11_buffer_axis_settings2?.Clear();
+
+                    if (Form1.vl11_wav_path_key_buffer != null) System.Array.Clear(Form1.vl11_wav_path_key_buffer, 0, Form1.vl11_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_vl11_wav_path_data_settings?.Clear();
+                },
+
+                ["VL82M"] = () =>
                 {
-                    Form1.joystick_FZ_point_buffer = null;
-                    Properties.Settings.Default.FZ_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(12);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "Rx")
+                    if (Form1.VL82M_key_buffer != null) System.Array.Clear(Form1.VL82M_key_buffer, 0, Form1.VL82M_key_buffer.Length);
+                    if (Form1.VL82M_axis_buffer != null) System.Array.Clear(Form1.VL82M_axis_buffer, 0, Form1.VL82M_axis_buffer.Length);
+                    if (sb_vl82_axis_data != null) System.Array.Clear(sb_vl82_axis_data, 0, sb_vl82_axis_data.Length);
+
+                    Properties.Settings.Default.vl82_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.vl82_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.vl82_buffer_axis_settings2?.Clear();
+
+                    if (Form1.vl82_wav_path_key_buffer != null) System.Array.Clear(Form1.vl82_wav_path_key_buffer, 0, Form1.vl82_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_vl82_wav_path_data_settings?.Clear();
+                },
+
+                ["VL80T"] = () =>
                 {
-                    Form1.joystick_Rx_point_buffer = null;
-                    Properties.Settings.Default.Rx_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(13);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "Ry")
+                    if (Form1.VL80T_key_buffer != null) System.Array.Clear(Form1.VL80T_key_buffer, 0, Form1.VL80T_key_buffer.Length);
+                    if (Form1.VL80T_axis_buffer != null) System.Array.Clear(Form1.VL80T_axis_buffer, 0, Form1.VL80T_axis_buffer.Length);
+                    if (sb_vl80t_axis_data != null) System.Array.Clear(sb_vl80t_axis_data, 0, sb_vl80t_axis_data.Length);
+
+                    Properties.Settings.Default.vl80t_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.vl80t_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.vl80t_buffer_axis_settings2?.Clear();
+
+                    if (Form1.vl80t_wav_path_key_buffer != null) System.Array.Clear(Form1.vl80t_wav_path_key_buffer, 0, Form1.vl80t_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_vl80t_wav_path_data_settings?.Clear();
+                },
+
+                ["VL85"] = () =>
                 {
-                    Form1.joystick_Ry_point_buffer = null;
-                    Properties.Settings.Default.Ry_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(14);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "Rz")
+                    if (Form1.VL85_key_buffer != null) System.Array.Clear(Form1.VL85_key_buffer, 0, Form1.VL85_key_buffer.Length);
+                    if (Form1.VL85_axis_buffer != null) System.Array.Clear(Form1.VL85_axis_buffer, 0, Form1.VL85_axis_buffer.Length);
+                    if (sb_vl85_axis_data != null) System.Array.Clear(sb_vl85_axis_data, 0, sb_vl85_axis_data.Length);
+
+                    Properties.Settings.Default.vl85_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.vl85_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.vl85_buffer_axis_settings2?.Clear();
+
+                    if (Form1.vl85_wav_path_key_buffer != null) System.Array.Clear(Form1.vl85_wav_path_key_buffer, 0, Form1.vl85_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_vl85_wav_path_data_settings?.Clear();
+                },
+
+                ["TEP70"] = () =>
                 {
-                    Form1.joystick_Rz_point_buffer = null;
-                    Properties.Settings.Default.Rz_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(15);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "VRx")
+                    if (Form1.TEP70_key_buffer != null) System.Array.Clear(Form1.TEP70_key_buffer, 0, Form1.TEP70_key_buffer.Length);
+                    if (Form1.TEP70_axis_buffer != null) System.Array.Clear(Form1.TEP70_axis_buffer, 0, Form1.TEP70_axis_buffer.Length);
+                    if (sb_tep70_axis_data != null) System.Array.Clear(sb_tep70_axis_data, 0, sb_tep70_axis_data.Length);
+
+                    Properties.Settings.Default.tep70_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.tep70_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.tep70_buffer_axis_settings2?.Clear();
+
+                    if (Form1.tep70_wav_path_key_buffer != null) System.Array.Clear(Form1.tep70_wav_path_key_buffer, 0, Form1.tep70_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_tep70_wav_path_data_settings?.Clear();
+                },
+
+                ["2TE10U"] = () =>
                 {
-                    Form1.joystick_VRx_point_buffer = null;
-                    Properties.Settings.Default.VRx_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(16);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "VRy")
+                    if (Form1.TE10U_key_buffer != null) System.Array.Clear(Form1.TE10U_key_buffer, 0, Form1.TE10U_key_buffer.Length);
+                    if (Form1.TE10U_axis_buffer != null) System.Array.Clear(Form1.TE10U_axis_buffer, 0, Form1.TE10U_axis_buffer.Length);
+                    if (sb_te10u_axis_data != null) System.Array.Clear(sb_te10u_axis_data, 0, sb_te10u_axis_data.Length);
+
+                    Properties.Settings.Default.te10u_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.te10u_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.te10u_buffer_axis_settings2?.Clear();
+
+                    if (Form1.te10u_wav_path_key_buffer != null) System.Array.Clear(Form1.te10u_wav_path_key_buffer, 0, Form1.te10u_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_te10u_wav_path_data_settings?.Clear();
+                },
+
+                ["M62"] = () =>
                 {
-                    Form1.joystick_VRy_point_buffer = null;
-                    Properties.Settings.Default.VRy_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(17);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "VRz")
+                    if (Form1.M62_key_buffer != null) System.Array.Clear(Form1.M62_key_buffer, 0, Form1.M62_key_buffer.Length);
+                    if (Form1.M62_axis_buffer != null) System.Array.Clear(Form1.M62_axis_buffer, 0, Form1.M62_axis_buffer.Length);
+                    if (sb_m62_axis_data != null) System.Array.Clear(sb_m62_axis_data, 0, sb_m62_axis_data.Length);
+
+                    Properties.Settings.Default.m62_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.m62_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.m62_buffer_axis_settings2?.Clear();
+
+                    if (Form1.m62_wav_path_key_buffer != null) System.Array.Clear(Form1.m62_wav_path_key_buffer, 0, Form1.m62_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_m62_wav_path_data_settings?.Clear();
+                },
+
+                ["ED4M"] = () =>
                 {
-                    Form1.joystick_VRz_point_buffer = null;
-                    Properties.Settings.Default.VRz_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(18);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "VX")
+                    if (Form1.ED4M_key_buffer != null) System.Array.Clear(Form1.ED4M_key_buffer, 0, Form1.ED4M_key_buffer.Length);
+                    if (Form1.ED4M_axis_buffer != null) System.Array.Clear(Form1.ED4M_axis_buffer, 0, Form1.ED4M_axis_buffer.Length);
+                    if (sb_ed4m_axis_data != null) System.Array.Clear(sb_ed4m_axis_data, 0, sb_ed4m_axis_data.Length);
+
+                    Properties.Settings.Default.ed4m_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.ed4m_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.ed4m_buffer_axis_settings2?.Clear();
+
+                    if (Form1.ed4m_wav_path_key_buffer != null) System.Array.Clear(Form1.ed4m_wav_path_key_buffer, 0, Form1.ed4m_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_ed4m_wav_path_data_settings?.Clear();
+                },
+
+                ["ED9M"] = () =>
                 {
-                    Form1.joystick_VX_point_buffer = null;
-                    Properties.Settings.Default.VX_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(19);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "VY")
+                    if (Form1.ED9M_key_buffer != null) System.Array.Clear(Form1.ED9M_key_buffer, 0, Form1.ED9M_key_buffer.Length);
+                    if (Form1.ED9M_axis_buffer != null) System.Array.Clear(Form1.ED9M_axis_buffer, 0, Form1.ED9M_axis_buffer.Length);
+                    if (sb_ed9m_axis_data != null) System.Array.Clear(sb_ed9m_axis_data, 0, sb_ed9m_axis_data.Length);
+
+                    Properties.Settings.Default.ed9m_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.ed9m_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.ed9m_buffer_axis_settings2?.Clear();
+
+                    if (Form1.ed9m_wav_path_key_buffer != null) System.Array.Clear(Form1.ed9m_wav_path_key_buffer, 0, Form1.ed9m_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_ed9m_wav_path_data_settings?.Clear();
+                },
+
+                ["tem18"] = () =>
                 {
-                    Form1.joystick_VY_point_buffer = null;
-                    Properties.Settings.Default.VY_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(20);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "VZ")
-                {
-                    Form1.joystick_VZ_point_buffer = null;
-                    Properties.Settings.Default.VZ_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(21);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "X")
-                {
-                    Form1.joystick_X_point_buffer = null;
-                    Properties.Settings.Default.X_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(22);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "Y")
-                {
-                    Form1.joystick_Y_point_buffer = null;
-                    Properties.Settings.Default.Y_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(23);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "Z")
-                {
-                    Form1.joystick_Z_point_buffer = null;
-                    Properties.Settings.Default.Z_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(24);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "POV")
-                {
-                    Form1.joystick_POV_point_buffer = null;
-                    Properties.Settings.Default.POV_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(25);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "Slider")
-                {
-                    Form1.joystick_Slider_point_buffer = null;
-                    Properties.Settings.Default.Slider_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(26);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "SliderAS")
-                {
-                    Form1.joystick_ASlider_point_buffer = null;
-                    Properties.Settings.Default.ASlider_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(27);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "SliderFS")
-                {
-                    Form1.joystick_FSlider_point_buffer = null;
-                    Properties.Settings.Default.FSlider_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(28);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                if (comboBox_osi_select.SelectedItem.ToString() == "SliderVS")
-                {
-                    Form1.joystick_VSlider_point_buffer = null;
-                    Properties.Settings.Default.VSlider_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                    sbros_metok_clear_buffer(29);
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    KeyDataUpdate();
-                }
-                Properties.Settings.Default.Save();
-            }
+                    if (Form1.tem18_key_buffer != null) System.Array.Clear(Form1.tem18_key_buffer, 0, Form1.tem18_key_buffer.Length);
+                    if (Form1.tem18_axis_buffer != null) System.Array.Clear(Form1.tem18_axis_buffer, 0, Form1.tem18_axis_buffer.Length);
+                    if (sb_tem18_axis_data != null) System.Array.Clear(sb_tem18_axis_data, 0, sb_tem18_axis_data.Length);
+
+                    Properties.Settings.Default.tem18_buffer_key_settings?.Clear();
+                    Properties.Settings.Default.tem18_buffer_axis_settings?.Clear();
+                    Properties.Settings.Default.tem18_buffer_axis_settings2?.Clear();
+
+                    if (Form1.tem18_wav_path_key_buffer != null) System.Array.Clear(Form1.tem18_wav_path_key_buffer, 0, Form1.tem18_wav_path_key_buffer.Length);
+                    Properties.Settings.Default.sb_tem18_wav_path_data_settings?.Clear();
+                },
+            };
         }
 
         //============================================================================
@@ -3883,922 +3321,329 @@ namespace zdsimScanner
         //============================================================================
         private void button_zdsim_sbros_tek_Click(object sender, EventArgs e)
         {
-            string s_name = "Удаление настроек текущего локомотива";
-            string s1 = "Настройки локомотива - ";
-            string s2 = " будут удалены, уверены?";
-            DialogResult result = MessageBox.Show((s1 + comboBox_zdsimLoco.SelectedItem.ToString() + s2), s_name, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-            if (result == DialogResult.OK)
+            string loco = comboBox_zdsimLoco.SelectedItem?.ToString();
+            if (string.IsNullOrEmpty(loco))
+                return;
+
+            string title = "Удаление настроек текущего локомотива";
+            string msg = "Настройки локомотива - " + loco + " будут удалены, уверены?";
+
+            var result = MessageBox.Show(
+                msg,
+                title,
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Warning,
+                MessageBoxDefaultButton.Button2);
+
+            if (result != DialogResult.OK)
+                return;
+
+            EnsureLocoResetDefs();
+
+            if (!_locoResetByName.TryGetValue(loco, out var resetAction))
             {
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "Controls")
-                {
-                    //кнопки, оси
-                    Array.Clear(Form1.Controls_key_buffer, 0, Form1.Controls_key_buffer.Length);
-                    Array.Clear(Form1.Controls_axis_buffer, 0, Form1.Controls_axis_buffer.Length);
-                    Array.Clear(sb_controls_axis_data, 0, sb_controls_axis_data.Length);
-                    Properties.Settings.Default.controls_buffer_key_settings.Clear();
-                    Properties.Settings.Default.controls_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.controls_buffer_axis_settings2.Clear();
+                MessageBox.Show(
+                    "Для локомотива \"" + loco + "\" не описан сброс (нет в карте).",
+                    "Сброс",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
 
-                    //звук
-                    Array.Clear(Form1.controls_wav_path_key_buffer, 0, Form1.controls_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_controls_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "Neshtatki")
-                {
-                    Array.Clear(Form1.Neshtatki_key_buffer, 0, Form1.Neshtatki_key_buffer.Length);
-                    Array.Clear(Form1.Neshtatki_axis_buffer, 0, Form1.Neshtatki_axis_buffer.Length);
-                    Array.Clear(sb_neshtatki_axis_data, 0, sb_neshtatki_axis_data.Length);
-                    Properties.Settings.Default.neshtatki_buffer_key_settings.Clear();
-                    Properties.Settings.Default.neshtatki_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.neshtatki_buffer_axis_settings2.Clear();
+            resetAction();
 
-                    //звук
-                    Array.Clear(Form1.neshtatki_wav_path_key_buffer, 0, Form1.neshtatki_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_neshtatki_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "2ES5K")
-                {
-                    Array.Clear(Form1.ES5K_key_buffer, 0, Form1.ES5K_key_buffer.Length);
-                    Array.Clear(Form1.ES5K_axis_buffer, 0, Form1.ES5K_axis_buffer.Length);
-                    Array.Clear(sb_es5k_axis_data, 0, sb_es5k_axis_data.Length);
-                    Properties.Settings.Default.es5k_buffer_key_settings.Clear();
-                    Properties.Settings.Default.es5k_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.es5k_buffer_axis_settings2.Clear();
+            // твой общий хвост
+            sbBufferSave();
+            Form1.SaveBuffersSettings();
+            Properties.Settings.Default.Save();
+            KeyDataUpdate();
+        }
 
-                    //звук
-                    Array.Clear(Form1.es5k_wav_path_key_buffer, 0, Form1.es5k_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_es5k_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "EP1M")
-                {
-                    Array.Clear(Form1.EP1M_key_buffer, 0, Form1.EP1M_key_buffer.Length);
-                    Array.Clear(Form1.EP1M_axis_buffer, 0, Form1.EP1M_axis_buffer.Length);
-                    Array.Clear(sb_ep1m_axis_data, 0, sb_ep1m_axis_data.Length);
-                    Properties.Settings.Default.ep1m_buffer_key_settings.Clear();
-                    Properties.Settings.Default.ep1m_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.ep1m_buffer_axis_settings2.Clear();
+        //============================================================================
+        // Для работы с button_zdsim_sbros_key_Click()
+        //============================================================================
+        private sealed class LocoRowBindingDef
+        {
+            public int[] KeyBuffer;                      // Form1.*_key_buffer
+            public int[,] AxisBuffer;                    // Form1.*_axis_buffer (N x 2)
+            public string[] SbAxisData;                  // sb_*_axis_data
 
-                    //звук
-                    Array.Clear(Form1.ep1m_wav_path_key_buffer, 0, Form1.ep1m_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_ep1m_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS2K")
-                {
-                    Array.Clear(Form1.CHS2K_key_buffer, 0, Form1.CHS2K_key_buffer.Length);
-                    Array.Clear(Form1.CHS2K_axis_buffer, 0, Form1.CHS2K_axis_buffer.Length);
-                    Array.Clear(sb_chs2k_axis_data, 0, sb_chs2k_axis_data.Length);
-                    Properties.Settings.Default.chs2k_buffer_key_settings.Clear();
-                    Properties.Settings.Default.chs2k_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.chs2k_buffer_axis_settings2.Clear();
+            public StringCollection KeySettings;   // *_buffer_key_settings
+            public StringCollection AxisSettings1; // *_buffer_axis_settings
+            public StringCollection AxisSettings2; // *_buffer_axis_settings2
+        }
 
-                    //звук
-                    Array.Clear(Form1.chs2k_wav_path_key_buffer, 0, Form1.chs2k_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_chs2k_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4")
-                {
-                    Array.Clear(Form1.CHS4_key_buffer, 0, Form1.CHS4_key_buffer.Length);
-                    Array.Clear(Form1.CHS4_axis_buffer, 0, Form1.CHS4_axis_buffer.Length);
-                    Array.Clear(sb_chs4_axis_data, 0, sb_chs4_axis_data.Length);
-                    Properties.Settings.Default.chs4_buffer_key_settings.Clear();
-                    Properties.Settings.Default.chs4_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.chs4_buffer_axis_settings2.Clear();
+        private Dictionary<string, LocoRowBindingDef> _locoRowBindingByName;
 
-                    //звук
-                    Array.Clear(Form1.chs4_wav_path_key_buffer, 0, Form1.chs4_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_chs4_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4 KVR")
-                {
-                    Array.Clear(Form1.CHS4KVR_key_buffer, 0, Form1.CHS4KVR_key_buffer.Length);
-                    Array.Clear(Form1.CHS4KVR_axis_buffer, 0, Form1.CHS4KVR_axis_buffer.Length);
-                    Array.Clear(sb_chs4kvr_axis_data, 0, sb_chs4kvr_axis_data.Length);
-                    Properties.Settings.Default.chs4kvr_buffer_key_settings.Clear();
-                    Properties.Settings.Default.chs4kvr_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.chs4kvr_buffer_axis_settings2.Clear();
+        private void EnsureLocoRowBindingDefs()
+        {
+            if (_locoRowBindingByName != null) return;
 
-                    //звук
-                    Array.Clear(Form1.chs4kvr_wav_path_key_buffer, 0, Form1.chs4kvr_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_chs4kvr_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4T")
+            _locoRowBindingByName = new Dictionary<string, LocoRowBindingDef>(StringComparer.Ordinal)
+            {
+                ["Controls"] = new LocoRowBindingDef
                 {
-                    Array.Clear(Form1.CHS4T_key_buffer, 0, Form1.CHS4T_key_buffer.Length);
-                    Array.Clear(Form1.CHS4T_axis_buffer, 0, Form1.CHS4T_axis_buffer.Length);
-                    Array.Clear(sb_chs4t_axis_data, 0, sb_chs4t_axis_data.Length);
-                    Properties.Settings.Default.chs4t_buffer_key_settings.Clear();
-                    Properties.Settings.Default.chs4t_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.chs4t_buffer_axis_settings2.Clear();
-
-                    //звук
-                    Array.Clear(Form1.chs4t_wav_path_key_buffer, 0, Form1.chs4t_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_chs4t_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS7")
+                    KeyBuffer = Form1.Controls_key_buffer,
+                    AxisBuffer = Form1.Controls_axis_buffer,
+                    SbAxisData = sb_controls_axis_data,
+                    KeySettings = Properties.Settings.Default.controls_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.controls_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.controls_buffer_axis_settings2,
+                },
+                ["Neshtatki"] = new LocoRowBindingDef
                 {
-                    Array.Clear(Form1.CHS7_key_buffer, 0, Form1.CHS7_key_buffer.Length);
-                    Array.Clear(Form1.CHS7_axis_buffer, 0, Form1.CHS7_axis_buffer.Length);
-                    Array.Clear(sb_chs7_axis_data, 0, sb_chs7_axis_data.Length);
-                    Properties.Settings.Default.chs7_buffer_key_settings.Clear();
-                    Properties.Settings.Default.chs7_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.chs7_buffer_axis_settings2.Clear();
-
-                    //звук
-                    Array.Clear(Form1.chs7_wav_path_key_buffer, 0, Form1.chs7_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_chs7_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS8")
+                    KeyBuffer = Form1.Neshtatki_key_buffer,
+                    AxisBuffer = Form1.Neshtatki_axis_buffer,
+                    SbAxisData = sb_neshtatki_axis_data,
+                    KeySettings = Properties.Settings.Default.neshtatki_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.neshtatki_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.neshtatki_buffer_axis_settings2,
+                },
+                ["2ES5K"] = new LocoRowBindingDef
                 {
-                    Array.Clear(Form1.CHS8_key_buffer, 0, Form1.CHS8_key_buffer.Length);
-                    Array.Clear(Form1.CHS8_axis_buffer, 0, Form1.CHS8_axis_buffer.Length);
-                    Array.Clear(sb_chs8_axis_data, 0, sb_chs8_axis_data.Length);
-                    Properties.Settings.Default.chs8_buffer_key_settings.Clear();
-                    Properties.Settings.Default.chs8_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.chs8_buffer_axis_settings2.Clear();
-
-                    //звук
-                    Array.Clear(Form1.chs8_wav_path_key_buffer, 0, Form1.chs8_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_chs8_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL11M")
+                    KeyBuffer = Form1.ES5K_key_buffer,
+                    AxisBuffer = Form1.ES5K_axis_buffer,
+                    SbAxisData = sb_es5k_axis_data,
+                    KeySettings = Properties.Settings.Default.es5k_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.es5k_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.es5k_buffer_axis_settings2,
+                },
+                ["EP1M"] = new LocoRowBindingDef
                 {
-                    Array.Clear(Form1.VL11M_key_buffer, 0, Form1.VL11M_key_buffer.Length);
-                    Array.Clear(Form1.VL11M_axis_buffer, 0, Form1.VL11M_axis_buffer.Length);
-                    Array.Clear(sb_vl11_axis_data, 0, sb_vl11_axis_data.Length);
-                    Properties.Settings.Default.vl11_buffer_key_settings.Clear();
-                    Properties.Settings.Default.vl11_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.vl11_buffer_axis_settings2.Clear();
-
-                    //звук
-                    Array.Clear(Form1.vl11_wav_path_key_buffer, 0, Form1.vl11_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_vl11_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL82M")
+                    KeyBuffer = Form1.EP1M_key_buffer,
+                    AxisBuffer = Form1.EP1M_axis_buffer,
+                    SbAxisData = sb_ep1m_axis_data,
+                    KeySettings = Properties.Settings.Default.ep1m_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.ep1m_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.ep1m_buffer_axis_settings2,
+                },
+                ["CHS2K"] = new LocoRowBindingDef
                 {
-                    Array.Clear(Form1.VL82M_key_buffer, 0, Form1.VL82M_key_buffer.Length);
-                    Array.Clear(Form1.VL82M_axis_buffer, 0, Form1.VL82M_axis_buffer.Length);
-                    Array.Clear(sb_vl82_axis_data, 0, sb_vl82_axis_data.Length);
-                    Properties.Settings.Default.vl82_buffer_key_settings.Clear();
-                    Properties.Settings.Default.vl82_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.vl82_buffer_axis_settings2.Clear();
-
-                    //звук
-                    Array.Clear(Form1.vl82_wav_path_key_buffer, 0, Form1.vl82_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_vl82_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL80T")
+                    KeyBuffer = Form1.CHS2K_key_buffer,
+                    AxisBuffer = Form1.CHS2K_axis_buffer,
+                    SbAxisData = sb_chs2k_axis_data,
+                    KeySettings = Properties.Settings.Default.chs2k_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.chs2k_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.chs2k_buffer_axis_settings2,
+                },
+                ["CHS4"] = new LocoRowBindingDef
                 {
-                    Array.Clear(Form1.VL80T_key_buffer, 0, Form1.VL80T_key_buffer.Length);
-                    Array.Clear(Form1.VL80T_axis_buffer, 0, Form1.VL80T_axis_buffer.Length);
-                    Array.Clear(sb_vl80t_axis_data, 0, sb_vl80t_axis_data.Length);
-                    Properties.Settings.Default.vl80t_buffer_key_settings.Clear();
-                    Properties.Settings.Default.vl80t_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.vl80t_buffer_axis_settings2.Clear();
-
-                    //звук
-                    Array.Clear(Form1.vl80t_wav_path_key_buffer, 0, Form1.vl80t_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_vl80t_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL85")
+                    KeyBuffer = Form1.CHS4_key_buffer,
+                    AxisBuffer = Form1.CHS4_axis_buffer,
+                    SbAxisData = sb_chs4_axis_data,
+                    KeySettings = Properties.Settings.Default.chs4_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.chs4_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.chs4_buffer_axis_settings2,
+                },
+                ["CHS4 KVR"] = new LocoRowBindingDef
                 {
-                    Array.Clear(Form1.VL85_key_buffer, 0, Form1.VL85_key_buffer.Length);
-                    Array.Clear(Form1.VL85_axis_buffer, 0, Form1.VL85_axis_buffer.Length);
-                    Array.Clear(sb_vl85_axis_data, 0, sb_vl85_axis_data.Length);
-                    Properties.Settings.Default.vl85_buffer_key_settings.Clear();
-                    Properties.Settings.Default.vl85_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.vl85_buffer_axis_settings2.Clear();
-
-                    //звук
-                    Array.Clear(Form1.vl85_wav_path_key_buffer, 0, Form1.vl85_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_vl85_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "TEP70")
+                    KeyBuffer = Form1.CHS4KVR_key_buffer,
+                    AxisBuffer = Form1.CHS4KVR_axis_buffer,
+                    SbAxisData = sb_chs4kvr_axis_data,
+                    KeySettings = Properties.Settings.Default.chs4kvr_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.chs4kvr_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.chs4kvr_buffer_axis_settings2,
+                },
+                ["CHS4T"] = new LocoRowBindingDef
                 {
-                    Array.Clear(Form1.TEP70_key_buffer, 0, Form1.TEP70_key_buffer.Length);
-                    Array.Clear(Form1.TEP70_axis_buffer, 0, Form1.TEP70_axis_buffer.Length);
-                    Array.Clear(sb_tep70_axis_data, 0, sb_tep70_axis_data.Length);
-                    Properties.Settings.Default.tep70_buffer_key_settings.Clear();
-                    Properties.Settings.Default.tep70_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.tep70_buffer_axis_settings2.Clear();
-
-                    //звук
-                    Array.Clear(Form1.tep70_wav_path_key_buffer, 0, Form1.tep70_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_tep70_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "2TE10U")
+                    KeyBuffer = Form1.CHS4T_key_buffer,
+                    AxisBuffer = Form1.CHS4T_axis_buffer,
+                    SbAxisData = sb_chs4t_axis_data,
+                    KeySettings = Properties.Settings.Default.chs4t_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.chs4t_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.chs4t_buffer_axis_settings2,
+                },
+                ["CHS7"] = new LocoRowBindingDef
                 {
-                    Array.Clear(Form1.TE10U_key_buffer, 0, Form1.TE10U_key_buffer.Length);
-                    Array.Clear(Form1.TE10U_axis_buffer, 0, Form1.TE10U_axis_buffer.Length);
-                    Array.Clear(sb_te10u_axis_data, 0, sb_te10u_axis_data.Length);
-                    Properties.Settings.Default.te10u_buffer_key_settings.Clear();
-                    Properties.Settings.Default.te10u_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.te10u_buffer_axis_settings2.Clear();
-
-                    //звук
-                    Array.Clear(Form1.te10u_wav_path_key_buffer, 0, Form1.te10u_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_te10u_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "M62")
+                    KeyBuffer = Form1.CHS7_key_buffer,
+                    AxisBuffer = Form1.CHS7_axis_buffer,
+                    SbAxisData = sb_chs7_axis_data,
+                    KeySettings = Properties.Settings.Default.chs7_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.chs7_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.chs7_buffer_axis_settings2,
+                },
+                ["CHS8"] = new LocoRowBindingDef
                 {
-                    Array.Clear(Form1.M62_key_buffer, 0, Form1.M62_key_buffer.Length);
-                    Array.Clear(Form1.M62_axis_buffer, 0, Form1.M62_axis_buffer.Length);
-                    Array.Clear(sb_m62_axis_data, 0, sb_m62_axis_data.Length);
-                    Properties.Settings.Default.m62_buffer_key_settings.Clear();
-                    Properties.Settings.Default.m62_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.m62_buffer_axis_settings2.Clear();
-
-                    //звук
-                    Array.Clear(Form1.m62_wav_path_key_buffer, 0, Form1.m62_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_m62_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "ED4M")
+                    KeyBuffer = Form1.CHS8_key_buffer,
+                    AxisBuffer = Form1.CHS8_axis_buffer,
+                    SbAxisData = sb_chs8_axis_data,
+                    KeySettings = Properties.Settings.Default.chs8_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.chs8_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.chs8_buffer_axis_settings2,
+                },
+                ["VL11M"] = new LocoRowBindingDef
                 {
-                    Array.Clear(Form1.ED4M_key_buffer, 0, Form1.ED4M_key_buffer.Length);
-                    Array.Clear(Form1.ED4M_axis_buffer, 0, Form1.ED4M_axis_buffer.Length);
-                    Array.Clear(sb_ed4m_axis_data, 0, sb_ed4m_axis_data.Length);
-                    Properties.Settings.Default.ed4m_buffer_key_settings.Clear();
-                    Properties.Settings.Default.ed4m_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.ed4m_buffer_axis_settings2.Clear();
-
-                    //звук
-                    Array.Clear(Form1.ed4m_wav_path_key_buffer, 0, Form1.ed4m_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_ed4m_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "ED9M")
+                    KeyBuffer = Form1.VL11M_key_buffer,
+                    AxisBuffer = Form1.VL11M_axis_buffer,
+                    SbAxisData = sb_vl11_axis_data,
+                    KeySettings = Properties.Settings.Default.vl11_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.vl11_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.vl11_buffer_axis_settings2,
+                },
+                ["VL82M"] = new LocoRowBindingDef
                 {
-                    Array.Clear(Form1.ED9M_key_buffer, 0, Form1.ED9M_key_buffer.Length);
-                    Array.Clear(Form1.ED9M_axis_buffer, 0, Form1.ED9M_axis_buffer.Length);
-                    Array.Clear(sb_ed9m_axis_data, 0, sb_ed9m_axis_data.Length);
-                    Properties.Settings.Default.ed9m_buffer_key_settings.Clear();
-                    Properties.Settings.Default.ed9m_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.ed9m_buffer_axis_settings2.Clear();
-
-                    //звук
-                    Array.Clear(Form1.ed9m_wav_path_key_buffer, 0, Form1.ed9m_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_ed9m_wav_path_data_settings.Clear();
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "tem18")
+                    KeyBuffer = Form1.VL82M_key_buffer,
+                    AxisBuffer = Form1.VL82M_axis_buffer,
+                    SbAxisData = sb_vl82_axis_data,
+                    KeySettings = Properties.Settings.Default.vl82_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.vl82_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.vl82_buffer_axis_settings2,
+                },
+                ["VL80T"] = new LocoRowBindingDef
                 {
-                    Array.Clear(Form1.tem18_key_buffer, 0, Form1.tem18_key_buffer.Length);
-                    Array.Clear(Form1.tem18_axis_buffer, 0, Form1.tem18_axis_buffer.Length);
-                    Array.Clear(sb_tem18_axis_data, 0, sb_tem18_axis_data.Length);
-                    Properties.Settings.Default.tem18_buffer_key_settings.Clear();
-                    Properties.Settings.Default.tem18_buffer_axis_settings.Clear();
-                    Properties.Settings.Default.tem18_buffer_axis_settings2.Clear();
+                    KeyBuffer = Form1.VL80T_key_buffer,
+                    AxisBuffer = Form1.VL80T_axis_buffer,
+                    SbAxisData = sb_vl80t_axis_data,
+                    KeySettings = Properties.Settings.Default.vl80t_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.vl80t_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.vl80t_buffer_axis_settings2,
+                },
+                ["VL85"] = new LocoRowBindingDef
+                {
+                    KeyBuffer = Form1.VL85_key_buffer,
+                    AxisBuffer = Form1.VL85_axis_buffer,
+                    SbAxisData = sb_vl85_axis_data,
+                    KeySettings = Properties.Settings.Default.vl85_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.vl85_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.vl85_buffer_axis_settings2,
+                },
+                ["TEP70"] = new LocoRowBindingDef
+                {
+                    KeyBuffer = Form1.TEP70_key_buffer,
+                    AxisBuffer = Form1.TEP70_axis_buffer,
+                    SbAxisData = sb_tep70_axis_data,
+                    KeySettings = Properties.Settings.Default.tep70_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.tep70_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.tep70_buffer_axis_settings2,
+                },
+                ["2TE10U"] = new LocoRowBindingDef
+                {
+                    KeyBuffer = Form1.TE10U_key_buffer,
+                    AxisBuffer = Form1.TE10U_axis_buffer,
+                    SbAxisData = sb_te10u_axis_data,
+                    KeySettings = Properties.Settings.Default.te10u_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.te10u_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.te10u_buffer_axis_settings2,
+                },
+                ["M62"] = new LocoRowBindingDef
+                {
+                    KeyBuffer = Form1.M62_key_buffer,
+                    AxisBuffer = Form1.M62_axis_buffer,
+                    SbAxisData = sb_m62_axis_data,
+                    KeySettings = Properties.Settings.Default.m62_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.m62_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.m62_buffer_axis_settings2,
+                },
+                ["ED4M"] = new LocoRowBindingDef
+                {
+                    KeyBuffer = Form1.ED4M_key_buffer,
+                    AxisBuffer = Form1.ED4M_axis_buffer,
+                    SbAxisData = sb_ed4m_axis_data,
+                    KeySettings = Properties.Settings.Default.ed4m_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.ed4m_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.ed4m_buffer_axis_settings2,
+                },
+                ["ED9M"] = new LocoRowBindingDef
+                {
+                    KeyBuffer = Form1.ED9M_key_buffer,
+                    AxisBuffer = Form1.ED9M_axis_buffer,
+                    SbAxisData = sb_ed9m_axis_data,
+                    KeySettings = Properties.Settings.Default.ed9m_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.ed9m_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.ed9m_buffer_axis_settings2,
+                },
+                ["tem18"] = new LocoRowBindingDef
+                {
+                    KeyBuffer = Form1.tem18_key_buffer,
+                    AxisBuffer = Form1.tem18_axis_buffer,
+                    SbAxisData = sb_tem18_axis_data,
+                    KeySettings = Properties.Settings.Default.tem18_buffer_key_settings,
+                    AxisSettings1 = Properties.Settings.Default.tem18_buffer_axis_settings,
+                    AxisSettings2 = Properties.Settings.Default.tem18_buffer_axis_settings2,
+                },
+            };
+        }
 
-                    //звук
-                    Array.Clear(Form1.tem18_wav_path_key_buffer, 0, Form1.tem18_wav_path_key_buffer.Length);
-                    Properties.Settings.Default.sb_tem18_wav_path_data_settings.Clear();
-                }
-                sbBufferSave();
-                Form1.SaveBuffersSettings();
-                Properties.Settings.Default.Save();
-                KeyDataUpdate();
+        //============================================================================
+        // Единая функция «удалить привязку в строке»
+        //============================================================================
+        private void ClearBindingRow(LocoRowBindingDef def, int rowIndex)
+        {
+            if (def == null) return;
+            if (rowIndex < 0) return;
+
+            // Буферы
+            if (def.KeyBuffer != null && (uint)rowIndex < (uint)def.KeyBuffer.Length)
+                def.KeyBuffer[rowIndex] = 0;
+
+            if (def.AxisBuffer != null &&
+                (uint)rowIndex < (uint)def.AxisBuffer.GetLength(0) &&
+                def.AxisBuffer.GetLength(1) >= 2)
+            {
+                def.AxisBuffer[rowIndex, 0] = 0;
+                def.AxisBuffer[rowIndex, 1] = 0;
+            }
+
+            if (def.SbAxisData != null && (uint)rowIndex < (uint)def.SbAxisData.Length)
+                def.SbAxisData[rowIndex] = null;
+
+            // Settings: НЕ чистим всю коллекцию, только гарантируем длину и пишем по индексу
+            if (def.KeySettings != null)
+            {
+                int need = def.KeyBuffer?.Length ?? 0;
+                EnsureSizeAtLeastFillZeros(def.KeySettings, need);
+                if ((uint)rowIndex < (uint)def.KeySettings.Count) def.KeySettings[rowIndex] = "0";
+            }
+
+            if (def.AxisSettings1 != null)
+            {
+                int need = def.AxisBuffer?.GetLength(0) ?? 0;
+                EnsureSizeAtLeastFillZeros(def.AxisSettings1, need);
+                if ((uint)rowIndex < (uint)def.AxisSettings1.Count) def.AxisSettings1[rowIndex] = "0";
+            }
+
+            if (def.AxisSettings2 != null)
+            {
+                int need = def.AxisBuffer?.GetLength(0) ?? 0;
+                EnsureSizeAtLeastFillZeros(def.AxisSettings2, need);
+                if ((uint)rowIndex < (uint)def.AxisSettings2.Count) def.AxisSettings2[rowIndex] = "0";
             }
         }
 
         //============================================================================
-        // Кнопка "Удал.кн." служит для удаления текущей кнопки или точки оси
+        // Кнопка "Удал.кн." — удаление текущей кнопки или точки оси
         //============================================================================
-        private void button_zdsim_sbros_key_Click(object sender, EventArgs e)
+        private void button_zdsim_sbros_key_Click(object sender, System.EventArgs e)
         {
-            if (dataGridView_Zdsimulator.CurrentCell.ColumnIndex == 1)
+            // удаляем только если стоим в колонке 1
+            if (dataGridView_Zdsimulator.CurrentCell == null) return;
+            if (dataGridView_Zdsimulator.CurrentRow == null) return;
+            if (dataGridView_Zdsimulator.CurrentCell.ColumnIndex != 1) return;
+
+            string loco = comboBox_zdsimLoco.SelectedItem?.ToString();
+            if (string.IsNullOrEmpty(loco)) return;
+
+            int row = dataGridView_Zdsimulator.CurrentRow.Index;
+            if (row < 0) return;
+
+            EnsureLocoRowBindingDefs();
+
+            if (!_locoRowBindingByName.TryGetValue(loco, out var def))
+                return; // или показать MessageBox, если хочешь
+
+            ClearBindingRow(def, row); // Единая функция «удалить привязку в строке»
+
+            // общий хвост
+            sbBufferSave();
+            Form1.SaveBuffersSettings();
+            Properties.Settings.Default.Save();
+            KeyDataUpdate();
+
+            // вернуть курсор и скролл на ту же строку
+            if (row >= 0 && row < dataGridView_Zdsimulator.Rows.Count)
             {
-                int i = 0;
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "Controls")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.Controls_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.Controls_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.Controls_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_controls_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.controls_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.controls_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.controls_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "Neshtatki")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.Neshtatki_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.Neshtatki_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.Neshtatki_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_neshtatki_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.neshtatki_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.neshtatki_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.neshtatki_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "2ES5K")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.ES5K_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.ES5K_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.ES5K_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_es5k_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.es5k_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.es5k_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.es5k_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "EP1M")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.EP1M_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.EP1M_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.EP1M_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_ep1m_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.ep1m_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.ep1m_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.ep1m_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS2K")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.CHS2K_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.CHS2K_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.CHS2K_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_chs2k_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.chs2k_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.chs2k_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.chs2k_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.CHS4_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.CHS4_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.CHS4_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_chs4_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.chs4_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.chs4_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.chs4_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4 KVR")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.CHS4KVR_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.CHS4KVR_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.CHS4KVR_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_chs4kvr_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.chs4kvr_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.chs4kvr_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.chs4kvr_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4T")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.CHS4T_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.CHS4T_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.CHS4T_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_chs4t_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.chs4t_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.chs4t_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.chs4t_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS7")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.CHS7_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.CHS7_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.CHS7_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_chs7_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.chs7_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.chs7_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.chs7_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS8")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.CHS8_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.CHS8_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.CHS8_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_chs8_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.chs8_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.chs8_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.chs8_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL11M")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.VL11M_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.VL11M_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.VL11M_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_vl11_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.vl11_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.vl11_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.vl11_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL82M")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.VL82M_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.VL82M_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.VL82M_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_vl82_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.vl82_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.vl82_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.vl82_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL80T")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.VL80T_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.VL80T_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.VL80T_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_vl80t_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.vl80t_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.vl80t_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.vl80t_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL85")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.VL85_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.VL85_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.VL85_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_vl85_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.vl85_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.vl85_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.vl85_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "TEP70")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.TEP70_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.TEP70_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.TEP70_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_tep70_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.tep70_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.tep70_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.tep70_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "2TE10U")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.TE10U_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.TE10U_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.TE10U_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_te10u_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.te10u_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.te10u_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.te10u_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "M62")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.M62_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.M62_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.M62_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_m62_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.m62_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.m62_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.m62_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "ED4M")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.ED4M_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.ED4M_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.ED4M_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_ed4m_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.ed4m_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.ed4m_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.ed4m_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "ED9M")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.ED9M_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.ED9M_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.ED9M_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_ed9m_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.ed9m_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.ed9m_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.ed9m_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "tem18")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.tem18_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = 0;
-                    Form1.tem18_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 0] = 0;
-                    Form1.tem18_axis_buffer[dataGridView_Zdsimulator.CurrentRow.Index, 1] = 0;
-                    sb_tem18_axis_data[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.tem18_buffer_key_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.tem18_buffer_axis_settings[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    Properties.Settings.Default.tem18_buffer_axis_settings2[dataGridView_Zdsimulator.CurrentRow.Index] = "0";
-                    sbBufferSave();
-                    Form1.SaveBuffersSettings();
-                    Properties.Settings.Default.Save();
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[1];
-                }
-            }
-        }
-
-        //============================================================================
-        // Кнопка "Удал.звук" служит для удаления звука установленного для органа управления
-        //============================================================================
-        private void button_zdsim_sbros_sound_Click(object sender, EventArgs e)
-        {
-            if (dataGridView_Zdsimulator.CurrentCell.ColumnIndex == 2)
-            {
-                int i = 0;
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "Controls")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.controls_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_controls_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "2ES5K")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.es5k_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_es5k_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "EP1M")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.ep1m_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_ep1m_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS2K")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.chs2k_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_chs2k_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.chs4_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_chs4_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4 KVR")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.chs4kvr_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_chs4kvr_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS4T")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.chs4t_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_chs4t_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS7")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.chs7_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_chs7_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
-                    KeyDataUpdate();
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "CHS8")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.chs8_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_chs8_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
-                    KeyDataUpdate();
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL11M")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.vl11_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_vl11_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
-                    KeyDataUpdate();
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL82M")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.vl82_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_vl82_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
-                    KeyDataUpdate();
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL80T")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.vl80t_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_vl80t_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
-                    KeyDataUpdate();
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "VL85")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.vl85_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_vl85_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
-                    KeyDataUpdate();
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "TEP70")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.tep70_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_tep70_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
-                    KeyDataUpdate();
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "2TE10U")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.te10u_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_te10u_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
-                    KeyDataUpdate();
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "M62")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.m62_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_m62_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
-                    KeyDataUpdate();
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "ED4M")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.ed4m_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_ed4m_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
-                    KeyDataUpdate();
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "ED9M")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.ed9m_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_ed9m_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
-                    KeyDataUpdate();
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "tem18")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.tem18_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_tem18_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-
-                    KeyDataUpdate();
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
-                }
-                if (comboBox_zdsimLoco.SelectedItem.ToString() == "Neshtatki")
-                {
-                    i = dataGridView_Zdsimulator.CurrentRow.Index;
-                    Form1.neshtatki_wav_path_key_buffer[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    Properties.Settings.Default.sb_neshtatki_wav_path_data_settings[dataGridView_Zdsimulator.CurrentRow.Index] = null;
-                    KeyDataUpdate();
-
-                    //перевод курсора на выделенную позицию
-                    dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = i;
-                    dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[i].Cells[2];
- 
-                }
+                dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = row;
+                dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[row].Cells[1];
             }
         }
 
@@ -4807,216 +3652,113 @@ namespace zdsimScanner
         //============================================================================
         private void button_zdsim_sbros_all_Click(object sender, EventArgs e)
         {
-            string s_name = "Удаление настроек всех локомотивов";
-            string s1 = "Настройки всех локомотивов будут удалены, уверены?";
-            DialogResult result = MessageBox.Show(s1, s_name, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-            if (result == DialogResult.OK)
+            if (MessageBox.Show(
+                "Настройки всех локомотивов будут удалены, уверены?",
+                "Удаление настроек всех локомотивов",
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Warning,
+                MessageBoxDefaultButton.Button2) != DialogResult.OK)
+                return;
+
+            EnsureLocoRowBindingDefs();
+            EnsureSoundBindings();
+
+            foreach (var def in _locoRowBindingByName.Values)
             {
-                Array.Clear(Form1.Controls_key_buffer, 0, Form1.Controls_key_buffer.Length);
-                Array.Clear(Form1.Controls_axis_buffer, 0, Form1.Controls_axis_buffer.Length);
-                Array.Clear(sb_controls_axis_data, 0, sb_controls_axis_data.Length);
-                Properties.Settings.Default.controls_buffer_key_settings.Clear();
-                Properties.Settings.Default.controls_buffer_axis_settings.Clear();
-                Properties.Settings.Default.controls_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.controls_wav_path_key_buffer, 0, Form1.controls_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_controls_wav_path_data_settings.Clear();
+                if (def.KeyBuffer != null)
+                    Array.Clear(def.KeyBuffer, 0, def.KeyBuffer.Length);
 
-                Array.Clear(Form1.Neshtatki_key_buffer, 0, Form1.Neshtatki_key_buffer.Length);
-                Array.Clear(Form1.Neshtatki_axis_buffer, 0, Form1.Neshtatki_axis_buffer.Length);
-                Array.Clear(sb_neshtatki_axis_data, 0, sb_neshtatki_axis_data.Length);
-                Properties.Settings.Default.neshtatki_buffer_key_settings.Clear();
-                Properties.Settings.Default.neshtatki_buffer_axis_settings.Clear();
-                Properties.Settings.Default.neshtatki_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.neshtatki_wav_path_key_buffer, 0, Form1.neshtatki_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_neshtatki_wav_path_data_settings.Clear();
+                if (def.AxisBuffer != null)
+                    Array.Clear(def.AxisBuffer, 0, def.AxisBuffer.Length);
 
-                Array.Clear(Form1.ES5K_key_buffer, 0, Form1.ES5K_key_buffer.Length);
-                Array.Clear(Form1.ES5K_axis_buffer, 0, Form1.ES5K_axis_buffer.Length);
-                Array.Clear(sb_es5k_axis_data, 0, sb_es5k_axis_data.Length);
-                Properties.Settings.Default.es5k_buffer_key_settings.Clear();
-                Properties.Settings.Default.es5k_buffer_axis_settings.Clear();
-                Properties.Settings.Default.es5k_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.es5k_wav_path_key_buffer, 0, Form1.es5k_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_es5k_wav_path_data_settings.Clear();
+                if (def.SbAxisData != null)
+                    Array.Clear(def.SbAxisData, 0, def.SbAxisData.Length);
 
-                Array.Clear(Form1.EP1M_key_buffer, 0, Form1.EP1M_key_buffer.Length);
-                Array.Clear(Form1.EP1M_axis_buffer, 0, Form1.EP1M_axis_buffer.Length);
-                Array.Clear(sb_ep1m_axis_data, 0, sb_ep1m_axis_data.Length);
-                Properties.Settings.Default.ep1m_buffer_key_settings.Clear();
-                Properties.Settings.Default.ep1m_buffer_axis_settings.Clear();
-                Properties.Settings.Default.ep1m_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.ep1m_wav_path_key_buffer, 0, Form1.ep1m_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_ep1m_wav_path_data_settings.Clear();
+                int rows = def.AxisBuffer?.GetLength(0) ?? 0;
 
-                Array.Clear(Form1.CHS2K_key_buffer, 0, Form1.CHS2K_key_buffer.Length);
-                Array.Clear(Form1.CHS2K_axis_buffer, 0, Form1.CHS2K_axis_buffer.Length);
-                Array.Clear(sb_chs2k_axis_data, 0, sb_chs2k_axis_data.Length);
-                Properties.Settings.Default.chs2k_buffer_key_settings.Clear();
-                Properties.Settings.Default.chs2k_buffer_axis_settings.Clear();
-                Properties.Settings.Default.chs2k_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.chs2k_wav_path_key_buffer, 0, Form1.chs2k_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_chs2k_wav_path_data_settings.Clear();
+                ResetSizeFillZeros(def.KeySettings, def.KeyBuffer?.Length ?? 0);
+                ResetSizeFillZeros(def.AxisSettings1, rows);
+                ResetSizeFillZeros(def.AxisSettings2, rows);
+            }
 
-                Array.Clear(Form1.CHS4_key_buffer, 0, Form1.CHS4_key_buffer.Length);
-                Array.Clear(Form1.CHS4_axis_buffer, 0, Form1.CHS4_axis_buffer.Length);
-                Array.Clear(sb_chs4_axis_data, 0, sb_chs4_axis_data.Length);
-                Properties.Settings.Default.chs4_buffer_key_settings.Clear();
-                Properties.Settings.Default.chs4_buffer_axis_settings.Clear();
-                Properties.Settings.Default.chs4_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.chs4_wav_path_key_buffer, 0, Form1.chs4_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_chs4_wav_path_data_settings.Clear();
+            foreach (var sound in _soundByLocoName.Values)
+            {
+                if (sound.WavPathBuffer != null)
+                    Array.Clear(sound.WavPathBuffer, 0, sound.WavPathBuffer.Length);
 
-                Array.Clear(Form1.CHS4KVR_key_buffer, 0, Form1.CHS4KVR_key_buffer.Length);
-                Array.Clear(Form1.CHS4KVR_axis_buffer, 0, Form1.CHS4KVR_axis_buffer.Length);
-                Array.Clear(sb_chs4kvr_axis_data, 0, sb_chs4kvr_axis_data.Length);
-                Properties.Settings.Default.chs4kvr_buffer_key_settings.Clear();
-                Properties.Settings.Default.chs4kvr_buffer_axis_settings.Clear();
-                Properties.Settings.Default.chs4kvr_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.chs4kvr_wav_path_key_buffer, 0, Form1.chs4kvr_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_chs4kvr_wav_path_data_settings.Clear();
+                EnsureSizeAndFillNulls(sound.WavSettings, sound.WavPathBuffer?.Length ?? 0);
+            }
 
-                Array.Clear(Form1.CHS4T_key_buffer, 0, Form1.CHS4T_key_buffer.Length);
-                Array.Clear(Form1.CHS4T_axis_buffer, 0, Form1.CHS4T_axis_buffer.Length);
-                Array.Clear(sb_chs4t_axis_data, 0, sb_chs4t_axis_data.Length);
-                Properties.Settings.Default.chs4t_buffer_key_settings.Clear();
-                Properties.Settings.Default.chs4t_buffer_axis_settings.Clear();
-                Properties.Settings.Default.chs4t_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.chs4t_wav_path_key_buffer, 0, Form1.chs4t_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_chs4t_wav_path_data_settings.Clear();
+            sbBufferSave();
+            sbBufferWavPathSave();
 
-                Array.Clear(Form1.CHS7_key_buffer, 0, Form1.CHS7_key_buffer.Length);
-                Array.Clear(Form1.CHS7_axis_buffer, 0, Form1.CHS7_axis_buffer.Length);
-                Array.Clear(sb_chs7_axis_data, 0, sb_chs7_axis_data.Length);
-                Properties.Settings.Default.chs7_buffer_key_settings.Clear();
-                Properties.Settings.Default.chs7_buffer_axis_settings.Clear();
-                Properties.Settings.Default.chs7_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.chs7_wav_path_key_buffer, 0, Form1.chs7_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_chs7_wav_path_data_settings.Clear();
+            Form1.SaveBuffersSettings();
+            Properties.Settings.Default.Save();
+            KeyDataUpdate();
+        }
 
-                Array.Clear(Form1.CHS8_key_buffer, 0, Form1.CHS8_key_buffer.Length);
-                Array.Clear(Form1.CHS8_axis_buffer, 0, Form1.CHS8_axis_buffer.Length);
-                Array.Clear(sb_chs8_axis_data, 0, sb_chs8_axis_data.Length);
-                Properties.Settings.Default.chs8_buffer_key_settings.Clear();
-                Properties.Settings.Default.chs8_buffer_axis_settings.Clear();
-                Properties.Settings.Default.chs8_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.chs8_wav_path_key_buffer, 0, Form1.chs8_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_chs8_wav_path_data_settings.Clear();
+        //============================================================================
+        // Полный сброс коллекции: очистить и заполнить "0" заполнить нулями до нужной длины.
+        //============================================================================
+        private static void ResetSizeFillZeros(System.Collections.Specialized.StringCollection sc, int size)
+        {
+            if (sc == null) return;
+            sc.Clear();
+            for (int i = 0; i < size; i++) sc.Add("0");
+        }
 
-                Array.Clear(Form1.VL11M_key_buffer, 0, Form1.VL11M_key_buffer.Length);
-                Array.Clear(Form1.VL11M_axis_buffer, 0, Form1.VL11M_axis_buffer.Length);
-                Array.Clear(sb_vl11_axis_data, 0, sb_vl11_axis_data.Length);
-                Properties.Settings.Default.vl11_buffer_key_settings.Clear();
-                Properties.Settings.Default.vl11_buffer_axis_settings.Clear();
-                Properties.Settings.Default.vl11_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.vl11_wav_path_key_buffer, 0, Form1.vl11_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_vl11_wav_path_data_settings.Clear();
+        //============================================================================
+        // Гарантировать длину (для индексации): только нарастить до нужной длины значениями "0"
+        //============================================================================
+        private static void EnsureSizeAtLeastFillZeros(System.Collections.Specialized.StringCollection sc, int size)
+        {
+            if (sc == null) return;
+            while (sc.Count < size) sc.Add("0");
+        }
 
-                Array.Clear(Form1.VL82M_key_buffer, 0, Form1.VL82M_key_buffer.Length);
-                Array.Clear(Form1.VL82M_axis_buffer, 0, Form1.VL82M_axis_buffer.Length);
-                Array.Clear(sb_vl82_axis_data, 0, sb_vl82_axis_data.Length);
-                Properties.Settings.Default.vl82_buffer_key_settings.Clear();
-                Properties.Settings.Default.vl82_buffer_axis_settings.Clear();
-                Properties.Settings.Default.vl82_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.vl82_wav_path_key_buffer, 0, Form1.vl82_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_vl82_wav_path_data_settings.Clear();
+        //============================================================================
+        // Аналогично для null (звук)
+        //============================================================================
+        private static void EnsureSizeAtLeastFillNulls(System.Collections.Specialized.StringCollection sc, int size)
+        {
+            if (sc == null) return;
+            while (sc.Count < size) sc.Add(null);
+        }
 
-                Array.Clear(Form1.VL80T_key_buffer, 0, Form1.VL80T_key_buffer.Length);
-                Array.Clear(Form1.VL80T_axis_buffer, 0, Form1.VL80T_axis_buffer.Length);
-                Array.Clear(sb_vl80t_axis_data, 0, sb_vl80t_axis_data.Length);
-                Properties.Settings.Default.vl80t_buffer_key_settings.Clear();
-                Properties.Settings.Default.vl80t_buffer_axis_settings.Clear();
-                Properties.Settings.Default.vl80t_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.vl80t_wav_path_key_buffer, 0, Form1.vl80t_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_vl80t_wav_path_data_settings.Clear();
+        //============================================================================
+        // Сброс буферов локомотивов
+        //============================================================================
+        private void ResetAllLocos()
+        {
+            EnsureLocoRowBindingDefs();
 
-                Array.Clear(Form1.VL85_key_buffer, 0, Form1.VL85_key_buffer.Length);
-                Array.Clear(Form1.VL85_axis_buffer, 0, Form1.VL85_axis_buffer.Length);
-                Array.Clear(sb_vl85_axis_data, 0, sb_vl85_axis_data.Length);
-                Properties.Settings.Default.vl85_buffer_key_settings.Clear();
-                Properties.Settings.Default.vl85_buffer_axis_settings.Clear();
-                Properties.Settings.Default.vl85_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.vl85_wav_path_key_buffer, 0, Form1.vl85_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_vl85_wav_path_data_settings.Clear();
+            foreach (var def in _locoRowBindingByName.Values)
+            {
+                if (def.KeyBuffer != null) Array.Clear(def.KeyBuffer, 0, def.KeyBuffer.Length);
+                if (def.AxisBuffer != null) Array.Clear(def.AxisBuffer, 0, def.AxisBuffer.Length);
+                if (def.SbAxisData != null) Array.Clear(def.SbAxisData, 0, def.SbAxisData.Length);
 
-                Array.Clear(Form1.TEP70_key_buffer, 0, Form1.TEP70_key_buffer.Length);
-                Array.Clear(Form1.TEP70_axis_buffer, 0, Form1.TEP70_axis_buffer.Length);
-                Array.Clear(sb_tep70_axis_data, 0, sb_tep70_axis_data.Length);
-                Properties.Settings.Default.tep70_buffer_key_settings.Clear();
-                Properties.Settings.Default.tep70_buffer_axis_settings.Clear();
-                Properties.Settings.Default.tep70_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.tep70_wav_path_key_buffer, 0, Form1.tep70_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_tep70_wav_path_data_settings.Clear();
+                // Settings — привести к ожидаемой длине
+                if (def.KeyBuffer != null)
+                    ResetSizeFillZeros(def.KeySettings, def.KeyBuffer.Length);
 
-                Array.Clear(Form1.TE10U_key_buffer, 0, Form1.TE10U_key_buffer.Length);
-                Array.Clear(Form1.TE10U_axis_buffer, 0, Form1.TE10U_axis_buffer.Length);
-                Array.Clear(sb_te10u_axis_data, 0, sb_te10u_axis_data.Length);
-                Properties.Settings.Default.te10u_buffer_key_settings.Clear();
-                Properties.Settings.Default.te10u_buffer_axis_settings.Clear();
-                Properties.Settings.Default.te10u_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.te10u_wav_path_key_buffer, 0, Form1.te10u_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_te10u_wav_path_data_settings.Clear();
+                int rows = (def.AxisBuffer != null) ? def.AxisBuffer.GetLength(0) : 0;
+                ResetSizeFillZeros(def.AxisSettings1, rows);
+                ResetSizeFillZeros(def.AxisSettings2, rows);
+            }
+        }
 
-                Array.Clear(Form1.M62_key_buffer, 0, Form1.M62_key_buffer.Length);
-                Array.Clear(Form1.M62_axis_buffer, 0, Form1.M62_axis_buffer.Length);
-                Array.Clear(sb_m62_axis_data, 0, sb_m62_axis_data.Length);
-                Properties.Settings.Default.m62_buffer_key_settings.Clear();
-                Properties.Settings.Default.m62_buffer_axis_settings.Clear();
-                Properties.Settings.Default.m62_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.m62_wav_path_key_buffer, 0, Form1.m62_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_m62_wav_path_data_settings.Clear();
+        //============================================================================
+        // Сброс точек осей
+        //============================================================================
+        private void ResetAllAxisPoints()
+        {
+            EnsureAxisResetDefs();
 
-                Array.Clear(Form1.ED4M_key_buffer, 0, Form1.ED4M_key_buffer.Length);
-                Array.Clear(Form1.ED4M_axis_buffer, 0, Form1.ED4M_axis_buffer.Length);
-                Array.Clear(sb_ed4m_axis_data, 0, sb_ed4m_axis_data.Length);
-                Properties.Settings.Default.ed4m_buffer_key_settings.Clear();
-                Properties.Settings.Default.ed4m_buffer_axis_settings.Clear();
-                Properties.Settings.Default.ed4m_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.ed4m_wav_path_key_buffer, 0, Form1.ed4m_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_ed4m_wav_path_data_settings.Clear();
-
-                Array.Clear(Form1.ED9M_key_buffer, 0, Form1.ED9M_key_buffer.Length);
-                Array.Clear(Form1.ED9M_axis_buffer, 0, Form1.ED9M_axis_buffer.Length);
-                Array.Clear(sb_ed9m_axis_data, 0, sb_ed9m_axis_data.Length);
-                Properties.Settings.Default.ed9m_buffer_key_settings.Clear();
-                Properties.Settings.Default.ed9m_buffer_axis_settings.Clear();
-                Properties.Settings.Default.ed9m_buffer_axis_settings2.Clear();
-                //звук
-                Array.Clear(Form1.ed9m_wav_path_key_buffer, 0, Form1.ed9m_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_ed9m_wav_path_data_settings.Clear();
-
-                Array.Clear(Form1.tem18_key_buffer, 0, Form1.tem18_key_buffer.Length);
-                Array.Clear(Form1.tem18_axis_buffer, 0, Form1.tem18_axis_buffer.Length);
-                Array.Clear(sb_tem18_axis_data, 0, sb_tem18_axis_data.Length);
-                Properties.Settings.Default.tem18_buffer_key_settings.Clear();
-                Properties.Settings.Default.tem18_buffer_axis_settings.Clear();
-                Properties.Settings.Default.tem18_buffer_axis_settings2.Clear();
-
-                //звук
-                Array.Clear(Form1.tem18_wav_path_key_buffer, 0, Form1.tem18_wav_path_key_buffer.Length);
-                Properties.Settings.Default.sb_tem18_wav_path_data_settings.Clear();
-
-                sbBufferSave();
-                Form1.SaveBuffersSettings();
-                Properties.Settings.Default.Save();
-                KeyDataUpdate();
+            foreach (var def in _axisResetByUiName.Values)
+            {
+                def.ClearPointBuffer?.Invoke();
+                def.ResetSettingToStart?.Invoke();
             }
         }
 
@@ -5025,183 +3767,34 @@ namespace zdsimScanner
         //============================================================================
         private void button_sbros_all_Click(object sender, EventArgs e)
         {
-            string s_name = "Удаление ВСЕХ НАСТРОЕК !";
-            string s1 = "ВНИМАНИЕ! Все настройки, включая точки осей будут удалены, уверены?";
-            DialogResult result = MessageBox.Show(s1, s_name, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-            if (result == DialogResult.OK)
+            if (MessageBox.Show(
+                    "ВНИМАНИЕ! Все настройки, включая точки осей будут удалены, уверены?",
+                    "Удаление ВСЕХ НАСТРОЕК !",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Warning,
+                    MessageBoxDefaultButton.Button2) != DialogResult.OK)
+                return;
+
+            //Cursor = Cursors.WaitCursor;
+            try
             {
-                this.Cursor = Cursors.WaitCursor;
+                Cursor = Cursors.WaitCursor;
+                ResetAllLocos();
+                ResetAllAxisPoints();
 
-                //удаляем все буфера кнопок и осей
-                Array.Clear(Form1.Controls_key_buffer, 0, Form1.Controls_key_buffer.Length);
-                Array.Clear(Form1.Controls_axis_buffer, 0, Form1.Controls_axis_buffer.Length);
-                Properties.Settings.Default.controls_buffer_key_settings.Clear();
-                Properties.Settings.Default.controls_buffer_axis_settings.Clear();
-                Properties.Settings.Default.controls_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.Neshtatki_key_buffer, 0, Form1.Neshtatki_key_buffer.Length);
-                Array.Clear(Form1.Neshtatki_axis_buffer, 0, Form1.Neshtatki_axis_buffer.Length);
-                Array.Clear(sb_neshtatki_axis_data, 0, sb_neshtatki_axis_data.Length);
-                Properties.Settings.Default.neshtatki_buffer_key_settings.Clear();
-                Properties.Settings.Default.neshtatki_buffer_axis_settings.Clear();
-                Properties.Settings.Default.neshtatki_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.ES5K_key_buffer, 0, Form1.ES5K_key_buffer.Length);
-                Array.Clear(Form1.ES5K_axis_buffer, 0, Form1.ES5K_axis_buffer.Length);
-                Properties.Settings.Default.es5k_buffer_key_settings.Clear();
-                Properties.Settings.Default.es5k_buffer_axis_settings.Clear();
-                Properties.Settings.Default.es5k_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.EP1M_key_buffer, 0, Form1.EP1M_key_buffer.Length);
-                Array.Clear(Form1.EP1M_axis_buffer, 0, Form1.EP1M_axis_buffer.Length);
-                Properties.Settings.Default.ep1m_buffer_key_settings.Clear();
-                Properties.Settings.Default.ep1m_buffer_axis_settings.Clear();
-                Properties.Settings.Default.ep1m_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.CHS2K_key_buffer, 0, Form1.CHS2K_key_buffer.Length);
-                Array.Clear(Form1.CHS2K_axis_buffer, 0, Form1.CHS2K_axis_buffer.Length);
-                Properties.Settings.Default.chs2k_buffer_key_settings.Clear();
-                Properties.Settings.Default.chs2k_buffer_axis_settings.Clear();
-                Properties.Settings.Default.chs2k_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.CHS4_key_buffer, 0, Form1.CHS4_key_buffer.Length);
-                Array.Clear(Form1.CHS4_axis_buffer, 0, Form1.CHS4_axis_buffer.Length);
-                Properties.Settings.Default.chs4_buffer_key_settings.Clear();
-                Properties.Settings.Default.chs4_buffer_axis_settings.Clear();
-                Properties.Settings.Default.chs4_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.CHS4KVR_key_buffer, 0, Form1.CHS4KVR_key_buffer.Length);
-                Array.Clear(Form1.CHS4KVR_axis_buffer, 0, Form1.CHS4KVR_axis_buffer.Length);
-                Properties.Settings.Default.chs4kvr_buffer_key_settings.Clear();
-                Properties.Settings.Default.chs4kvr_buffer_axis_settings.Clear();
-                Properties.Settings.Default.chs4kvr_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.CHS4T_key_buffer, 0, Form1.CHS4T_key_buffer.Length);
-                Array.Clear(Form1.CHS4T_axis_buffer, 0, Form1.CHS4T_axis_buffer.Length);
-                Properties.Settings.Default.chs4t_buffer_key_settings.Clear();
-                Properties.Settings.Default.chs4t_buffer_axis_settings.Clear();
-                Properties.Settings.Default.chs4t_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.CHS7_key_buffer, 0, Form1.CHS7_key_buffer.Length);
-                Array.Clear(Form1.CHS7_axis_buffer, 0, Form1.CHS7_axis_buffer.Length);
-                Properties.Settings.Default.chs7_buffer_key_settings.Clear();
-                Properties.Settings.Default.chs7_buffer_axis_settings.Clear();
-                Properties.Settings.Default.chs7_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.CHS8_key_buffer, 0, Form1.CHS8_key_buffer.Length);
-                Array.Clear(Form1.CHS8_axis_buffer, 0, Form1.CHS8_axis_buffer.Length);
-                Properties.Settings.Default.chs8_buffer_key_settings.Clear();
-                Properties.Settings.Default.chs8_buffer_axis_settings.Clear();
-                Properties.Settings.Default.chs8_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.VL11M_key_buffer, 0, Form1.VL11M_key_buffer.Length);
-                Array.Clear(Form1.VL11M_axis_buffer, 0, Form1.VL11M_axis_buffer.Length);
-                Properties.Settings.Default.vl11_buffer_key_settings.Clear();
-                Properties.Settings.Default.vl11_buffer_axis_settings.Clear();
-                Properties.Settings.Default.vl11_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.VL82M_key_buffer, 0, Form1.VL82M_key_buffer.Length);
-                Array.Clear(Form1.VL82M_axis_buffer, 0, Form1.VL82M_axis_buffer.Length);
-                Properties.Settings.Default.vl82_buffer_key_settings.Clear();
-                Properties.Settings.Default.vl82_buffer_axis_settings.Clear();
-                Properties.Settings.Default.vl82_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.VL80T_key_buffer, 0, Form1.VL80T_key_buffer.Length);
-                Array.Clear(Form1.VL80T_axis_buffer, 0, Form1.VL80T_axis_buffer.Length);
-                Properties.Settings.Default.vl80t_buffer_key_settings.Clear();
-                Properties.Settings.Default.vl80t_buffer_axis_settings.Clear();
-                Properties.Settings.Default.vl80t_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.VL85_key_buffer, 0, Form1.VL85_key_buffer.Length);
-                Array.Clear(Form1.VL85_axis_buffer, 0, Form1.VL85_axis_buffer.Length);
-                Properties.Settings.Default.vl85_buffer_key_settings.Clear();
-                Properties.Settings.Default.vl85_buffer_axis_settings.Clear();
-                Properties.Settings.Default.vl85_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.TEP70_key_buffer, 0, Form1.TEP70_key_buffer.Length);
-                Array.Clear(Form1.TEP70_axis_buffer, 0, Form1.TEP70_axis_buffer.Length); 
-                Properties.Settings.Default.tep70_buffer_key_settings.Clear();
-                Properties.Settings.Default.tep70_buffer_axis_settings.Clear();
-                Properties.Settings.Default.tep70_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.TE10U_key_buffer, 0, Form1.TE10U_key_buffer.Length);
-                Array.Clear(Form1.TE10U_axis_buffer, 0, Form1.TE10U_axis_buffer.Length); 
-                Properties.Settings.Default.te10u_buffer_key_settings.Clear();
-                Properties.Settings.Default.te10u_buffer_axis_settings.Clear();
-                Properties.Settings.Default.te10u_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.M62_key_buffer, 0, Form1.M62_key_buffer.Length);
-                Array.Clear(Form1.M62_axis_buffer, 0, Form1.M62_axis_buffer.Length); 
-                Properties.Settings.Default.m62_buffer_key_settings.Clear();
-                Properties.Settings.Default.m62_buffer_axis_settings.Clear();
-                Properties.Settings.Default.m62_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.ED4M_key_buffer, 0, Form1.ED4M_key_buffer.Length);
-                Array.Clear(Form1.ED4M_axis_buffer, 0, Form1.ED4M_axis_buffer.Length); 
-                Properties.Settings.Default.ed4m_buffer_key_settings.Clear();
-                Properties.Settings.Default.ed4m_buffer_axis_settings.Clear();
-                Properties.Settings.Default.ed4m_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.ED9M_key_buffer, 0, Form1.ED9M_key_buffer.Length);
-                Array.Clear(Form1.ED9M_axis_buffer, 0, Form1.ED9M_axis_buffer.Length); 
-                Properties.Settings.Default.ed9m_buffer_key_settings.Clear();
-                Properties.Settings.Default.ed9m_buffer_axis_settings.Clear();
-                Properties.Settings.Default.ed9m_buffer_axis_settings2.Clear();
-                Array.Clear(Form1.tem18_key_buffer, 0, Form1.tem18_key_buffer.Length);
-                Array.Clear(Form1.tem18_axis_buffer, 0, Form1.tem18_axis_buffer.Length);
-                Properties.Settings.Default.tem18_buffer_key_settings.Clear();
-                Properties.Settings.Default.tem18_buffer_axis_settings.Clear();
-                Properties.Settings.Default.tem18_buffer_axis_settings2.Clear();
-
-                //удаляем точки осей
-                Form1.joystick_ARx_point_buffer = null;
-                Properties.Settings.Default.ARx_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_ARy_point_buffer = null;
-                Properties.Settings.Default.ARy_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_ARz_point_buffer = null;
-                Properties.Settings.Default.ARz_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_AX_point_buffer = null;
-                Properties.Settings.Default.AX_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_AY_point_buffer = null;
-                Properties.Settings.Default.AY_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_AZ_point_buffer = null;
-                Properties.Settings.Default.AZ_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_FRx_point_buffer = null;
-                Properties.Settings.Default.FRx_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_FRy_point_buffer = null;
-                Properties.Settings.Default.FRy_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_FRz_point_buffer = null;
-                Properties.Settings.Default.FRz_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_FX_point_buffer = null;
-                Properties.Settings.Default.FX_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_FY_point_buffer = null;
-                Properties.Settings.Default.FY_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_FZ_point_buffer = null;
-                Properties.Settings.Default.FZ_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_Rx_point_buffer = null;
-                Properties.Settings.Default.Rx_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_Ry_point_buffer = null;
-                Properties.Settings.Default.Ry_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_Rz_point_buffer = null;
-                Properties.Settings.Default.Rz_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_VRx_point_buffer = null;
-                Properties.Settings.Default.VRx_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_VRy_point_buffer = null;
-                Properties.Settings.Default.VRy_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_VRz_point_buffer = null;
-                Properties.Settings.Default.VRz_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_VX_point_buffer = null;
-                Properties.Settings.Default.VX_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_VY_point_buffer = null;
-                Properties.Settings.Default.VY_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_VZ_point_buffer = null;
-                Properties.Settings.Default.VZ_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_X_point_buffer = null;
-                Properties.Settings.Default.X_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_Y_point_buffer = null;
-                Properties.Settings.Default.Y_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_Z_point_buffer = null;
-                Properties.Settings.Default.Z_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_POV_point_buffer = null;
-                Properties.Settings.Default.POV_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_Slider_point_buffer = null;
-                Properties.Settings.Default.Slider_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_ASlider_point_buffer = null;
-                Properties.Settings.Default.ASlider_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_FSlider_point_buffer = null;
-                Properties.Settings.Default.FSlider_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                Form1.joystick_VSlider_point_buffer = null;
-                Properties.Settings.Default.VSlider_point_buffer_settings = Properties.Settings.Default.temp_string_buffer_start;
-                
                 Properties.Settings.Default.Save();
+
                 Form1.DeleteXmlBinFiles();
                 DeleteAppDataFiles();
                 DeleteAppDataFiles_local();
-                Thread.Sleep(3000);
-                this.Cursor = Cursors.Default;
+
+                Properties.Settings.Default.Save();
                 Application.Restart();
+                //Application.Exit();
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
 
@@ -5322,5 +3915,208 @@ namespace zdsimScanner
 
         }
 
+        //============================================================================
+        // Для работы button_zdsim_sbros_sound_Click()
+        //============================================================================
+        private sealed class LocoSoundBinding
+        {
+            public string UiName;                         // "Controls", "2ES5K", ...
+            public string[] WavPathBuffer;                // Form1.*_wav_path_key_buffer
+            public StringCollection WavSettings; // Properties.Settings.Default.sb_*_wav_path_data_settings
+        }
+
+        private Dictionary<string, LocoSoundBinding> _soundByLocoName;
+
+        private void EnsureSoundBindings()
+        {
+            if (_soundByLocoName != null) return;
+
+            _soundByLocoName = new Dictionary<string, LocoSoundBinding>(StringComparer.Ordinal)
+            {
+                ["Controls"] = new LocoSoundBinding
+                {
+                    UiName = "Controls",
+                    WavPathBuffer = Form1.controls_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_controls_wav_path_data_settings
+                },
+                ["Neshtatki"] = new LocoSoundBinding
+                {
+                    UiName = "Neshtatki",
+                    WavPathBuffer = Form1.neshtatki_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_neshtatki_wav_path_data_settings
+                },
+                ["2ES5K"] = new LocoSoundBinding
+                {
+                    UiName = "2ES5K",
+                    WavPathBuffer = Form1.es5k_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_es5k_wav_path_data_settings
+                },
+                ["EP1M"] = new LocoSoundBinding
+                {
+                    UiName = "EP1M",
+                    WavPathBuffer = Form1.ep1m_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_ep1m_wav_path_data_settings
+                },
+                ["CHS2K"] = new LocoSoundBinding
+                {
+                    UiName = "CHS2K",
+                    WavPathBuffer = Form1.chs2k_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_chs2k_wav_path_data_settings
+                },
+                ["CHS4"] = new LocoSoundBinding
+                {
+                    UiName = "CHS4",
+                    WavPathBuffer = Form1.chs4_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_chs4_wav_path_data_settings
+                },
+                ["CHS4 KVR"] = new LocoSoundBinding
+                {
+                    UiName = "CHS4 KVR",
+                    WavPathBuffer = Form1.chs4kvr_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_chs4kvr_wav_path_data_settings
+                },
+                ["CHS4T"] = new LocoSoundBinding
+                {
+                    UiName = "CHS4T",
+                    WavPathBuffer = Form1.chs4t_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_chs4t_wav_path_data_settings
+                },
+                ["CHS7"] = new LocoSoundBinding
+                {
+                    UiName = "CHS7",
+                    WavPathBuffer = Form1.chs7_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_chs7_wav_path_data_settings
+                },
+                ["CHS8"] = new LocoSoundBinding
+                {
+                    UiName = "CHS8",
+                    WavPathBuffer = Form1.chs8_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_chs8_wav_path_data_settings
+                },
+                ["VL11M"] = new LocoSoundBinding
+                {
+                    UiName = "VL11M",
+                    WavPathBuffer = Form1.vl11_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_vl11_wav_path_data_settings
+                },
+                ["VL82M"] = new LocoSoundBinding
+                {
+                    UiName = "VL82M",
+                    WavPathBuffer = Form1.vl82_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_vl82_wav_path_data_settings
+                },
+                ["VL80T"] = new LocoSoundBinding
+                {
+                    UiName = "VL80T",
+                    WavPathBuffer = Form1.vl80t_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_vl80t_wav_path_data_settings
+                },
+                ["VL85"] = new LocoSoundBinding
+                {
+                    UiName = "VL85",
+                    WavPathBuffer = Form1.vl85_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_vl85_wav_path_data_settings
+                },
+                ["TEP70"] = new LocoSoundBinding
+                {
+                    UiName = "TEP70",
+                    WavPathBuffer = Form1.tep70_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_tep70_wav_path_data_settings
+                },
+                ["2TE10U"] = new LocoSoundBinding
+                {
+                    UiName = "2TE10U",
+                    WavPathBuffer = Form1.te10u_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_te10u_wav_path_data_settings
+                },
+                ["M62"] = new LocoSoundBinding
+                {
+                    UiName = "M62",
+                    WavPathBuffer = Form1.m62_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_m62_wav_path_data_settings
+                },
+                ["ED4M"] = new LocoSoundBinding
+                {
+                    UiName = "ED4M",
+                    WavPathBuffer = Form1.ed4m_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_ed4m_wav_path_data_settings
+                },
+                ["ED9M"] = new LocoSoundBinding
+                {
+                    UiName = "ED9M",
+                    WavPathBuffer = Form1.ed9m_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_ed9m_wav_path_data_settings
+                },
+                ["tem18"] = new LocoSoundBinding
+                {
+                    UiName = "tem18",
+                    WavPathBuffer = Form1.tem18_wav_path_key_buffer,
+                    WavSettings = Properties.Settings.Default.sb_tem18_wav_path_data_settings
+                },
+            };
+        }
+
+        //============================================================================
+        // Вспомогательная функция для StringCollection:
+        //============================================================================
+        private static void EnsureSizeAndFillNulls(StringCollection sc, int size)
+        {
+            if (sc == null) return;
+
+            while (sc.Count < size) sc.Add(null);
+            while (sc.Count > size) sc.RemoveAt(sc.Count - 1);
+        }
+
+        //============================================================================
+        // Кнопка "Удал.звук" служит для удаления звука установленного для органа управления
+        //============================================================================
+        private void button_zdsim_sbros_sound_Click(object sender, EventArgs e)
+        {
+            if (dataGridView_Zdsimulator.CurrentCell?.ColumnIndex != 2) return;
+            if (dataGridView_Zdsimulator.CurrentRow == null) return;
+
+            EnsureSoundBindings();
+   
+            string loco = comboBox_zdsimLoco.SelectedItem?.ToString();
+            if (string.IsNullOrEmpty(loco)) return;
+
+            if (!_soundByLocoName.TryGetValue(loco, out var b)) return;
+
+            int row = dataGridView_Zdsimulator.CurrentRow.Index;
+            if ((uint)row >= (uint)b.WavPathBuffer.Length) return;
+
+            b.WavPathBuffer[row] = null;
+
+            // ВАЖНО: StringCollection по индексу требует, чтобы элемент существовал.
+            // Если коллекция может быть короче — сначала нормализуем длину.
+            EnsureSizeAtLeastFillNulls(b.WavSettings, b.WavPathBuffer.Length);
+            //EnsureSizeAndFillNulls(b.WavSettings, b.WavPathBuffer.Length);
+            b.WavSettings[row] = null;
+
+            KeyDataUpdate();
+
+            dataGridView_Zdsimulator.FirstDisplayedScrollingRowIndex = row;
+            dataGridView_Zdsimulator.CurrentCell = dataGridView_Zdsimulator.Rows[row].Cells[2];
+
+            sbBufferWavPathSave();
+            Form1.SaveBuffersSettings();
+            Properties.Settings.Default.Save();
+        }
+
+        //=====================================================================
+        // Сохранение отрисовки звуков
+        //=====================================================================
+        private void sbBufferWavPathSave()
+        {
+            EnsureSoundBindings();
+
+            foreach (var b in _soundByLocoName.Values)
+            {
+                b.WavSettings.Clear();
+                for (int i = 0; i < b.WavPathBuffer.Length; i++)
+                    b.WavSettings.Add(b.WavPathBuffer[i]);
+            }
+        }
+     
     }
 }
