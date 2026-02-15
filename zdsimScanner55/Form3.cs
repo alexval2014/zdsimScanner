@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Microsoft.DirectX.DirectInput;
 
+//============================================================================
+// Окно "Кнопки и оси джойстика"
+//============================================================================
 namespace zdsimScanner
 {
     public partial class Form_joystick_control : Form
@@ -3873,7 +3876,5 @@ namespace zdsimScanner
         {
             timer1.Enabled = false;
         }
-
-
     }
 }
