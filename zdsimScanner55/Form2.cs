@@ -1,18 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Drawing;
-using System.Threading;
 using System.Windows.Forms;
 using Microsoft.DirectX.DirectInput;
 using SysAction = System.Action;
+using System.Collections.Specialized;
+using System.Collections.Generic;
 // если вдруг тебе понадобится DirectInput.Action, можно так:
 // using DiAction = Microsoft.DirectX.DirectInput.Action;
 
-using System.Collections.Specialized;
-using System.Collections.Generic;
-
 namespace zdsimScanner
-{    public partial class Form2 : Form
+{    
+    public partial class Form2 : Form
     {
         public int i_temp_row_number_f2;
         public int i_temp_column_number_f2;
@@ -3360,260 +3359,9 @@ namespace zdsimScanner
         }
 
         //============================================================================
-        // Для работы с button_zdsim_sbros_key_Click()
-        //============================================================================
-        private sealed class LocoRowBindingDef
-        {
-            public int[] KeyBuffer;                      // Form1.*_key_buffer
-            public int[,] AxisBuffer;                    // Form1.*_axis_buffer (N x 2)
-            public string[] SbAxisData;                  // sb_*_axis_data
-
-            public StringCollection KeySettings;   // *_buffer_key_settings
-            public StringCollection AxisSettings1; // *_buffer_axis_settings
-            public StringCollection AxisSettings2; // *_buffer_axis_settings2
-        }
-
-        private Dictionary<string, LocoRowBindingDef> _locoRowBindingByName;
-
-        private void EnsureLocoRowBindingDefs()
-        {
-            if (_locoRowBindingByName != null) return;
-
-            _locoRowBindingByName = new Dictionary<string, LocoRowBindingDef>(StringComparer.Ordinal)
-            {
-                ["Controls"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.Controls_key_buffer,
-                    AxisBuffer = Form1.Controls_axis_buffer,
-                    SbAxisData = sb_controls_axis_data,
-                    KeySettings = Properties.Settings.Default.controls_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.controls_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.controls_buffer_axis_settings2,
-                },
-                ["Neshtatki"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.Neshtatki_key_buffer,
-                    AxisBuffer = Form1.Neshtatki_axis_buffer,
-                    SbAxisData = sb_neshtatki_axis_data,
-                    KeySettings = Properties.Settings.Default.neshtatki_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.neshtatki_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.neshtatki_buffer_axis_settings2,
-                },
-                ["2ES5K"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.ES5K_key_buffer,
-                    AxisBuffer = Form1.ES5K_axis_buffer,
-                    SbAxisData = sb_es5k_axis_data,
-                    KeySettings = Properties.Settings.Default.es5k_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.es5k_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.es5k_buffer_axis_settings2,
-                },
-                ["EP1M"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.EP1M_key_buffer,
-                    AxisBuffer = Form1.EP1M_axis_buffer,
-                    SbAxisData = sb_ep1m_axis_data,
-                    KeySettings = Properties.Settings.Default.ep1m_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.ep1m_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.ep1m_buffer_axis_settings2,
-                },
-                ["CHS2K"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.CHS2K_key_buffer,
-                    AxisBuffer = Form1.CHS2K_axis_buffer,
-                    SbAxisData = sb_chs2k_axis_data,
-                    KeySettings = Properties.Settings.Default.chs2k_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.chs2k_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.chs2k_buffer_axis_settings2,
-                },
-                ["CHS4"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.CHS4_key_buffer,
-                    AxisBuffer = Form1.CHS4_axis_buffer,
-                    SbAxisData = sb_chs4_axis_data,
-                    KeySettings = Properties.Settings.Default.chs4_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.chs4_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.chs4_buffer_axis_settings2,
-                },
-                ["CHS4 KVR"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.CHS4KVR_key_buffer,
-                    AxisBuffer = Form1.CHS4KVR_axis_buffer,
-                    SbAxisData = sb_chs4kvr_axis_data,
-                    KeySettings = Properties.Settings.Default.chs4kvr_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.chs4kvr_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.chs4kvr_buffer_axis_settings2,
-                },
-                ["CHS4T"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.CHS4T_key_buffer,
-                    AxisBuffer = Form1.CHS4T_axis_buffer,
-                    SbAxisData = sb_chs4t_axis_data,
-                    KeySettings = Properties.Settings.Default.chs4t_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.chs4t_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.chs4t_buffer_axis_settings2,
-                },
-                ["CHS7"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.CHS7_key_buffer,
-                    AxisBuffer = Form1.CHS7_axis_buffer,
-                    SbAxisData = sb_chs7_axis_data,
-                    KeySettings = Properties.Settings.Default.chs7_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.chs7_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.chs7_buffer_axis_settings2,
-                },
-                ["CHS8"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.CHS8_key_buffer,
-                    AxisBuffer = Form1.CHS8_axis_buffer,
-                    SbAxisData = sb_chs8_axis_data,
-                    KeySettings = Properties.Settings.Default.chs8_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.chs8_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.chs8_buffer_axis_settings2,
-                },
-                ["VL11M"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.VL11M_key_buffer,
-                    AxisBuffer = Form1.VL11M_axis_buffer,
-                    SbAxisData = sb_vl11_axis_data,
-                    KeySettings = Properties.Settings.Default.vl11_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.vl11_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.vl11_buffer_axis_settings2,
-                },
-                ["VL82M"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.VL82M_key_buffer,
-                    AxisBuffer = Form1.VL82M_axis_buffer,
-                    SbAxisData = sb_vl82_axis_data,
-                    KeySettings = Properties.Settings.Default.vl82_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.vl82_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.vl82_buffer_axis_settings2,
-                },
-                ["VL80T"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.VL80T_key_buffer,
-                    AxisBuffer = Form1.VL80T_axis_buffer,
-                    SbAxisData = sb_vl80t_axis_data,
-                    KeySettings = Properties.Settings.Default.vl80t_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.vl80t_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.vl80t_buffer_axis_settings2,
-                },
-                ["VL85"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.VL85_key_buffer,
-                    AxisBuffer = Form1.VL85_axis_buffer,
-                    SbAxisData = sb_vl85_axis_data,
-                    KeySettings = Properties.Settings.Default.vl85_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.vl85_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.vl85_buffer_axis_settings2,
-                },
-                ["TEP70"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.TEP70_key_buffer,
-                    AxisBuffer = Form1.TEP70_axis_buffer,
-                    SbAxisData = sb_tep70_axis_data,
-                    KeySettings = Properties.Settings.Default.tep70_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.tep70_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.tep70_buffer_axis_settings2,
-                },
-                ["2TE10U"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.TE10U_key_buffer,
-                    AxisBuffer = Form1.TE10U_axis_buffer,
-                    SbAxisData = sb_te10u_axis_data,
-                    KeySettings = Properties.Settings.Default.te10u_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.te10u_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.te10u_buffer_axis_settings2,
-                },
-                ["M62"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.M62_key_buffer,
-                    AxisBuffer = Form1.M62_axis_buffer,
-                    SbAxisData = sb_m62_axis_data,
-                    KeySettings = Properties.Settings.Default.m62_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.m62_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.m62_buffer_axis_settings2,
-                },
-                ["ED4M"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.ED4M_key_buffer,
-                    AxisBuffer = Form1.ED4M_axis_buffer,
-                    SbAxisData = sb_ed4m_axis_data,
-                    KeySettings = Properties.Settings.Default.ed4m_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.ed4m_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.ed4m_buffer_axis_settings2,
-                },
-                ["ED9M"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.ED9M_key_buffer,
-                    AxisBuffer = Form1.ED9M_axis_buffer,
-                    SbAxisData = sb_ed9m_axis_data,
-                    KeySettings = Properties.Settings.Default.ed9m_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.ed9m_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.ed9m_buffer_axis_settings2,
-                },
-                ["tem18"] = new LocoRowBindingDef
-                {
-                    KeyBuffer = Form1.tem18_key_buffer,
-                    AxisBuffer = Form1.tem18_axis_buffer,
-                    SbAxisData = sb_tem18_axis_data,
-                    KeySettings = Properties.Settings.Default.tem18_buffer_key_settings,
-                    AxisSettings1 = Properties.Settings.Default.tem18_buffer_axis_settings,
-                    AxisSettings2 = Properties.Settings.Default.tem18_buffer_axis_settings2,
-                },
-            };
-        }
-
-        //============================================================================
-        // Единая функция «удалить привязку в строке»
-        //============================================================================
-        private void ClearBindingRow(LocoRowBindingDef def, int rowIndex)
-        {
-            if (def == null) return;
-            if (rowIndex < 0) return;
-
-            // Буферы
-            if (def.KeyBuffer != null && (uint)rowIndex < (uint)def.KeyBuffer.Length)
-                def.KeyBuffer[rowIndex] = 0;
-
-            if (def.AxisBuffer != null &&
-                (uint)rowIndex < (uint)def.AxisBuffer.GetLength(0) &&
-                def.AxisBuffer.GetLength(1) >= 2)
-            {
-                def.AxisBuffer[rowIndex, 0] = 0;
-                def.AxisBuffer[rowIndex, 1] = 0;
-            }
-
-            if (def.SbAxisData != null && (uint)rowIndex < (uint)def.SbAxisData.Length)
-                def.SbAxisData[rowIndex] = null;
-
-            // Settings: НЕ чистим всю коллекцию, только гарантируем длину и пишем по индексу
-            if (def.KeySettings != null)
-            {
-                int need = def.KeyBuffer?.Length ?? 0;
-                EnsureSizeAtLeastFillZeros(def.KeySettings, need);
-                if ((uint)rowIndex < (uint)def.KeySettings.Count) def.KeySettings[rowIndex] = "0";
-            }
-
-            if (def.AxisSettings1 != null)
-            {
-                int need = def.AxisBuffer?.GetLength(0) ?? 0;
-                EnsureSizeAtLeastFillZeros(def.AxisSettings1, need);
-                if ((uint)rowIndex < (uint)def.AxisSettings1.Count) def.AxisSettings1[rowIndex] = "0";
-            }
-
-            if (def.AxisSettings2 != null)
-            {
-                int need = def.AxisBuffer?.GetLength(0) ?? 0;
-                EnsureSizeAtLeastFillZeros(def.AxisSettings2, need);
-                if ((uint)rowIndex < (uint)def.AxisSettings2.Count) def.AxisSettings2[rowIndex] = "0";
-            }
-        }
-
-        //============================================================================
         // Кнопка "Удал.кн." — удаление текущей кнопки или точки оси
         //============================================================================
-        private void button_zdsim_sbros_key_Click(object sender, System.EventArgs e)
+        private void button_zdsim_sbros_key_Click(object sender, EventArgs e)
         {
             // удаляем только если стоим в колонке 1
             if (dataGridView_Zdsimulator.CurrentCell == null) return;
@@ -3700,30 +3448,15 @@ namespace zdsimScanner
         //============================================================================
         // Полный сброс коллекции: очистить и заполнить "0" заполнить нулями до нужной длины.
         //============================================================================
-        private static void ResetSizeFillZeros(System.Collections.Specialized.StringCollection sc, int size)
+        private static void ResetSizeFillZeros(StringCollection sc, int size)
         {
             if (sc == null) return;
             sc.Clear();
             for (int i = 0; i < size; i++) sc.Add("0");
         }
 
-        //============================================================================
-        // Гарантировать длину (для индексации): только нарастить до нужной длины значениями "0"
-        //============================================================================
-        private static void EnsureSizeAtLeastFillZeros(System.Collections.Specialized.StringCollection sc, int size)
-        {
-            if (sc == null) return;
-            while (sc.Count < size) sc.Add("0");
-        }
 
-        //============================================================================
-        // Аналогично для null (звук)
-        //============================================================================
-        private static void EnsureSizeAtLeastFillNulls(System.Collections.Specialized.StringCollection sc, int size)
-        {
-            if (sc == null) return;
-            while (sc.Count < size) sc.Add(null);
-        }
+
 
         //============================================================================
         // Сброс буферов локомотивов
@@ -3915,146 +3648,6 @@ namespace zdsimScanner
 
         }
 
-        //============================================================================
-        // Для работы button_zdsim_sbros_sound_Click()
-        //============================================================================
-        private sealed class LocoSoundBinding
-        {
-            public string UiName;                         // "Controls", "2ES5K", ...
-            public string[] WavPathBuffer;                // Form1.*_wav_path_key_buffer
-            public StringCollection WavSettings; // Properties.Settings.Default.sb_*_wav_path_data_settings
-        }
-
-        private Dictionary<string, LocoSoundBinding> _soundByLocoName;
-
-        private void EnsureSoundBindings()
-        {
-            if (_soundByLocoName != null) return;
-
-            _soundByLocoName = new Dictionary<string, LocoSoundBinding>(StringComparer.Ordinal)
-            {
-                ["Controls"] = new LocoSoundBinding
-                {
-                    UiName = "Controls",
-                    WavPathBuffer = Form1.controls_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_controls_wav_path_data_settings
-                },
-                ["Neshtatki"] = new LocoSoundBinding
-                {
-                    UiName = "Neshtatki",
-                    WavPathBuffer = Form1.neshtatki_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_neshtatki_wav_path_data_settings
-                },
-                ["2ES5K"] = new LocoSoundBinding
-                {
-                    UiName = "2ES5K",
-                    WavPathBuffer = Form1.es5k_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_es5k_wav_path_data_settings
-                },
-                ["EP1M"] = new LocoSoundBinding
-                {
-                    UiName = "EP1M",
-                    WavPathBuffer = Form1.ep1m_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_ep1m_wav_path_data_settings
-                },
-                ["CHS2K"] = new LocoSoundBinding
-                {
-                    UiName = "CHS2K",
-                    WavPathBuffer = Form1.chs2k_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_chs2k_wav_path_data_settings
-                },
-                ["CHS4"] = new LocoSoundBinding
-                {
-                    UiName = "CHS4",
-                    WavPathBuffer = Form1.chs4_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_chs4_wav_path_data_settings
-                },
-                ["CHS4 KVR"] = new LocoSoundBinding
-                {
-                    UiName = "CHS4 KVR",
-                    WavPathBuffer = Form1.chs4kvr_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_chs4kvr_wav_path_data_settings
-                },
-                ["CHS4T"] = new LocoSoundBinding
-                {
-                    UiName = "CHS4T",
-                    WavPathBuffer = Form1.chs4t_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_chs4t_wav_path_data_settings
-                },
-                ["CHS7"] = new LocoSoundBinding
-                {
-                    UiName = "CHS7",
-                    WavPathBuffer = Form1.chs7_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_chs7_wav_path_data_settings
-                },
-                ["CHS8"] = new LocoSoundBinding
-                {
-                    UiName = "CHS8",
-                    WavPathBuffer = Form1.chs8_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_chs8_wav_path_data_settings
-                },
-                ["VL11M"] = new LocoSoundBinding
-                {
-                    UiName = "VL11M",
-                    WavPathBuffer = Form1.vl11_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_vl11_wav_path_data_settings
-                },
-                ["VL82M"] = new LocoSoundBinding
-                {
-                    UiName = "VL82M",
-                    WavPathBuffer = Form1.vl82_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_vl82_wav_path_data_settings
-                },
-                ["VL80T"] = new LocoSoundBinding
-                {
-                    UiName = "VL80T",
-                    WavPathBuffer = Form1.vl80t_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_vl80t_wav_path_data_settings
-                },
-                ["VL85"] = new LocoSoundBinding
-                {
-                    UiName = "VL85",
-                    WavPathBuffer = Form1.vl85_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_vl85_wav_path_data_settings
-                },
-                ["TEP70"] = new LocoSoundBinding
-                {
-                    UiName = "TEP70",
-                    WavPathBuffer = Form1.tep70_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_tep70_wav_path_data_settings
-                },
-                ["2TE10U"] = new LocoSoundBinding
-                {
-                    UiName = "2TE10U",
-                    WavPathBuffer = Form1.te10u_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_te10u_wav_path_data_settings
-                },
-                ["M62"] = new LocoSoundBinding
-                {
-                    UiName = "M62",
-                    WavPathBuffer = Form1.m62_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_m62_wav_path_data_settings
-                },
-                ["ED4M"] = new LocoSoundBinding
-                {
-                    UiName = "ED4M",
-                    WavPathBuffer = Form1.ed4m_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_ed4m_wav_path_data_settings
-                },
-                ["ED9M"] = new LocoSoundBinding
-                {
-                    UiName = "ED9M",
-                    WavPathBuffer = Form1.ed9m_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_ed9m_wav_path_data_settings
-                },
-                ["tem18"] = new LocoSoundBinding
-                {
-                    UiName = "tem18",
-                    WavPathBuffer = Form1.tem18_wav_path_key_buffer,
-                    WavSettings = Properties.Settings.Default.sb_tem18_wav_path_data_settings
-                },
-            };
-        }
 
         //============================================================================
         // Вспомогательная функция для StringCollection:
@@ -4103,20 +3696,6 @@ namespace zdsimScanner
             Properties.Settings.Default.Save();
         }
 
-        //=====================================================================
-        // Сохранение отрисовки звуков
-        //=====================================================================
-        private void sbBufferWavPathSave()
-        {
-            EnsureSoundBindings();
 
-            foreach (var b in _soundByLocoName.Values)
-            {
-                b.WavSettings.Clear();
-                for (int i = 0; i < b.WavPathBuffer.Length; i++)
-                    b.WavSettings.Add(b.WavPathBuffer[i]);
-            }
-        }
-     
     }
 }

@@ -106,8 +106,8 @@ namespace zdsimScanner
          "Дворники 5",
      */
 
-
-        /*
+  
+  /*
                    public static void write_controls()
                    {
                            Loco.i_temp_buffer_count1 = 0;
